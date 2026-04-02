@@ -652,6 +652,20 @@
       overflow: hidden;
     }
 
+    /* Dramatic spotlight effect */
+    #screen-podium::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(ellipse at center top, rgba(255,215,0,0.15) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
     .podium-container {
       display: flex;
       align-items: flex-end;
@@ -661,6 +675,7 @@
       width: 100%;
       max-width: 900px;
       position: relative;
+      z-index: 2;
     }
 
     .podium-block {
@@ -669,6 +684,57 @@
       flex-direction: column;
       align-items: center;
       transform-style: preserve-3d;
+    }
+
+    /* Suspense overlay for dramatic reveal */
+    .suspense-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, transparent 30%, rgba(0,0,0,0.8) 100%);
+      z-index: 10;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .suspense-overlay.active {
+      opacity: 1;
+    }
+
+    /* Dramatic question mark reveal */
+    .rank-reveal {
+      font-size: 4rem;
+      font-weight: 900;
+      color: transparent;
+      text-shadow: none;
+      opacity: 0;
+      transform: scale(0.5);
+    }
+
+    .rank-reveal.reveal {
+      animation: rankRevealAnim 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @keyframes rankRevealAnim {
+      0% {
+        opacity: 0;
+        transform: scale(0.5) rotate(-10deg);
+        color: transparent;
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.3) rotate(5deg);
+        color: #ffd700;
+        text-shadow: 0 0 30px rgba(255,215,0,0.8), 0 0 60px rgba(255,215,0,0.5);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+        color: #ffd700;
+        text-shadow: 0 0 20px rgba(255,215,0,0.6);
+      }
     }
 
     /* 3rd Place - Left */
@@ -776,6 +842,18 @@
     .winner-rank {
       font-size: 3rem;
       margin-bottom: 8px;
+      opacity: 0;
+      transform: scale(0);
+    }
+
+    .winner-rank.show {
+      animation: trophyPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s forwards;
+    }
+
+    @keyframes trophyPop {
+      0% { opacity: 0; transform: scale(0) rotate(-20deg); }
+      60% { opacity: 1; transform: scale(1.3) rotate(10deg); }
+      100% { opacity: 1; transform: scale(1) rotate(0deg); }
     }
 
     .podium-1st .winner-rank {
@@ -812,32 +890,64 @@
       background-clip: text;
     }
 
-    /* Animations */
+    /* Dramatic suspense flash effect */
+    @keyframes suspenseFlash {
+      0%, 100% { background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%); }
+      25% { background: linear-gradient(135deg, #1a1a3e 0%, #403b7a 60%, #32325e 100%); }
+      50% { background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%); }
+      75% { background: linear-gradient(135deg, #1a1a3e 0%, #403b7a 60%, #32325e 100%); }
+    }
+
+    .suspense-flash {
+      animation: suspenseFlash 0.3s ease-in-out 3;
+    }
+
+    /* Dramatic particle burst */
+    .particle-burst {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    @keyframes particleExplode {
+      0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(var(--tx), var(--ty)) scale(0);
+        opacity: 0;
+      }
+    }
+
+    /* Enhanced podium animations */
     @keyframes podiumRise3rd {
-      0% { transform: translateY(100vh) rotateX(-20deg); }
-      30% { transform: translateY(-20px) rotateX(5deg); }
+      0% { transform: translateY(100vh) rotateX(-20deg); opacity: 0; }
+      30% { transform: translateY(-20px) rotateX(5deg); opacity: 1; }
       50% { transform: translateY(10px) rotateX(-3deg); }
       70% { transform: translateY(-5px) rotateX(2deg); }
-      100% { transform: translateY(0) rotateX(0); }
+      100% { transform: translateY(0) rotateX(0); opacity: 1; }
     }
 
     @keyframes podiumRise2nd {
-      0% { transform: translateY(100vh) rotateX(-20deg) scale(0.8); }
-      25% { transform: translateY(-30px) rotateX(8deg) scale(1.05); }
+      0% { transform: translateY(100vh) rotateX(-20deg) scale(0.8); opacity: 0; }
+      25% { transform: translateY(-30px) rotateX(8deg) scale(1.05); opacity: 1; }
       45% { transform: translateY(15px) rotateX(-5deg) scale(0.98); }
       65% { transform: translateY(-10px) rotateX(3deg) scale(1.02); }
       85% { transform: translateY(5px) rotateX(-2deg) scale(0.99); }
-      100% { transform: translateY(0) rotateX(0) scale(1); }
+      100% { transform: translateY(0) rotateX(0) scale(1); opacity: 1; }
     }
 
     @keyframes podiumRise1st {
-      0% { transform: translateY(100vh) rotateX(-30deg) scale(0.6); }
-      20% { transform: translateY(-50px) rotateX(15deg) scale(1.15); }
+      0% { transform: translateY(100vh) rotateX(-30deg) scale(0.6); opacity: 0; }
+      20% { transform: translateY(-50px) rotateX(15deg) scale(1.15); opacity: 1; }
       40% { transform: translateY(25px) rotateX(-10deg) scale(0.95); }
       55% { transform: translateY(-20px) rotateX(8deg) scale(1.08); }
       70% { transform: translateY(10px) rotateX(-5deg) scale(0.98); }
       85% { transform: translateY(-5px) rotateX(3deg) scale(1.03); }
-      100% { transform: translateY(0) rotateX(0) scale(1); }
+      100% { transform: translateY(0) rotateX(0) scale(1); opacity: 1; }
     }
 
     @keyframes winnerReveal {
@@ -1001,11 +1111,77 @@
       text-shadow: 0 0 40px rgba(255, 215, 0, 0.8);
       margin-bottom: 40px;
       animation: titlePulse 2s ease-in-out infinite;
+      z-index: 5;
+      position: relative;
     }
 
     @keyframes titlePulse {
       0%, 100% { transform: scale(1); text-shadow: 0 0 40px rgba(255, 215, 0, 0.8); }
       50% { transform: scale(1.05); text-shadow: 0 0 80px rgba(255, 215, 0, 1), 0 0 120px rgba(255, 140, 0, 0.6); }
+    }
+
+    /* Dramatic title entrance */
+    .podium-title.entrance {
+      animation: titleEntrance 1.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards, titlePulse 2s ease-in-out 1.5s infinite;
+    }
+
+    @keyframes titleEntrance {
+      0% {
+        opacity: 0;
+        transform: scale(0.5) translateY(-50px);
+      }
+      60% {
+        opacity: 1;
+        transform: scale(1.2) translateY(10px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    /* Firework effect for winner */
+    .firework {
+      position: fixed;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      z-index: 999;
+      pointer-events: none;
+    }
+
+    @keyframes fireworkAnim {
+      0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(var(--fx), var(--fy)) scale(0);
+        opacity: 0;
+      }
+    }
+
+    /* Thunder/Lightning effect */
+    .lightning-flash {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: white;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 998;
+    }
+
+    .lightning-flash.flash {
+      animation: lightning 0.15s ease-out;
+    }
+
+    @keyframes lightning {
+      0% { opacity: 0.8; }
+      50% { opacity: 0.3; }
+      100% { opacity: 0; }
     }
 
     /* Old podium styles - keeping for compatibility */
@@ -2129,47 +2305,130 @@
       document.getElementById('name-1st').textContent = '-';
       document.getElementById('score-1st').textContent = '0';
       
-      // Remove old confetti
-      document.querySelectorAll('.confetti').forEach(c => c.remove());
+      // Reset trophy animation classes
+      document.querySelectorAll('.winner-rank').forEach(el => el.classList.remove('show'));
+      
+      // Remove old confetti and effects
+      document.querySelectorAll('.confetti, .firework, .lightning-flash').forEach(c => c.remove());
+      
+      // Add suspense overlay
+      let overlay = document.querySelector('.suspense-overlay');
+      if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.className = 'suspense-overlay';
+        document.getElementById('screen-podium').appendChild(overlay);
+      }
+      setTimeout(() => overlay.classList.add('active'), 100);
       
       if (!players.length) {
         document.getElementById('name-1st').textContent = 'No players 😢';
+        overlay.classList.remove('active');
         return;
       }
       
       // Get top 3 players
       const top3 = players.slice(0, 3);
       
-      // Animation sequence - 3rd place first with suspense
+      // DRAMATIC SUSPENSE SEQUENCE
+      // Title entrance with dramatic effect
+      const titleEl = document.querySelector('.podium-title');
+      titleEl.classList.remove('entrance');
+      void titleEl.offsetWidth; // Force reflow
+      titleEl.classList.add('entrance');
+      
+      // Suspenseful music beat simulation with background flashes
+      let flashCount = 0;
+      const suspenseInterval = setInterval(() => {
+        document.getElementById('screen-podium').classList.add('suspense-flash');
+        setTimeout(() => {
+          document.getElementById('screen-podium').classList.remove('suspense-flash');
+        }, 150);
+        flashCount++;
+        if (flashCount >= 6) clearInterval(suspenseInterval);
+      }, 400);
+      
+      // Add lightning effect before each reveal
+      const createLightning = () => {
+        let lightning = document.querySelector('.lightning-flash');
+        if (!lightning) {
+          lightning = document.createElement('div');
+          lightning.className = 'lightning-flash';
+          document.body.appendChild(lightning);
+        }
+        lightning.classList.add('flash');
+        setTimeout(() => lightning.classList.remove('flash'), 150);
+      };
+      
+      // 3rd PLACE - First reveal with suspense
       setTimeout(() => {
-        // 3rd PLACE - Comes up first with crazy shaking
+        createLightning();
         if (top3[2]) {
           document.getElementById('name-3rd').textContent = escHtml(top3[2].name);
           document.getElementById('score-3rd').textContent = top3[2].score.toLocaleString();
           document.getElementById('podium-3rd').classList.add('animate-3rd');
+          
+          // Show trophy with delay
+          setTimeout(() => {
+            document.querySelector('#winner-3rd .winner-rank').classList.add('show');
+            createParticleBurst('winner-3rd', '#cd7f32');
+          }, 800);
         }
-      }, 500);
+      }, 2000);
       
+      // 2nd PLACE - Even more suspense
       setTimeout(() => {
-        // 2nd PLACE - Even crazier animation
+        createLightning();
+        // Add extra suspense flash
+        document.getElementById('screen-podium').style.animation = 'suspenseFlash 0.15s ease-in-out 2';
+        setTimeout(() => {
+          document.getElementById('screen-podium').style.animation = '';
+        }, 300);
+        
         if (top3[1]) {
           document.getElementById('name-2nd').textContent = escHtml(top3[1].name);
           document.getElementById('score-2nd').textContent = top3[1].score.toLocaleString();
           document.getElementById('podium-2nd').classList.add('animate-2nd');
+          
+          setTimeout(() => {
+            document.querySelector('#winner-2nd .winner-rank').classList.add('show');
+            createParticleBurst('winner-2nd', '#c0c0c0');
+          }, 900);
         }
-      }, 2500);
+      }, 4500);
       
+      // Remove suspense overlay before final reveal
       setTimeout(() => {
-        // 1st PLACE - The ultimate champion with most epic animation
+        overlay.classList.remove('active');
+      }, 6000);
+      
+      // 1st PLACE - THE GRAND CHAMPION with fireworks
+      setTimeout(() => {
+        createLightning();
+        // Multiple lightning strikes for dramatic effect
+        setTimeout(createLightning, 200);
+        setTimeout(createLightning, 400);
+        
         if (top3[0]) {
           document.getElementById('name-1st').textContent = escHtml(top3[0].name);
           document.getElementById('score-1st').textContent = top3[0].score.toLocaleString();
           document.getElementById('podium-1st').classList.add('animate-1st');
           
-          // Create confetti explosion for the winner
-          createConfetti();
+          // Show trophy with grand animation
+          setTimeout(() => {
+            document.querySelector('#winner-1st .winner-rank').classList.add('show');
+            createParticleBurst('winner-1st', '#ffd700');
+            createParticleBurst('winner-1st', '#ff8c00');
+          }, 1000);
+          
+          // Massive confetti explosion
+          setTimeout(() => createConfetti(), 1200);
+          setTimeout(() => createConfetti(), 1500);
+          setTimeout(() => createConfetti(), 1800);
+          
+          // Firework celebration
+          setTimeout(() => createFireworks(), 1500);
         }
-      }, 5000);
+      }, 7000);
       
       // Also update legacy list (hidden)
       const medals  = ['🥇','🥈','🥉'];
@@ -2181,6 +2440,60 @@
         li.innerHTML = `<span class="podium-rank">${medals[i]||i+1}</span><span style="flex:1">${escHtml(p.name)}</span><span class="podium-score">${p.score.toLocaleString()}</span>`;
         list.appendChild(li);
       });
+    }
+    
+    function createParticleBurst(targetId, color) {
+      const target = document.getElementById(targetId);
+      if (!target) return;
+      
+      const rect = target.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      
+      for (let i = 0; i < 12; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle-burst';
+        particle.style.background = color;
+        particle.style.left = centerX + 'px';
+        particle.style.top = centerY + 'px';
+        
+        const angle = (i / 12) * Math.PI * 2;
+        const distance = 80 + Math.random() * 60;
+        particle.style.setProperty('--tx', Math.cos(angle) * distance + 'px');
+        particle.style.setProperty('--ty', Math.sin(angle) * distance + 'px');
+        particle.style.animation = 'particleExplode 0.8s ease-out forwards';
+        
+        document.body.appendChild(particle);
+        setTimeout(() => particle.remove(), 800);
+      }
+    }
+    
+    function createFireworks() {
+      for (let f = 0; f < 5; f++) {
+        setTimeout(() => {
+          const x = 20 + Math.random() * 60;
+          const y = 20 + Math.random() * 30;
+          
+          for (let i = 0; i < 20; i++) {
+            const firework = document.createElement('div');
+            firework.className = 'firework';
+            firework.style.left = x + '%';
+            firework.style.top = y + '%';
+            
+            const colors = ['#ffd700', '#ff6b6b', '#4ecdc4', '#ff8c00', '#c0c0c0'];
+            firework.style.background = colors[Math.floor(Math.random() * colors.length)];
+            
+            const angle = (i / 20) * Math.PI * 2;
+            const distance = 100 + Math.random() * 150;
+            firework.style.setProperty('--fx', Math.cos(angle) * distance + 'px');
+            firework.style.setProperty('--fy', Math.sin(angle) * distance + 'px');
+            firework.style.animation = 'fireworkAnim 1.2s ease-out forwards';
+            
+            document.body.appendChild(firework);
+            setTimeout(() => firework.remove(), 1200);
+          }
+        }, f * 300);
+      }
     }
     
     function createConfetti() {
@@ -2215,6 +2528,21 @@
           setTimeout(() => confetti.remove(), 4000);
         }
       }, 1000);
+      
+      // Extra golden shower for champion
+      setTimeout(() => {
+        for (let i = 1; i <= 15; i++) {
+          const confetti = document.createElement('div');
+          confetti.className = `confetti confetti-${(i % 10) + 1}`;
+          confetti.style.left = (Math.random() * 80 + 10) + '%';
+          confetti.style.animationDuration = (2 + Math.random() * 2) + 's';
+          confetti.style.animationDelay = (Math.random() * 0.5) + 's';
+          confetti.style.width = (8 + Math.random() * 8) + 'px';
+          confetti.style.height = confetti.style.width;
+          document.body.appendChild(confetti);
+          setTimeout(() => confetti.remove(), 5000);
+        }
+      }, 1500);
     }
 
     function escHtml(s) {
