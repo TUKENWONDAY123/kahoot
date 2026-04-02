@@ -645,37 +645,74 @@
       font-weight: 900;
     }
 
-    /* ─── PODIUM ─── */
+    /* ═══════════════════════════════════════════════════════════════════════
+       NEW CINEMATIC PODIUM - Ultra Smooth Suspense Reveal System
+       ═══════════════════════════════════════════════════════════════════════ */
+    
     #screen-podium {
-      background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-      perspective: 1000px;
+      background: linear-gradient(180deg, #0a0a1a 0%, #1a1a3e 40%, #2d2d5a 100%);
+      perspective: 1200px;
       overflow: hidden;
     }
 
-    /* Dramatic spotlight effect */
+    /* Cinematic vignette overlay */
     #screen-podium::before {
       content: '';
       position: fixed;
       top: 0;
-      left: 50%;
-      transform: translateX(-50%);
+      left: 0;
       width: 100%;
       height: 100%;
-      background: radial-gradient(ellipse at center top, rgba(255,215,0,0.15) 0%, transparent 60%);
+      background: radial-gradient(ellipse at center, transparent 0%, transparent 40%, rgba(0,0,0,0.6) 100%);
       pointer-events: none;
       z-index: 1;
+    }
+
+    /* Animated spotlight beams */
+    #screen-podium::after {
+      content: '';
+      position: fixed;
+      top: -50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200%;
+      height: 150%;
+      background: conic-gradient(from 180deg at 50% 50%, 
+        transparent 0deg, 
+        rgba(255,215,0,0.03) 30deg, 
+        transparent 60deg,
+        rgba(255,215,0,0.02) 90deg,
+        transparent 120deg,
+        rgba(255,215,0,0.03) 150deg,
+        transparent 180deg,
+        rgba(255,215,0,0.02) 210deg,
+        transparent 240deg,
+        rgba(255,215,0,0.03) 270deg,
+        transparent 300deg,
+        rgba(255,215,0,0.02) 330deg,
+        transparent 360deg
+      );
+      animation: spotlightRotate 20s linear infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes spotlightRotate {
+      from { transform: translateX(-50%) rotate(0deg); }
+      to { transform: translateX(-50%) rotate(360deg); }
     }
 
     .podium-container {
       display: flex;
       align-items: flex-end;
       justify-content: center;
-      gap: 20px;
-      height: 60vh;
+      gap: 15px;
+      height: 55vh;
       width: 100%;
-      max-width: 900px;
+      max-width: 850px;
       position: relative;
       z-index: 2;
+      padding: 0 20px;
     }
 
     .podium-block {
@@ -686,71 +723,70 @@
       transform-style: preserve-3d;
     }
 
-    /* Suspense overlay for dramatic reveal */
+    /* ═══ SUSPENSE OVERLAY SYSTEM ═══ */
     .suspense-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: radial-gradient(circle, transparent 30%, rgba(0,0,0,0.8) 100%);
+      background: radial-gradient(circle at center, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.85) 100%);
       z-index: 10;
       opacity: 0;
-      transition: opacity 0.5s ease;
+      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(0px);
     }
 
     .suspense-overlay.active {
       opacity: 1;
+      backdrop-filter: blur(3px);
     }
 
-    /* Dramatic question mark reveal */
-    .rank-reveal {
-      font-size: 4rem;
-      font-weight: 900;
-      color: transparent;
-      text-shadow: none;
+    /* ═══ MYSTERY SILHOUETTES ═══ */
+    .mystery-silhouette {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%);
+      border-radius: 50% 50% 45% 45%;
+      margin-bottom: 15px;
       opacity: 0;
-      transform: scale(0.5);
+      filter: blur(8px);
+      transition: all 0.6s ease;
     }
 
-    .rank-reveal.reveal {
-      animation: rankRevealAnim 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    .mystery-silhouette.show {
+      opacity: 1;
+      animation: silhouettePulse 2s ease-in-out infinite;
     }
 
-    @keyframes rankRevealAnim {
-      0% {
-        opacity: 0;
-        transform: scale(0.5) rotate(-10deg);
-        color: transparent;
-      }
-      50% {
-        opacity: 1;
-        transform: scale(1.3) rotate(5deg);
-        color: #ffd700;
-        text-shadow: 0 0 30px rgba(255,215,0,0.8), 0 0 60px rgba(255,215,0,0.5);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1) rotate(0deg);
-        color: #ffd700;
-        text-shadow: 0 0 20px rgba(255,215,0,0.6);
-      }
+    @keyframes silhouettePulse {
+      0%, 100% { transform: translateX(-50%) scale(1); filter: blur(8px); opacity: 0.6; }
+      50% { transform: translateX(-50%) scale(1.05); filter: blur(6px); opacity: 0.8; }
     }
 
-    /* 3rd Place - Left */
+    /* ═══ 3RD PLACE - BRONZE ═══ */
     .podium-3rd {
       order: 1;
       z-index: 1;
     }
 
     .podium-3rd .podium-base {
-      width: 180px;
-      height: 120px;
-      background: linear-gradient(180deg, #cd7f32 0%, #8b4513 100%);
-      border-radius: 12px 12px 0 0;
-      box-shadow: 0 0 40px rgba(205, 127, 50, 0.6), inset 0 2px 10px rgba(255,255,255,0.3);
+      width: 170px;
+      height: 110px;
+      background: linear-gradient(180deg, #b87333 0%, #8b5a2b 50%, #654321 100%);
+      border-radius: 10px 10px 0 0;
+      box-shadow: 
+        0 0 30px rgba(184, 115, 51, 0.4),
+        0 10px 40px rgba(0,0,0,0.4),
+        inset 0 2px 15px rgba(255,255,255,0.2),
+        inset 0 -2px 10px rgba(0,0,0,0.2);
       position: relative;
-      transform: translateY(100vh);
+      transform: translateY(100vh) scale(0.8);
+      opacity: 0;
     }
 
     .podium-3rd .podium-base::before {
@@ -759,25 +795,31 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 4rem;
+      font-size: 3.5rem;
       font-weight: 900;
-      color: rgba(255,255,255,0.3);
+      color: rgba(255,255,255,0.25);
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
     }
 
-    /* 2nd Place - Right */
+    /* ═══ 2ND PLACE - SILVER ═══ */
     .podium-2nd {
       order: 3;
       z-index: 2;
     }
 
     .podium-2nd .podium-base {
-      width: 180px;
-      height: 160px;
-      background: linear-gradient(180deg, #c0c0c0 0%, #808080 100%);
-      border-radius: 12px 12px 0 0;
-      box-shadow: 0 0 50px rgba(192, 192, 192, 0.7), inset 0 2px 10px rgba(255,255,255,0.4);
+      width: 170px;
+      height: 150px;
+      background: linear-gradient(180deg, #e8e8e8 0%, #c0c0c0 50%, #909090 100%);
+      border-radius: 10px 10px 0 0;
+      box-shadow: 
+        0 0 40px rgba(192, 192, 192, 0.5),
+        0 10px 50px rgba(0,0,0,0.4),
+        inset 0 2px 15px rgba(255,255,255,0.4),
+        inset 0 -2px 10px rgba(0,0,0,0.2);
       position: relative;
-      transform: translateY(100vh);
+      transform: translateY(100vh) scale(0.8);
+      opacity: 0;
     }
 
     .podium-2nd .podium-base::before {
@@ -786,25 +828,32 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 4rem;
+      font-size: 3.5rem;
       font-weight: 900;
       color: rgba(255,255,255,0.3);
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
     }
 
-    /* 1st Place - Center (BIGGEST) */
+    /* ═══ 1ST PLACE - GOLD ═══ */
     .podium-1st {
       order: 2;
       z-index: 3;
     }
 
     .podium-1st .podium-base {
-      width: 220px;
-      height: 200px;
-      background: linear-gradient(180deg, #ffd700 0%, #ffb700 50%, #ff8c00 100%);
-      border-radius: 16px 16px 0 0;
-      box-shadow: 0 0 80px rgba(255, 215, 0, 0.9), inset 0 2px 15px rgba(255,255,255,0.5);
+      width: 210px;
+      height: 190px;
+      background: linear-gradient(180deg, #ffd700 0%, #ffb800 30%, #ff9500 70%, #ff7800 100%);
+      border-radius: 14px 14px 0 0;
+      box-shadow: 
+        0 0 60px rgba(255, 215, 0, 0.6),
+        0 0 100px rgba(255, 140, 0, 0.3),
+        0 15px 60px rgba(0,0,0,0.5),
+        inset 0 3px 20px rgba(255,255,255,0.5),
+        inset 0 -3px 15px rgba(0,0,0,0.2);
       position: relative;
-      transform: translateY(100vh);
+      transform: translateY(100vh) scale(0.8);
+      opacity: 0;
     }
 
     .podium-1st .podium-base::before {
@@ -813,105 +862,400 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 5rem;
+      font-size: 4.5rem;
       font-weight: 900;
-      color: rgba(255,255,255,0.3);
+      color: rgba(255,255,255,0.35);
+      text-shadow: 0 2px 15px rgba(0,0,0,0.3);
     }
 
-    /* Winner Cards */
+    /* Shimmer effect on gold podium */
+    .podium-1st .podium-base::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      animation: shimmer 3s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0%, 100% { left: -100%; }
+      50% { left: 150%; }
+    }
+
+    /* ═══ WINNER CARDS ═══ */
     .winner-card {
       position: absolute;
       bottom: 100%;
       left: 50%;
-      transform: translateX(-50%) translateY(100vh) scale(0);
-      background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
-      border-radius: 20px;
-      padding: 20px 24px;
+      transform: translateX(-50%) translateY(50px) scale(0.8);
+      background: linear-gradient(145deg, rgba(255,255,255,0.98) 0%, rgba(250,250,250,0.95) 100%);
+      border-radius: 16px;
+      padding: 18px 22px;
       text-align: center;
-      min-width: 200px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-      margin-bottom: 20px;
+      min-width: 180px;
+      box-shadow: 0 15px 50px rgba(0,0,0,0.3), 0 5px 20px rgba(0,0,0,0.2);
+      margin-bottom: 15px;
       opacity: 0;
+      border: 1px solid rgba(255,255,255,0.3);
     }
 
     .podium-1st .winner-card {
-      min-width: 260px;
-      padding: 28px 32px;
+      min-width: 240px;
+      padding: 24px 28px;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(255,215,0,0.2);
     }
 
     .winner-rank {
-      font-size: 3rem;
-      margin-bottom: 8px;
+      font-size: 2.5rem;
+      margin-bottom: 6px;
       opacity: 0;
-      transform: scale(0);
+      transform: scale(0.5);
     }
 
     .winner-rank.show {
-      animation: trophyPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s forwards;
+      animation: trophyReveal 0.7s cubic-bezier(0.34, 1.8, 0.64, 1) forwards;
     }
 
-    @keyframes trophyPop {
-      0% { opacity: 0; transform: scale(0) rotate(-20deg); }
-      60% { opacity: 1; transform: scale(1.3) rotate(10deg); }
-      100% { opacity: 1; transform: scale(1) rotate(0deg); }
+    @keyframes trophyReveal {
+      0% { opacity: 0; transform: scale(0.5) translateY(20px); }
+      40% { opacity: 1; transform: scale(1.2) translateY(-10px); }
+      70% { transform: scale(0.95) translateY(5px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
     }
 
     .podium-1st .winner-rank {
-      font-size: 4rem;
+      font-size: 3.5rem;
     }
 
     .winner-name {
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       font-weight: 800;
       color: #1a1a2e;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       word-break: break-word;
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    .winner-name.reveal {
+      animation: nameReveal 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    @keyframes nameReveal {
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .podium-1st .winner-name {
-      font-size: 1.8rem;
-      background: linear-gradient(90deg, #ffd700, #ff8c00);
+      font-size: 1.7rem;
+      background: linear-gradient(90deg, #ffb800, #ff8c00);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
 
     .winner-score {
-      font-size: 1.6rem;
+      font-size: 1.4rem;
       font-weight: 900;
       color: #4338ca;
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    .winner-score.reveal {
+      animation: scoreReveal 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.15s forwards;
+    }
+
+    @keyframes scoreReveal {
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .podium-1st .winner-score {
-      font-size: 2.2rem;
-      background: linear-gradient(90deg, #ff8c00, #ffd700);
+      font-size: 2rem;
+      background: linear-gradient(90deg, #ff8c00, #ffb800);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
 
-    /* Dramatic suspense flash effect */
-    @keyframes suspenseFlash {
-      0%, 100% { background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%); }
-      25% { background: linear-gradient(135deg, #1a1a3e 0%, #403b7a 60%, #32325e 100%); }
-      50% { background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%); }
-      75% { background: linear-gradient(135deg, #1a1a3e 0%, #403b7a 60%, #32325e 100%); }
+    /* ═══ CINEMATIC ANIMATION KEYFRAMES ═══ */
+
+    /* Smooth podium rise with anticipation */
+    @keyframes podiumRiseBronze {
+      0% { 
+        transform: translateY(100vh) scale(0.8) rotateX(-15deg); 
+        opacity: 0; 
+      }
+      60% { 
+        transform: translateY(-15px) scale(1.02) rotateX(3deg); 
+        opacity: 1; 
+      }
+      80% { 
+        transform: translateY(8px) scale(0.99) rotateX(-1deg); 
+      }
+      100% { 
+        transform: translateY(0) scale(1) rotateX(0); 
+        opacity: 1; 
+      }
     }
 
-    .suspense-flash {
-      animation: suspenseFlash 0.3s ease-in-out 3;
+    @keyframes podiumRiseSilver {
+      0% { 
+        transform: translateY(100vh) scale(0.8) rotateX(-15deg); 
+        opacity: 0; 
+      }
+      55% { 
+        transform: translateY(-20px) scale(1.03) rotateX(4deg); 
+        opacity: 1; 
+      }
+      75% { 
+        transform: translateY(10px) scale(0.98) rotateX(-2deg); 
+      }
+      100% { 
+        transform: translateY(0) scale(1) rotateX(0); 
+        opacity: 1; 
+      }
     }
 
-    /* Dramatic particle burst */
-    .particle-burst {
-      position: absolute;
+    @keyframes podiumRiseGold {
+      0% { 
+        transform: translateY(100vh) scale(0.7) rotateX(-20deg); 
+        opacity: 0; 
+      }
+      50% { 
+        transform: translateY(-30px) scale(1.05) rotateX(5deg); 
+        opacity: 1; 
+      }
+      70% { 
+        transform: translateY(15px) scale(0.97) rotateX(-3deg); 
+      }
+      85% { 
+        transform: translateY(-8px) scale(1.02) rotateX(2deg); 
+      }
+      100% { 
+        transform: translateY(0) scale(1) rotateX(0); 
+        opacity: 1; 
+      }
+    }
+
+    /* Winner card smooth reveal */
+    @keyframes cardRevealBronze {
+      0% { 
+        transform: translateX(-50%) translateY(50px) scale(0.8); 
+        opacity: 0; 
+      }
+      50% { 
+        transform: translateX(-50%) translateY(-20px) scale(1.05); 
+        opacity: 1; 
+      }
+      75% { 
+        transform: translateX(-50%) translateY(8px) scale(0.98); 
+      }
+      100% { 
+        transform: translateX(-50%) translateY(0) scale(1); 
+        opacity: 1; 
+      }
+    }
+
+    @keyframes cardRevealSilver {
+      0% { 
+        transform: translateX(-50%) translateY(50px) scale(0.8); 
+        opacity: 0; 
+      }
+      45% { 
+        transform: translateX(-50%) translateY(-25px) scale(1.06); 
+        opacity: 1; 
+      }
+      70% { 
+        transform: translateX(-50%) translateY(10px) scale(0.97); 
+      }
+      100% { 
+        transform: translateX(-50%) translateY(0) scale(1); 
+        opacity: 1; 
+      }
+    }
+
+    @keyframes cardRevealGold {
+      0% { 
+        transform: translateX(-50%) translateY(80px) scale(0.7); 
+        opacity: 0; 
+      }
+      40% { 
+        transform: translateX(-50%) translateY(-35px) scale(1.1); 
+        opacity: 1; 
+      }
+      60% { 
+        transform: translateX(-50%) translateY(15px) scale(0.95); 
+      }
+      80% { 
+        transform: translateX(-50%) translateY(-8px) scale(1.03); 
+      }
+      100% { 
+        transform: translateX(-50%) translateY(0) scale(1); 
+        opacity: 1; 
+      }
+    }
+
+    /* Gentle floating glow pulse */
+    @keyframes glowPulseBronze {
+      0%, 100% { 
+        box-shadow: 
+          0 0 30px rgba(184, 115, 51, 0.4),
+          0 10px 40px rgba(0,0,0,0.4),
+          inset 0 2px 15px rgba(255,255,255,0.2);
+      }
+      50% { 
+        box-shadow: 
+          0 0 50px rgba(184, 115, 51, 0.6),
+          0 10px 40px rgba(0,0,0,0.4),
+          inset 0 2px 20px rgba(255,255,255,0.3);
+      }
+    }
+
+    @keyframes glowPulseSilver {
+      0%, 100% { 
+        box-shadow: 
+          0 0 40px rgba(192, 192, 192, 0.5),
+          0 10px 50px rgba(0,0,0,0.4),
+          inset 0 2px 15px rgba(255,255,255,0.4);
+      }
+      50% { 
+        box-shadow: 
+          0 0 70px rgba(192, 192, 192, 0.7),
+          0 10px 50px rgba(0,0,0,0.4),
+          inset 0 2px 25px rgba(255,255,255,0.5);
+      }
+    }
+
+    @keyframes glowPulseGold {
+      0%, 100% { 
+        box-shadow: 
+          0 0 60px rgba(255, 215, 0, 0.6),
+          0 0 100px rgba(255, 140, 0, 0.3),
+          0 15px 60px rgba(0,0,0,0.5),
+          inset 0 3px 20px rgba(255,255,255,0.5);
+      }
+      50% { 
+        box-shadow: 
+          0 0 100px rgba(255, 215, 0, 0.9),
+          0 0 150px rgba(255, 140, 0, 0.5),
+          0 15px 60px rgba(0,0,0,0.5),
+          inset 0 3px 30px rgba(255,255,255,0.6);
+      }
+    }
+
+    /* ═══ ANIMATION CLASSES ═══ */
+    .animate-3rd .podium-base {
+      animation: 
+        podiumRiseBronze 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards,
+        glowPulseBronze 3s ease-in-out 1.4s infinite;
+    }
+
+    .animate-3rd .winner-card {
+      animation: cardRevealBronze 1s cubic-bezier(0.34, 1.8, 0.64, 1) 1.2s forwards;
+    }
+
+    .animate-2nd .podium-base {
+      animation: 
+        podiumRiseSilver 1.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards,
+        glowPulseSilver 3s ease-in-out 1.6s infinite;
+    }
+
+    .animate-2nd .winner-card {
+      animation: cardRevealSilver 1.2s cubic-bezier(0.34, 1.8, 0.64, 1) 1.4s forwards;
+    }
+
+    .animate-1st .podium-base {
+      animation: 
+        podiumRiseGold 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards,
+        glowPulseGold 2s ease-in-out 2s infinite;
+    }
+
+    .animate-1st .winner-card {
+      animation: cardRevealGold 1.5s cubic-bezier(0.34, 1.8, 0.64, 1) 1.8s forwards;
+    }
+
+    /* ═══ TITLE STYLES ═══ */
+    .podium-title {
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      font-weight: 900;
+      color: white;
+      text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+      margin-bottom: 30px;
+      z-index: 5;
+      position: relative;
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+
+    .podium-title.entrance {
+      animation: titleCinematic 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+
+    @keyframes titleCinematic {
+      0% {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.9);
+        letter-spacing: 10px;
+      }
+      50% {
+        opacity: 1;
+        transform: translateY(5px) scale(1.02);
+        letter-spacing: 2px;
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        letter-spacing: normal;
+        text-shadow: 0 0 40px rgba(255, 215, 0, 0.8), 0 0 80px rgba(255, 140, 0, 0.4);
+      }
+    }
+
+    /* ═══ CONFETTI SYSTEM ═══ */
+    @keyframes confettiFallSmooth {
+      0% { 
+        transform: translateY(-20px) rotate(0deg) translateX(0); 
+        opacity: 1; 
+      }
+      25% {
+        transform: translateY(25vh) rotate(180deg) translateX(20px);
+      }
+      50% {
+        transform: translateY(50vh) rotate(360deg) translateX(-10px);
+      }
+      75% {
+        transform: translateY(75vh) rotate(540deg) translateX(15px);
+        opacity: 0.8;
+      }
+      100% { 
+        transform: translateY(105vh) rotate(720deg) translateX(0); 
+        opacity: 0; 
+      }
+    }
+
+    .confetti {
+      position: fixed;
       width: 10px;
       height: 10px;
+      top: -20px;
+      z-index: 100;
+      pointer-events: none;
+      border-radius: 2px;
+    }
+
+    /* ═══ PARTICLE BURST EFFECT ═══ */
+    .particle-burst {
+      position: absolute;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
       pointer-events: none;
     }
 
-    @keyframes particleExplode {
+    @keyframes particleFloat {
       0% {
         transform: translate(0, 0) scale(1);
         opacity: 1;
@@ -922,266 +1266,57 @@
       }
     }
 
-    /* Enhanced podium animations */
-    @keyframes podiumRise3rd {
-      0% { transform: translateY(100vh) rotateX(-20deg); opacity: 0; }
-      30% { transform: translateY(-20px) rotateX(5deg); opacity: 1; }
-      50% { transform: translateY(10px) rotateX(-3deg); }
-      70% { transform: translateY(-5px) rotateX(2deg); }
-      100% { transform: translateY(0) rotateX(0); opacity: 1; }
-    }
-
-    @keyframes podiumRise2nd {
-      0% { transform: translateY(100vh) rotateX(-20deg) scale(0.8); opacity: 0; }
-      25% { transform: translateY(-30px) rotateX(8deg) scale(1.05); opacity: 1; }
-      45% { transform: translateY(15px) rotateX(-5deg) scale(0.98); }
-      65% { transform: translateY(-10px) rotateX(3deg) scale(1.02); }
-      85% { transform: translateY(5px) rotateX(-2deg) scale(0.99); }
-      100% { transform: translateY(0) rotateX(0) scale(1); opacity: 1; }
-    }
-
-    @keyframes podiumRise1st {
-      0% { transform: translateY(100vh) rotateX(-30deg) scale(0.6); opacity: 0; }
-      20% { transform: translateY(-50px) rotateX(15deg) scale(1.15); opacity: 1; }
-      40% { transform: translateY(25px) rotateX(-10deg) scale(0.95); }
-      55% { transform: translateY(-20px) rotateX(8deg) scale(1.08); }
-      70% { transform: translateY(10px) rotateX(-5deg) scale(0.98); }
-      85% { transform: translateY(-5px) rotateX(3deg) scale(1.03); }
-      100% { transform: translateY(0) rotateX(0) scale(1); opacity: 1; }
-    }
-
-    @keyframes winnerReveal {
-      0% { 
-        transform: translateX(-50%) translateY(100vh) scale(0) rotateZ(-10deg);
-        opacity: 0;
-      }
-      40% {
-        transform: translateX(-50%) translateY(-30px) scale(1.1) rotateZ(5deg);
-        opacity: 1;
-      }
-      60% {
-        transform: translateX(-50%) translateY(10px) scale(0.95) rotateZ(-3deg);
-      }
-      80% {
-        transform: translateX(-50%) translateY(-5px) scale(1.02) rotateZ(2deg);
-      }
-      100% { 
-        transform: translateX(-50%) translateY(0) scale(1) rotateZ(0);
-        opacity: 1;
-      }
-    }
-
-    @keyframes winnerReveal1st {
-      0% { 
-        transform: translateX(-50%) translateY(100vh) scale(0) rotateZ(-20deg);
-        opacity: 0;
-      }
-      30% {
-        transform: translateX(-50%) translateY(-60px) scale(1.3) rotateZ(10deg);
-        opacity: 1;
-      }
-      50% {
-        transform: translateX(-50%) translateY(20px) scale(0.9) rotateZ(-8deg);
-      }
-      65% {
-        transform: translateX(-50%) translateY(-15px) scale(1.15) rotateZ(5deg);
-      }
-      80% {
-        transform: translateX(-50%) translateY(8px) scale(0.95) rotateZ(-3deg);
-      }
-      100% { 
-        transform: translateX(-50%) translateY(0) scale(1) rotateZ(0);
-        opacity: 1;
-      }
-    }
-
-    @keyframes crazyShake {
-      0%, 100% { transform: translateX(0); }
-      5% { transform: translateX(-8px) rotate(-3deg); }
-      10% { transform: translateX(8px) rotate(3deg); }
-      15% { transform: translateX(-12px) rotate(-5deg); }
-      20% { transform: translateX(12px) rotate(5deg); }
-      25% { transform: translateX(-10px) rotate(-4deg); }
-      30% { transform: translateX(10px) rotate(4deg); }
-      35% { transform: translateX(-6px) rotate(-2deg); }
-      40% { transform: translateX(6px) rotate(2deg); }
-      45% { transform: translateX(-4px) rotate(-1deg); }
-      50% { transform: translateX(4px) rotate(1deg); }
-      55% { transform: translateX(-2px) rotate(-0.5deg); }
-      60% { transform: translateX(2px) rotate(0.5deg); }
-      65% { transform: translateX(0); }
-    }
-
-    @keyframes crazyShake1st {
-      0%, 100% { transform: translateX(0) scale(1); }
-      4% { transform: translateX(-15px) rotate(-8deg) scale(1.05); }
-      8% { transform: translateX(15px) rotate(8deg) scale(0.95); }
-      12% { transform: translateX(-20px) rotate(-12deg) scale(1.08); }
-      16% { transform: translateX(20px) rotate(12deg) scale(0.92); }
-      20% { transform: translateX(-18px) rotate(-10deg) scale(1.06); }
-      24% { transform: translateX(18px) rotate(10deg) scale(0.94); }
-      28% { transform: translateX(-14px) rotate(-7deg) scale(1.04); }
-      32% { transform: translateX(14px) rotate(7deg) scale(0.96); }
-      36% { transform: translateX(-10px) rotate(-5deg) scale(1.03); }
-      40% { transform: translateX(10px) rotate(5deg) scale(0.97); }
-      44% { transform: translateX(-8px) rotate(-4deg) scale(1.02); }
-      48% { transform: translateX(8px) rotate(4deg) scale(0.98); }
-      52% { transform: translateX(-5px) rotate(-2deg) scale(1.01); }
-      56% { transform: translateX(5px) rotate(2deg) scale(0.99); }
-      60% { transform: translateX(0) scale(1); }
-    }
-
-    @keyframes pulseGlow {
-      0%, 100% { box-shadow: 0 0 40px rgba(205, 127, 50, 0.6), inset 0 2px 10px rgba(255,255,255,0.3); }
-      50% { box-shadow: 0 0 80px rgba(205, 127, 50, 0.9), inset 0 2px 15px rgba(255,255,255,0.5); }
-    }
-
-    @keyframes pulseGlow2nd {
-      0%, 100% { box-shadow: 0 0 50px rgba(192, 192, 192, 0.7), inset 0 2px 10px rgba(255,255,255,0.4); }
-      50% { box-shadow: 0 0 100px rgba(192, 192, 192, 1), inset 0 2px 20px rgba(255,255,255,0.6); }
-    }
-
-    @keyframes pulseGlow1st {
-      0%, 100% { box-shadow: 0 0 80px rgba(255, 215, 0, 0.9), inset 0 2px 15px rgba(255,255,255,0.5); }
-      50% { box-shadow: 0 0 150px rgba(255, 215, 0, 1), 0 0 200px rgba(255, 140, 0, 0.5), inset 0 2px 25px rgba(255,255,255,0.7); }
-    }
-
-    @keyframes confettiFall {
-      0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-    }
-
-    .confetti {
-      position: fixed;
-      width: 12px;
-      height: 12px;
-      top: -20px;
-      z-index: 1000;
-      pointer-events: none;
-    }
-
-    .confetti-1 { background: #ffd700; left: 10%; animation: confettiFall 3s linear forwards; }
-    .confetti-2 { background: #ff6b6b; left: 20%; animation: confettiFall 3.5s linear forwards 0.2s; }
-    .confetti-3 { background: #4ecdc4; left: 30%; animation: confettiFall 2.8s linear forwards 0.4s; }
-    .confetti-4 { background: #ffd700; left: 40%; animation: confettiFall 3.2s linear forwards 0.1s; }
-    .confetti-5 { background: #ff8c00; left: 50%; animation: confettiFall 3.7s linear forwards 0.3s; }
-    .confetti-6 { background: #c0c0c0; left: 60%; animation: confettiFall 2.9s linear forwards 0.5s; }
-    .confetti-7 { background: #ff6b6b; left: 70%; animation: confettiFall 3.3s linear forwards 0.15s; }
-    .confetti-8 { background: #ffd700; left: 80%; animation: confettiFall 3.6s linear forwards 0.25s; }
-    .confetti-9 { background: #4ecdc4; left: 90%; animation: confettiFall 3.1s linear forwards 0.35s; }
-    .confetti-10 { background: #cd7f32; left: 15%; animation: confettiFall 3.4s linear forwards 0.45s; }
-
-    .animate-3rd .podium-base {
-      animation: podiumRise3rd 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
-                 crazyShake 0.8s ease-in-out 1.2s,
-                 pulseGlow 2s ease-in-out 2s infinite;
-    }
-
-    .animate-3rd .winner-card {
-      animation: winnerReveal 1s cubic-bezier(0.34, 1.56, 0.64, 1) 1.5s forwards,
-                 crazyShake 0.6s ease-in-out 2.5s;
-    }
-
-    .animate-2nd .podium-base {
-      animation: podiumRise2nd 1.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
-                 crazyShake 1s ease-in-out 1.4s,
-                 pulseGlow2nd 2s ease-in-out 2.4s infinite;
-    }
-
-    .animate-2nd .winner-card {
-      animation: winnerReveal 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 1.8s forwards,
-                 crazyShake 0.8s ease-in-out 3s;
-    }
-
-    .animate-1st .podium-base {
-      animation: podiumRise1st 1.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
-                 crazyShake1st 1.5s ease-in-out 1.8s,
-                 pulseGlow1st 1.5s ease-in-out 3.3s infinite;
-    }
-
-    .animate-1st .winner-card {
-      animation: winnerReveal1st 1.5s cubic-bezier(0.34, 1.56, 0.64, 1) 2.3s forwards,
-                 crazyShake1st 1s ease-in-out 3.8s;
-    }
-
-    .podium-title {
-      font-size: clamp(2.5rem, 8vw, 4rem);
-      font-weight: 900;
-      color: white;
-      text-shadow: 0 0 40px rgba(255, 215, 0, 0.8);
-      margin-bottom: 40px;
-      animation: titlePulse 2s ease-in-out infinite;
-      z-index: 5;
-      position: relative;
-    }
-
-    @keyframes titlePulse {
-      0%, 100% { transform: scale(1); text-shadow: 0 0 40px rgba(255, 215, 0, 0.8); }
-      50% { transform: scale(1.05); text-shadow: 0 0 80px rgba(255, 215, 0, 1), 0 0 120px rgba(255, 140, 0, 0.6); }
-    }
-
-    /* Dramatic title entrance */
-    .podium-title.entrance {
-      animation: titleEntrance 1.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards, titlePulse 2s ease-in-out 1.5s infinite;
-    }
-
-    @keyframes titleEntrance {
-      0% {
-        opacity: 0;
-        transform: scale(0.5) translateY(-50px);
-      }
-      60% {
-        opacity: 1;
-        transform: scale(1.2) translateY(10px);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-      }
-    }
-
-    /* Firework effect for winner */
-    .firework {
-      position: fixed;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      z-index: 999;
-      pointer-events: none;
-    }
-
-    @keyframes fireworkAnim {
-      0% {
-        transform: translate(0, 0) scale(1);
-        opacity: 1;
-      }
-      100% {
-        transform: translate(var(--fx), var(--fy)) scale(0);
-        opacity: 0;
-      }
-    }
-
-    /* Thunder/Lightning effect */
-    .lightning-flash {
+    /* ═══ SPOTLIGHT FLASH EFFECT ═══ */
+    .spotlight-flash {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: white;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.3) 0%, transparent 70%);
       opacity: 0;
       pointer-events: none;
-      z-index: 998;
+      z-index: 50;
     }
 
-    .lightning-flash.flash {
-      animation: lightning 0.15s ease-out;
+    .spotlight-flash.flash {
+      animation: spotlightPulse 0.4s ease-out;
     }
 
-    @keyframes lightning {
-      0% { opacity: 0.8; }
-      50% { opacity: 0.3; }
+    @keyframes spotlightPulse {
+      0% { opacity: 0; }
+      30% { opacity: 1; }
       100% { opacity: 0; }
+    }
+
+    /* ═══ VICTORY RAYS EFFECT ═══ */
+    .victory-rays {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 200vmax;
+      height: 200vmax;
+      background: repeating-conic-gradient(
+        from 0deg at 50% 50%,
+        transparent 0deg,
+        rgba(255,215,0,0.03) 5deg,
+        transparent 10deg
+      );
+      animation: raysRotate 30s linear infinite;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    .victory-rays.active {
+      opacity: 1;
+    }
+
+    @keyframes raysRotate {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to { transform: translate(-50%, -50%) rotate(360deg); }
     }
 
     /* Old podium styles - keeping for compatibility */
@@ -2287,38 +2422,53 @@
       showPlayerWaiting('✅', 'Answer submitted!', false);
     }
 
-    // ── PODIUM ────────────────────────────────────────────────────────────────
+    // ── CINEMATIC PODIUM ──────────────────────────────────────────────────────
     function showPodium(code) {
       goTo('screen-podium');
       const players = Object.values(store.players[code] || {}).sort((a, b) => b.score - a.score);
       
-      // Reset animations
-      document.getElementById('podium-3rd').classList.remove('animate-3rd');
-      document.getElementById('podium-2nd').classList.remove('animate-2nd');
-      document.getElementById('podium-1st').classList.remove('animate-1st');
+      // Reset all animations
+      ['3rd', '2nd', '1st'].forEach(rank => {
+        document.getElementById(`podium-${rank}`).classList.remove(`animate-${rank}`);
+      });
       
-      // Reset content
-      document.getElementById('name-3rd').textContent = '-';
-      document.getElementById('score-3rd').textContent = '0';
-      document.getElementById('name-2nd').textContent = '-';
-      document.getElementById('score-2nd').textContent = '0';
-      document.getElementById('name-1st').textContent = '-';
-      document.getElementById('score-1st').textContent = '0';
+      // Reset content with suspense
+      ['3rd', '2nd', '1st'].forEach(rank => {
+        document.getElementById(`name-${rank}`).textContent = '???';
+        document.getElementById(`score-${rank}`).textContent = '?';
+        document.getElementById(`name-${rank}`).classList.remove('reveal');
+        document.getElementById(`score-${rank}`).classList.remove('reveal');
+      });
       
-      // Reset trophy animation classes
+      // Reset trophy animations
       document.querySelectorAll('.winner-rank').forEach(el => el.classList.remove('show'));
       
-      // Remove old confetti and effects
-      document.querySelectorAll('.confetti, .firework, .lightning-flash').forEach(c => c.remove());
+      // Clean up old effects
+      document.querySelectorAll('.confetti, .particle-burst, .spotlight-flash, .victory-rays').forEach(c => c.remove());
       
-      // Add suspense overlay
+      // Create suspense overlay
       let overlay = document.querySelector('.suspense-overlay');
       if (!overlay) {
         overlay = document.createElement('div');
         overlay.className = 'suspense-overlay';
         document.getElementById('screen-podium').appendChild(overlay);
       }
-      setTimeout(() => overlay.classList.add('active'), 100);
+      
+      // Create spotlight flash effect
+      let spotlight = document.querySelector('.spotlight-flash');
+      if (!spotlight) {
+        spotlight = document.createElement('div');
+        spotlight.className = 'spotlight-flash';
+        document.body.appendChild(spotlight);
+      }
+      
+      // Create victory rays for champion
+      let rays = document.querySelector('.victory-rays');
+      if (!rays) {
+        rays = document.createElement('div');
+        rays.className = 'victory-rays';
+        document.getElementById('screen-podium').appendChild(rays);
+      }
       
       if (!players.length) {
         document.getElementById('name-1st').textContent = 'No players 😢';
@@ -2326,113 +2476,121 @@
         return;
       }
       
-      // Get top 3 players
       const top3 = players.slice(0, 3);
       
-      // DRAMATIC SUSPENSE SEQUENCE
-      // Title entrance with dramatic effect
+      // ═══ CINEMATIC SEQUENCE START ═══
+      
+      // Title entrance
       const titleEl = document.querySelector('.podium-title');
       titleEl.classList.remove('entrance');
-      void titleEl.offsetWidth; // Force reflow
+      void titleEl.offsetWidth;
       titleEl.classList.add('entrance');
       
-      // Suspenseful music beat simulation with background flashes
-      let flashCount = 0;
-      const suspenseInterval = setInterval(() => {
-        document.getElementById('screen-podium').classList.add('suspense-flash');
-        setTimeout(() => {
-          document.getElementById('screen-podium').classList.remove('suspense-flash');
-        }, 150);
-        flashCount++;
-        if (flashCount >= 6) clearInterval(suspenseInterval);
-      }, 400);
+      // Activate suspense overlay
+      setTimeout(() => overlay.classList.add('active'), 200);
       
-      // Add lightning effect before each reveal
-      const createLightning = () => {
-        let lightning = document.querySelector('.lightning-flash');
-        if (!lightning) {
-          lightning = document.createElement('div');
-          lightning.className = 'lightning-flash';
-          document.body.appendChild(lightning);
-        }
-        lightning.classList.add('flash');
-        setTimeout(() => lightning.classList.remove('flash'), 150);
+      // Spotlight flash helper
+      const doSpotlight = () => {
+        spotlight.classList.add('flash');
+        setTimeout(() => spotlight.classList.remove('flash'), 400);
       };
       
-      // 3rd PLACE - First reveal with suspense
+      // ═══ 3RD PLACE REVEAL ═══
       setTimeout(() => {
-        createLightning();
+        doSpotlight();
         if (top3[2]) {
-          document.getElementById('name-3rd').textContent = escHtml(top3[2].name);
-          document.getElementById('score-3rd').textContent = top3[2].score.toLocaleString();
+          const nameEl = document.getElementById('name-3rd');
+          const scoreEl = document.getElementById('score-3rd');
+          
+          nameEl.textContent = escHtml(top3[2].name);
+          scoreEl.textContent = top3[2].score.toLocaleString();
+          
           document.getElementById('podium-3rd').classList.add('animate-3rd');
           
-          // Show trophy with delay
+          // Staggered text reveal
           setTimeout(() => {
+            nameEl.classList.add('reveal');
             document.querySelector('#winner-3rd .winner-rank').classList.add('show');
-            createParticleBurst('winner-3rd', '#cd7f32');
-          }, 800);
+          }, 1400);
+          
+          setTimeout(() => {
+            scoreEl.classList.add('reveal');
+            createElegantBurst('winner-3rd', '#b87333', 8);
+          }, 1600);
         }
-      }, 2000);
+      }, 2500);
       
-      // 2nd PLACE - Even more suspense
+      // ═══ 2ND PLACE REVEAL ═══
       setTimeout(() => {
-        createLightning();
-        // Add extra suspense flash
-        document.getElementById('screen-podium').style.animation = 'suspenseFlash 0.15s ease-in-out 2';
-        setTimeout(() => {
-          document.getElementById('screen-podium').style.animation = '';
-        }, 300);
-        
+        doSpotlight();
         if (top3[1]) {
-          document.getElementById('name-2nd').textContent = escHtml(top3[1].name);
-          document.getElementById('score-2nd').textContent = top3[1].score.toLocaleString();
+          const nameEl = document.getElementById('name-2nd');
+          const scoreEl = document.getElementById('score-2nd');
+          
+          nameEl.textContent = escHtml(top3[1].name);
+          scoreEl.textContent = top3[1].score.toLocaleString();
+          
           document.getElementById('podium-2nd').classList.add('animate-2nd');
           
           setTimeout(() => {
+            nameEl.classList.add('reveal');
             document.querySelector('#winner-2nd .winner-rank').classList.add('show');
-            createParticleBurst('winner-2nd', '#c0c0c0');
-          }, 900);
+          }, 1600);
+          
+          setTimeout(() => {
+            scoreEl.classList.add('reveal');
+            createElegantBurst('winner-2nd', '#c0c0c0', 10);
+          }, 1800);
         }
-      }, 4500);
+      }, 5000);
       
-      // Remove suspense overlay before final reveal
+      // ═══ 1ST PLACE - THE CHAMPION ═══
       setTimeout(() => {
+        // Remove overlay for grand reveal
         overlay.classList.remove('active');
-      }, 6000);
-      
-      // 1st PLACE - THE GRAND CHAMPION with fireworks
-      setTimeout(() => {
-        createLightning();
-        // Multiple lightning strikes for dramatic effect
-        setTimeout(createLightning, 200);
-        setTimeout(createLightning, 400);
+        
+        // Activate victory rays
+        rays.classList.add('active');
+        
+        // Triple spotlight flash
+        doSpotlight();
+        setTimeout(doSpotlight, 300);
+        setTimeout(doSpotlight, 600);
         
         if (top3[0]) {
-          document.getElementById('name-1st').textContent = escHtml(top3[0].name);
-          document.getElementById('score-1st').textContent = top3[0].score.toLocaleString();
+          const nameEl = document.getElementById('name-1st');
+          const scoreEl = document.getElementById('score-1st');
+          
+          nameEl.textContent = escHtml(top3[0].name);
+          scoreEl.textContent = top3[0].score.toLocaleString();
+          
           document.getElementById('podium-1st').classList.add('animate-1st');
           
-          // Show trophy with grand animation
+          // Grand reveal sequence
           setTimeout(() => {
+            nameEl.classList.add('reveal');
             document.querySelector('#winner-1st .winner-rank').classList.add('show');
-            createParticleBurst('winner-1st', '#ffd700');
-            createParticleBurst('winner-1st', '#ff8c00');
-          }, 1000);
+            createElegantBurst('winner-1st', '#ffd700', 15);
+          }, 2000);
           
-          // Massive confetti explosion
-          setTimeout(() => createConfetti(), 1200);
-          setTimeout(() => createConfetti(), 1500);
-          setTimeout(() => createConfetti(), 1800);
+          setTimeout(() => {
+            scoreEl.classList.add('reveal');
+            createElegantBurst('winner-1st', '#ff8c00', 12);
+          }, 2200);
           
-          // Firework celebration
-          setTimeout(() => createFireworks(), 1500);
+          // Epic confetti celebration
+          setTimeout(() => createElegantConfetti(), 2500);
+          setTimeout(() => createElegantConfetti(), 3000);
+          setTimeout(() => createElegantConfetti(), 3500);
+          
+          // Golden sparkle burst
+          setTimeout(() => createGoldenSparkles(), 2800);
         }
-      }, 7000);
+      }, 8000);
       
-      // Also update legacy list (hidden)
-      const medals  = ['🥇','🥈','🥉'];
-      const list    = document.getElementById('podium-list');
+      // Update legacy list
+      const medals = ['🥇','🥈','🥉'];
+      const list = document.getElementById('podium-list');
       list.innerHTML = '';
       players.slice(0, 3).forEach((p, i) => {
         const li = document.createElement('li');
@@ -2442,7 +2600,8 @@
       });
     }
     
-    function createParticleBurst(targetId, color) {
+    // Elegant particle burst - smooth and non-glitchy
+    function createElegantBurst(targetId, color, count) {
       const target = document.getElementById(targetId);
       if (!target) return;
       
@@ -2450,99 +2609,68 @@
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
       
-      for (let i = 0; i < 12; i++) {
+      for (let i = 0; i < count; i++) {
         const particle = document.createElement('div');
         particle.className = 'particle-burst';
         particle.style.background = color;
         particle.style.left = centerX + 'px';
         particle.style.top = centerY + 'px';
+        particle.style.boxShadow = `0 0 10px ${color}`;
         
-        const angle = (i / 12) * Math.PI * 2;
-        const distance = 80 + Math.random() * 60;
+        const angle = (i / count) * Math.PI * 2 + (Math.random() - 0.5) * 0.5;
+        const distance = 60 + Math.random() * 80;
         particle.style.setProperty('--tx', Math.cos(angle) * distance + 'px');
         particle.style.setProperty('--ty', Math.sin(angle) * distance + 'px');
-        particle.style.animation = 'particleExplode 0.8s ease-out forwards';
+        particle.style.animation = `particleFloat ${0.8 + Math.random() * 0.4}s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards`;
         
         document.body.appendChild(particle);
-        setTimeout(() => particle.remove(), 800);
+        setTimeout(() => particle.remove(), 1200);
       }
     }
     
-    function createFireworks() {
-      for (let f = 0; f < 5; f++) {
+    // Elegant confetti - smooth falling
+    function createElegantConfetti() {
+      const colors = ['#ffd700', '#ffb800', '#ff9500', '#ff6b6b', '#4ecdc4', '#c0c0c0', '#b87333'];
+      
+      for (let i = 0; i < 20; i++) {
         setTimeout(() => {
-          const x = 20 + Math.random() * 60;
-          const y = 20 + Math.random() * 30;
-          
-          for (let i = 0; i < 20; i++) {
-            const firework = document.createElement('div');
-            firework.className = 'firework';
-            firework.style.left = x + '%';
-            firework.style.top = y + '%';
-            
-            const colors = ['#ffd700', '#ff6b6b', '#4ecdc4', '#ff8c00', '#c0c0c0'];
-            firework.style.background = colors[Math.floor(Math.random() * colors.length)];
-            
-            const angle = (i / 20) * Math.PI * 2;
-            const distance = 100 + Math.random() * 150;
-            firework.style.setProperty('--fx', Math.cos(angle) * distance + 'px');
-            firework.style.setProperty('--fy', Math.sin(angle) * distance + 'px');
-            firework.style.animation = 'fireworkAnim 1.2s ease-out forwards';
-            
-            document.body.appendChild(firework);
-            setTimeout(() => firework.remove(), 1200);
-          }
-        }, f * 300);
-      }
-    }
-    
-    function createConfetti() {
-      for (let i = 1; i <= 10; i++) {
-        const confetti = document.createElement('div');
-        confetti.className = `confetti confetti-${i}`;
-        document.body.appendChild(confetti);
-        
-        // Remove after animation
-        setTimeout(() => confetti.remove(), 4000);
-      }
-      
-      // Create more confetti waves
-      setTimeout(() => {
-        for (let i = 1; i <= 10; i++) {
           const confetti = document.createElement('div');
-          confetti.className = `confetti confetti-${i}`;
-          confetti.style.left = (5 + i * 9) + '%';
-          confetti.style.animationDelay = (i * 0.1) + 's';
-          document.body.appendChild(confetti);
-          setTimeout(() => confetti.remove(), 4000);
-        }
-      }, 500);
-      
-      setTimeout(() => {
-        for (let i = 1; i <= 10; i++) {
-          const confetti = document.createElement('div');
-          confetti.className = `confetti confetti-${i}`;
-          confetti.style.left = (10 + i * 8) + '%';
-          confetti.style.animationDelay = (i * 0.15) + 's';
-          document.body.appendChild(confetti);
-          setTimeout(() => confetti.remove(), 4000);
-        }
-      }, 1000);
-      
-      // Extra golden shower for champion
-      setTimeout(() => {
-        for (let i = 1; i <= 15; i++) {
-          const confetti = document.createElement('div');
-          confetti.className = `confetti confetti-${(i % 10) + 1}`;
-          confetti.style.left = (Math.random() * 80 + 10) + '%';
-          confetti.style.animationDuration = (2 + Math.random() * 2) + 's';
-          confetti.style.animationDelay = (Math.random() * 0.5) + 's';
-          confetti.style.width = (8 + Math.random() * 8) + 'px';
+          confetti.className = 'confetti';
+          confetti.style.left = (Math.random() * 100) + '%';
+          confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+          confetti.style.width = (6 + Math.random() * 8) + 'px';
           confetti.style.height = confetti.style.width;
+          confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+          confetti.style.animation = `confettiFallSmooth ${2.5 + Math.random() * 2}s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards`;
+          confetti.style.animationDelay = (Math.random() * 0.5) + 's';
+          
           document.body.appendChild(confetti);
           setTimeout(() => confetti.remove(), 5000);
-        }
-      }, 1500);
+        }, i * 50);
+      }
+    }
+    
+    // Golden sparkles for champion
+    function createGoldenSparkles() {
+      const colors = ['#ffd700', '#ffb800', '#ffec8b', '#fff8dc'];
+      
+      for (let i = 0; i < 30; i++) {
+        setTimeout(() => {
+          const sparkle = document.createElement('div');
+          sparkle.className = 'confetti';
+          sparkle.style.left = (10 + Math.random() * 80) + '%';
+          sparkle.style.top = (20 + Math.random() * 40) + '%';
+          sparkle.style.background = colors[Math.floor(Math.random() * colors.length)];
+          sparkle.style.width = (4 + Math.random() * 6) + 'px';
+          sparkle.style.height = sparkle.style.width;
+          sparkle.style.borderRadius = '50%';
+          sparkle.style.boxShadow = `0 0 10px ${sparkle.style.background}`;
+          sparkle.style.animation = `confettiFallSmooth ${1.5 + Math.random() * 1.5}s ease-out forwards`;
+          
+          document.body.appendChild(sparkle);
+          setTimeout(() => sparkle.remove(), 3500);
+        }, i * 40);
+      }
     }
 
     function escHtml(s) {
