@@ -415,8 +415,6 @@
       gap: 10px;
       justify-content: center;
       margin-top: 16px;
-      max-height: 260px;
-      overflow-y: auto;
     }
 
     .player-pill {
@@ -450,6 +448,8 @@
       width: 100%;
       max-width: 700px;
       margin-top: 10px;
+      max-height: 55vh;
+      overflow-y: auto;
     }
 
     .lobby-top {
@@ -710,6 +710,96 @@
       font-size: 1.4rem;
     }
 
+    /* ─── ROUND SCOREBOARD ─── */
+    #screen-round-scores {
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 60%, #312e81 100%);
+    }
+
+    .round-sb-card {
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 20px;
+      padding: 28px 32px;
+      width: 100%;
+      max-width: 520px;
+      box-shadow: 0 24px 60px rgba(0,0,0,.5);
+    }
+
+    .round-sb-title {
+      font-size: 1rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,.5);
+      margin-bottom: 18px;
+    }
+
+    .rsb-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      color: white;
+      font-weight: 800;
+      font-size: 1.1rem;
+      opacity: 0;
+      transform: translateX(-40px);
+      transition: opacity .4s ease, transform .4s ease;
+    }
+
+    .rsb-item.show {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .rsb-item:nth-child(1) { background: linear-gradient(90deg, rgba(251,191,36,.35), rgba(251,191,36,.1)); border: 1px solid rgba(251,191,36,.5); }
+    .rsb-item:nth-child(2) { background: linear-gradient(90deg, rgba(192,192,192,.25), rgba(192,192,192,.07)); border: 1px solid rgba(192,192,192,.4); }
+    .rsb-item:nth-child(3) { background: linear-gradient(90deg, rgba(205,127,50,.25), rgba(205,127,50,.07)); border: 1px solid rgba(205,127,50,.4); }
+    .rsb-item:nth-child(4) { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); }
+    .rsb-item:nth-child(5) { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); }
+
+    .rsb-rank {
+      font-size: 1.5rem;
+      min-width: 34px;
+      text-align: center;
+    }
+
+    .rsb-name { flex: 1; }
+
+    .rsb-score {
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: #fbbf24;
+    }
+
+    .rsb-delta {
+      font-size: .85rem;
+      font-weight: 700;
+      color: #4ade80;
+      background: rgba(74,222,128,.15);
+      border-radius: 20px;
+      padding: 2px 10px;
+      min-width: 58px;
+      text-align: center;
+    }
+
+    @keyframes scoreCount {
+      from { opacity: 0; transform: scale(.7); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .rsb-score.counting {
+      animation: scoreCount .3s ease;
+    }
+
+    @keyframes countPulse {
+      0%   { transform: scale(1);    opacity: 1; }
+      45%  { transform: scale(1.18); opacity: .9; }
+      100% { transform: scale(1);    opacity: 1; }
+    }
+
     /* ─── UTILS ─── */
     .hidden {
       display: none !important;
@@ -731,22 +821,7 @@
       display: block;
     }
 
-    .timer-bar-wrap {
-      width: 100%;
-      max-width: 800px;
-      height: 10px;
-      background: rgba(255, 255, 255, .15);
-      border-radius: 10px;
-      overflow: hidden;
-      margin-bottom: 14px;
-    }
-
-    .timer-bar {
-      height: 100%;
-      background: linear-gradient(90deg, #22c55e, #fbbf24, #ef4444);
-      border-radius: 10px;
-      transition: width 1s linear;
-    }
+    /* timer-bar removed */
 
     .hint-text {
       color: rgba(255, 255, 255, .5);
@@ -931,12 +1006,30 @@
     </div>
   </div>
 
+  <!-- ══════════════ SCREEN 8b: PRE-GAME COUNTDOWN ══════════════ -->
+  <div id="screen-countdown" class="screen" style="background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:24px;">
+      <h2 style="color:rgba(255,255,255,.7);letter-spacing:2px;text-transform:uppercase;font-size:1rem;">Get Ready!</h2>
+      <div id="countdown-number"
+        style="font-size:clamp(6rem,25vw,12rem);font-weight:900;color:#fbbf24;
+               text-shadow:0 0 60px rgba(251,191,36,.5);
+               line-height:1;
+               animation:countPulse .9s ease-in-out infinite;">10</div>
+      <p style="color:rgba(255,255,255,.55);font-weight:700;font-size:1.1rem;">Game starts in…</p>
+    </div>
+  </div>
+
   <!-- ══════════════ SCREEN 9: HOST GAME VIEW ══════════════ -->
   <div id="screen-host-game" class="screen">
     <p class="host-meta" id="host-q-meta">Question 1 of 1</p>
     <div class="host-question-box" id="host-question-text">…</div>
-    <div class="timer-bar-wrap">
-      <div class="timer-bar" id="timer-bar" style="width:100%"></div>
+    <!-- vote progress bar -->
+    <div style="display:flex;align-items:center;gap:12px;width:100%;max-width:800px;margin-bottom:14px;">
+      <span style="color:rgba(255,255,255,.6);font-size:.9rem;font-weight:700;white-space:nowrap;">Votes:</span>
+      <div style="flex:1;height:10px;background:rgba(255,255,255,.15);border-radius:10px;overflow:hidden;">
+        <div id="vote-bar" style="height:100%;background:linear-gradient(90deg,#4ade80,#22c55e);border-radius:10px;width:0%;transition:width .4s ease;"></div>
+      </div>
+      <span id="vote-count-label" style="color:rgba(255,255,255,.8);font-size:.9rem;font-weight:800;white-space:nowrap;">0/0</span>
     </div>
     <div class="answers-grid" id="host-answers">
       <div class="ans-btn btn-red" id="ha-1">
@@ -952,8 +1045,19 @@
         <div class="shape">■</div><span id="hat-4"></span>
       </div>
     </div>
-    <button class="btn btn-dark btn-sm" id="host-next-btn" onclick="hostNext()"
-      style="margin-top:24px;min-width:220px;">Show Answer</button>
+    <p style="color:rgba(255,255,255,.45);font-size:.85rem;font-weight:700;margin-top:18px;">⏳ Round ends automatically when everyone has voted</p>
+  </div>
+
+  <!-- ══════════════ SCREEN 11b: ROUND SCOREBOARD ══════════════ -->
+  <div id="screen-round-scores" class="screen">
+    <div style="font-size:3rem;margin-bottom:4px;">📊</div>
+    <h1 style="font-size:2rem;margin-bottom:4px;" id="rsb-header">Round 1 Results</h1>
+    <p style="color:rgba(255,255,255,.5);font-weight:700;margin-bottom:20px;" id="rsb-subheader">Top Players</p>
+    <div class="round-sb-card">
+      <div class="round-sb-title">Leaderboard</div>
+      <div id="rsb-list"></div>
+    </div>
+    <p style="color:rgba(255,255,255,.35);font-size:.82rem;font-weight:700;margin-top:18px;" id="rsb-next-hint">Moving to next question…</p>
   </div>
 
   <!-- ══════════════ SCREEN 10: PLAYER GAME VIEW ══════════════ -->
@@ -979,7 +1083,7 @@
     </div>
   </div>
 
-  <!-- ══════════════ SCREEN 11: PODIUM ══════════════ -->
+  <!-- ══════════════ SCREEN 12: FINAL PODIUM ══════════════ -->
   <div id="screen-podium" class="screen">
     <div style="font-size:4rem;margin-bottom:8px;">🏆</div>
     <h1>Final Scores</h1>
@@ -1061,7 +1165,26 @@
         const { type, code, state, players } = e.data;
         if (type === 'STORE_UPDATE') {
           if (state) store.state[code] = state;
-          if (players) store.players[code] = players;
+          if (players) {
+            // Merge incoming players into existing store instead of overwriting,
+            // so players joining from separate tabs all accumulate correctly.
+            if (!store.players[code]) store.players[code] = {};
+            Object.entries(players).forEach(([id, data]) => {
+              // Only update answered/score if newer data says answered, to
+              // avoid a late broadcast clearing an already-answered flag.
+              const existing = store.players[code][id];
+              if (existing) {
+                store.players[code][id] = {
+                  ...existing,
+                  ...data,
+                  answered: existing.answered || data.answered,
+                  score: Math.max(existing.score, data.score),
+                };
+              } else {
+                store.players[code][id] = data;
+              }
+            });
+          }
           listeners.forEach(fn => fn(code));
         }
       };
@@ -1089,7 +1212,9 @@
     }
 
     function getPlayers(code) {
-      return Object.values(store.players[code] || {});
+      const playerMap = store.players[code] || {};
+      // Deduplicate by ID (Object.entries guarantees unique keys)
+      return Object.values(playerMap);
     }
 
     // ─────────────────────────────────────────
@@ -1104,9 +1229,10 @@
     let myScore = 0;
     let myAnswered = false;
 
-    let timerInterval = null;
     let hostQIndex = 0;
     let hostPhase = 'question';
+    // track scores before this round to compute deltas
+    let prevScores = {};
 
     // ─────────────────────────────────────────
     // TOAST
@@ -1371,15 +1497,33 @@
 
     function hostStoreListener(code) {
       if (code !== curCode) return;
-      updateHostLobbyUI();
+      const currentScreen = document.querySelector('.screen.active');
+      if (currentScreen && currentScreen.id === 'screen-lobby-host') {
+        updateHostLobbyUI();
+      }
+      if (currentScreen && currentScreen.id === 'screen-host-game') {
+        updateVoteBar();
+      }
     }
 
     function updateHostLobbyUI() {
-      const players = getPlayers(curCode);
-      document.getElementById('player-count-badge').textContent = players.length + ' player' + (players.length !== 1 ? 's' : '');
+      // Build a deduplicated map: playerId → player, so each ID appears only once
+      const playerMap = store.players[curCode] || {};
+      const seenIds = new Set();
+      const uniquePlayers = [];
+      Object.entries(playerMap).forEach(([id, p]) => {
+        if (!seenIds.has(id)) {
+          seenIds.add(id);
+          uniquePlayers.push(p);
+        }
+      });
+
+      const count = uniquePlayers.length;
+      document.getElementById('player-count-badge').textContent = count + ' player' + (count !== 1 ? 's' : '');
+
       const list = document.getElementById('host-players-list');
       list.innerHTML = '';
-      players.forEach(p => {
+      uniquePlayers.forEach(p => {
         const el = document.createElement('div');
         el.className = 'player-pill';
         el.textContent = p.name;
@@ -1395,12 +1539,39 @@
       if (players.length === 0 && !confirm('No players yet — start anyway for a demo?')) return;
       hostQIndex = 0;
       hostPhase = 'question';
-      showHostQuestion();
+
+      // Tell all player tabs to show the countdown too
+      setState(curCode, { status: 'countdown' });
+
+      // Show countdown on host
+      goTo('screen-countdown');
+      let count = 10;
+      const numEl = document.getElementById('countdown-number');
+      numEl.textContent = count;
+
+      const tick = setInterval(() => {
+        count--;
+        numEl.textContent = count;
+        if (count <= 0) {
+          clearInterval(tick);
+          setState(curCode, { status: 'question', qIndex: hostQIndex, revealAnswer: false });
+          showHostQuestion();
+        }
+      }, 1000);
     }
 
     function showHostQuestion() {
       const game = store.games[curCode];
       const q = game.questions[hostQIndex];
+
+      // snapshot scores before this round
+      prevScores = {};
+      if (store.players[curCode]) {
+        Object.keys(store.players[curCode]).forEach(id => {
+          prevScores[id] = store.players[curCode][id].score;
+        });
+      }
+
       goTo('screen-host-game');
 
       document.getElementById('host-q-meta').textContent = `Question ${hostQIndex + 1} of ${game.questions.length}`;
@@ -1413,7 +1584,6 @@
         document.getElementById('ha-' + (i + 1)).classList.remove('dim', 'correct');
       });
 
-      document.getElementById('host-next-btn').textContent = 'Show Answer ▼';
       hostPhase = 'question';
 
       if (store.players[curCode]) {
@@ -1422,51 +1592,109 @@
         });
       }
 
+      // reset vote bar
+      updateVoteBar();
+
       setState(curCode, { status: 'question', qIndex: hostQIndex, revealAnswer: false });
-      startTimer(q.t);
     }
 
-    function startTimer(seconds) {
-      clearInterval(timerInterval);
-      const bar = document.getElementById('timer-bar');
-      bar.style.transition = 'none';
-      bar.style.width = '100%';
-      let remaining = seconds;
-      setTimeout(() => {
-        bar.style.transition = `width ${seconds}s linear`;
-        bar.style.width = '0%';
-      }, 50);
-      timerInterval = setInterval(() => {
-        remaining--;
-        if (remaining <= 0) clearInterval(timerInterval);
-      }, 1000);
+    function updateVoteBar() {
+      const players = getPlayers(curCode);
+      const total = players.length;
+      const voted = players.filter(p => p.answered).length;
+      const pct = total > 0 ? Math.round((voted / total) * 100) : 0;
+      const bar = document.getElementById('vote-bar');
+      const label = document.getElementById('vote-count-label');
+      if (bar) bar.style.width = pct + '%';
+      if (label) label.textContent = `${voted}/${total}`;
+      // auto-end round when everyone voted
+      if (total > 0 && voted >= total && hostPhase === 'question') {
+        hostRevealAnswer();
+      }
     }
 
-    function hostNext() {
+    function hostRevealAnswer() {
+      if (hostPhase !== 'question') return;
+      hostPhase = 'reveal';
       const game = store.games[curCode];
-      clearInterval(timerInterval);
+      const correct = game.questions[hostQIndex].c;
+      for (let i = 1; i <= 4; i++) {
+        const el = document.getElementById('ha-' + i);
+        if (i === correct) el.classList.add('correct');
+        else el.classList.add('dim');
+      }
+      setState(curCode, { status: 'reveal', qIndex: hostQIndex, revealAnswer: true, correct });
 
-      if (hostPhase === 'question') {
-        hostPhase = 'reveal';
-        const correct = game.questions[hostQIndex].c;
-        for (let i = 1; i <= 4; i++) {
-          const el = document.getElementById('ha-' + i);
-          if (i === correct) el.classList.add('correct');
-          else el.classList.add('dim');
-        }
-        setState(curCode, { status: 'reveal', qIndex: hostQIndex, revealAnswer: true, correct });
-        const hasNext = hostQIndex < game.questions.length - 1;
-        document.getElementById('host-next-btn').textContent = hasNext ? 'Next Question ▶' : 'See Podium 🏆';
-      } else if (hostPhase === 'reveal') {
-        if (hostQIndex < game.questions.length - 1) {
+      // show round scoreboard after short delay
+      setTimeout(() => showRoundScoreboard(), 1200);
+    }
+
+    function showRoundScoreboard() {
+      const game = store.games[curCode];
+      const isLast = hostQIndex >= game.questions.length - 1;
+      const players = getPlayers(curCode).sort((a, b) => b.score - a.score);
+      const top5 = players.slice(0, 5);
+      const medals = ['🥇','🥈','🥉','4️⃣','5️⃣'];
+
+      document.getElementById('rsb-header').textContent = `Round ${hostQIndex + 1} Results`;
+      document.getElementById('rsb-subheader').textContent = `Question ${hostQIndex + 1} of ${game.questions.length}`;
+      document.getElementById('rsb-next-hint').textContent = isLast ? '🏆 Final scores coming up…' : '⏭ Next question coming up…';
+
+      const list = document.getElementById('rsb-list');
+      list.innerHTML = '';
+
+      top5.forEach((p, i) => {
+        const delta = p.score - (prevScores[Object.keys(store.players[curCode]).find(k => store.players[curCode][k] === p)] || 0);
+        const div = document.createElement('div');
+        div.className = 'rsb-item';
+        div.innerHTML = `
+          <span class="rsb-rank">${medals[i] || (i + 1)}</span>
+          <span class="rsb-name">${escHtml(p.name)}</span>
+          <span class="rsb-delta">+${delta}</span>
+          <span class="rsb-score" id="rsb-score-${i}">0</span>`;
+        list.appendChild(div);
+      });
+
+      goTo('screen-round-scores');
+
+      // animate each row in then count up score
+      top5.forEach((p, i) => {
+        setTimeout(() => {
+          const el = list.children[i];
+          if (el) el.classList.add('show');
+          // count up score
+          const scoreEl = document.getElementById('rsb-score-' + i);
+          if (!scoreEl) return;
+          const target = p.score;
+          const duration = 900;
+          const steps = 30;
+          let step = 0;
+          const interval = setInterval(() => {
+            step++;
+            const val = Math.round((step / steps) * target);
+            scoreEl.textContent = val.toLocaleString();
+            if (step >= steps) {
+              scoreEl.textContent = target.toLocaleString();
+              clearInterval(interval);
+            }
+          }, duration / steps);
+        }, i * 220);
+      });
+
+      // broadcast so players see reveal/waiting
+      setState(curCode, { status: 'reveal', qIndex: hostQIndex, correct: game.questions[hostQIndex].c });
+
+      // auto-advance after 4 seconds
+      setTimeout(() => {
+        if (isLast) {
+          setState(curCode, { status: 'podium' });
+          showPodium(curCode);
+        } else {
           hostQIndex++;
           hostPhase = 'question';
           showHostQuestion();
-        } else {
-          setState(curCode, { status: 'podium' });
-          showPodium(curCode);
         }
-      }
+      }, 4500);
     }
 
     // ─────────────────────────────────────────
@@ -1540,8 +1768,29 @@
 
     let lastQIndex = -1;
 
+    let playerCountdownInterval = null;
+
     function handlePlayerState(status, qIndex, correct) {
-      if (status === 'question') {
+      if (status === 'countdown') {
+        // Show player-side countdown
+        if (playerCountdownInterval) return; // already counting
+        let count = 10;
+        goTo('screen-countdown');
+        const numEl = document.getElementById('countdown-number');
+        numEl.textContent = count;
+        playerCountdownInterval = setInterval(() => {
+          count--;
+          numEl.textContent = count;
+          if (count <= 0) {
+            clearInterval(playerCountdownInterval);
+            playerCountdownInterval = null;
+          }
+        }, 1000);
+      } else if (status === 'question') {
+        if (playerCountdownInterval) {
+          clearInterval(playerCountdownInterval);
+          playerCountdownInterval = null;
+        }
         if (qIndex !== lastQIndex) { lastQIndex = qIndex; myAnswered = false; }
         if (!myAnswered) showPlayerButtons();
         else showPlayerWaiting('⏳', 'Answer sent!', false);
@@ -1580,15 +1829,26 @@
       if (myAnswered) return;
       myAnswered = true;
       const st = store.state[curCode];
+      // everyone gets points; more for correct answer
       if (st) {
         const game = store.games[curCode];
         if (game) {
           const q = game.questions[st.qIndex];
-          if (q && q.c === num) {
-            myScore += 1000;
+          if (q) {
+            if (q.c === num) {
+              myScore += 200; // correct answer bonus
+            } else {
+              myScore += 100; // participation points
+            }
             updatePlayerScore(curCode, curPlayerId, myScore);
           }
         }
+      }
+      // mark as answered so host can detect all-voted
+      if (store.players[curCode] && store.players[curCode][curPlayerId]) {
+        store.players[curCode][curPlayerId].answered = true;
+        broadcastStore(curCode);
+        listeners.forEach(fn => fn(curCode));
       }
       showPlayerWaiting('✅', 'Answer submitted!', false);
     }
