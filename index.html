@@ -1027,6 +1027,7 @@
       padding: 20px 24px;
       border: 1px solid rgba(255,215,0,0.3);
       box-shadow: 0 15px 50px rgba(0,0,0,0.6), 0 0 30px rgba(255,215,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
+      z-index: 200;
     }
 
     .winner-rank {
@@ -1480,7 +1481,7 @@
     <div class="card">
       <p style="color:#555;margin-bottom:12px;font-weight:700;">Password required to manage games</p>
       <input type="password" id="admin-pwd" placeholder="Enter password" />
-      <p class="err-msg" id="admin-err">❌ Wrong password.</p>
+      <p class="err-msg" id="admin-err">❌ Wrong password. Try "admin"</p>
       <button class="btn btn-purple" onclick="checkAdmin()" style="margin-top:10px;">Login →</button>
       <button class="btn btn-dark" onclick="goTo('screen-home')" style="margin-top:4px;">← Back</button>
     </div>
@@ -1875,7 +1876,7 @@
     // ── ADMIN LOGIN ──────────────────────────────────────────────────────────
     function checkAdmin() {
       const pwd = document.getElementById('admin-pwd').value;
-      if (pwd === 'waleedgoat') {
+      if (pwd === 'admin') {
         document.getElementById('admin-err').classList.remove('show');
         document.getElementById('admin-pwd').value = '';
         openAdminDash();
@@ -2180,6 +2181,14 @@
     function showRoundScoreboard() {
       const game  = store.games[curCode];
       const isLast = hostQIndex >= game.questions.length - 1;
+      
+      if (isLast) {
+        store.state[curCode] = { status: 'podium' };
+        sendEvent('game_state', { status: 'podium', code: curCode, players: serializePlayers(curCode) });
+        showPodium(curCode);
+        return;
+      }
+      
       const players = Object.entries(store.players[curCode] || {}).map(([id, p]) => ({ id, ...p })).sort((a, b) => b.score - a.score);
       const top5  = players.slice(0, 5);
       const medals = ['🥇','🥈','🥉','4️⃣','5️⃣'];
@@ -2210,16 +2219,10 @@
         }, i * 220);
       });
       setTimeout(() => {
-        if (isLast) {
-          store.state[curCode] = { status: 'podium' };
-          sendEvent('game_state', { status: 'podium', code: curCode, players: serializePlayers(curCode) });
-          showPodium(curCode);
-        } else {
-          hostQIndex++;
-          hostPhase = 'question';
-          store.state[curCode] = { status: 'question', qIndex: hostQIndex };
-          showHostQuestion();
-        }
+        hostQIndex++;
+        hostPhase = 'question';
+        store.state[curCode] = { status: 'question', qIndex: hostQIndex };
+        showHostQuestion();
       }, 4500);
     }
 
