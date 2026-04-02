@@ -645,17 +645,20 @@
       font-weight: 900;
     }
 
-    /* ═══════════════════════════════════════════════════════════════════════
-       NEW CINEMATIC PODIUM - Ultra Smooth Suspense Reveal System
-       ═══════════════════════════════════════════════════════════════════════ */
+    /* ═══════════════════════════════════════════════════════════════════════════
+       🌌 COSMIC GALAXY ARENA - Interstellar Victory Podium 🌌
+       ═══════════════════════════════════════════════════════════════════════════ */
     
     #screen-podium {
-      background: linear-gradient(180deg, #0a0a1a 0%, #1a1a3e 40%, #2d2d5a 100%);
-      perspective: 1200px;
+      background: 
+        radial-gradient(ellipse at 20% 80%, rgba(120, 20, 180, 0.4) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(20, 100, 200, 0.4) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 1) 0%, #0a0a1a 100%);
+      perspective: 1500px;
       overflow: hidden;
     }
 
-    /* Cinematic vignette overlay */
+    /* Animated starfield background */
     #screen-podium::before {
       content: '';
       position: fixed;
@@ -663,58 +666,163 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: radial-gradient(ellipse at center, transparent 0%, transparent 40%, rgba(0,0,0,0.6) 100%);
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    /* Animated spotlight beams */
-    #screen-podium::after {
-      content: '';
-      position: fixed;
-      top: -50%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 200%;
-      height: 150%;
-      background: conic-gradient(from 180deg at 50% 50%, 
-        transparent 0deg, 
-        rgba(255,215,0,0.03) 30deg, 
-        transparent 60deg,
-        rgba(255,215,0,0.02) 90deg,
-        transparent 120deg,
-        rgba(255,215,0,0.03) 150deg,
-        transparent 180deg,
-        rgba(255,215,0,0.02) 210deg,
-        transparent 240deg,
-        rgba(255,215,0,0.03) 270deg,
-        transparent 300deg,
-        rgba(255,215,0,0.02) 330deg,
-        transparent 360deg
-      );
-      animation: spotlightRotate 20s linear infinite;
+      background-image: 
+        radial-gradient(2px 2px at 20px 30px, white, transparent),
+        radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 90px 40px, white, transparent),
+        radial-gradient(2px 2px at 160px 120px, rgba(255,255,255,0.9), transparent),
+        radial-gradient(1px 1px at 230px 80px, white, transparent),
+        radial-gradient(2px 2px at 300px 150px, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1px 1px at 400px 60px, white, transparent),
+        radial-gradient(2px 2px at 500px 200px, rgba(255,255,255,0.8), transparent);
+      background-size: 550px 250px;
+      animation: starfieldMove 100s linear infinite;
       pointer-events: none;
       z-index: 0;
     }
 
-    @keyframes spotlightRotate {
-      from { transform: translateX(-50%) rotate(0deg); }
-      to { transform: translateX(-50%) rotate(360deg); }
+    @keyframes starfieldMove {
+      from { transform: translateY(0); }
+      to { transform: translateY(-250px); }
     }
 
+    /* Nebula clouds */
+    .nebula {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.3;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .nebula-1 {
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(138, 43, 226, 0.6), transparent 70%);
+      top: -200px;
+      left: -200px;
+      animation: nebulaFloat1 20s ease-in-out infinite;
+    }
+
+    .nebula-2 {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(0, 150, 255, 0.5), transparent 70%);
+      bottom: -150px;
+      right: -150px;
+      animation: nebulaFloat2 25s ease-in-out infinite;
+    }
+
+    @keyframes nebulaFloat1 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(50px, 30px) scale(1.1); }
+    }
+
+    @keyframes nebulaFloat2 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(-40px, -20px) scale(1.15); }
+    }
+
+    /* ═══ COSMIC TITLE ═══ */
+    .podium-title {
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      font-weight: 900;
+      background: linear-gradient(90deg, #ff00cc, #3333ff, #00ccff, #ff00cc);
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: none;
+      margin-bottom: 50px;
+      z-index: 10;
+      position: relative;
+      opacity: 0;
+      letter-spacing: 8px;
+      animation: cosmicGradient 4s linear infinite;
+    }
+
+    @keyframes cosmicGradient {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 300% 50%; }
+    }
+
+    .podium-title.entrance {
+      animation: cosmicTitleEntrance 2s cubic-bezier(0.16, 1, 0.3, 1) forwards, cosmicGradient 4s linear infinite;
+    }
+
+    @keyframes cosmicTitleEntrance {
+      0% {
+        opacity: 0;
+        transform: scale(3) translateZ(-500px);
+        filter: blur(20px);
+        letter-spacing: 50px;
+      }
+      60% {
+        opacity: 1;
+        transform: scale(0.9) translateZ(50px);
+        filter: blur(0px);
+        letter-spacing: 4px;
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateZ(0);
+        filter: blur(0px);
+        letter-spacing: 8px;
+      }
+    }
+
+    /* ═══ PLANET PODIUM CONTAINER ═══ */
     .podium-container {
       display: flex;
-      align-items: flex-end;
+      align-items: center;
       justify-content: center;
-      gap: 15px;
-      height: 55vh;
+      gap: 30px;
+      height: 60vh;
       width: 100%;
-      max-width: 850px;
+      max-width: 1000px;
       position: relative;
-      z-index: 2;
+      z-index: 5;
       padding: 0 20px;
     }
 
+    /* ═══ ORBIT RINGS ═══ */
+    .orbit-ring {
+      position: absolute;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .orbit-ring-1 {
+      width: 400px;
+      height: 120px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotateX(75deg);
+      animation: orbitRotate1 20s linear infinite;
+    }
+
+    .orbit-ring-2 {
+      width: 550px;
+      height: 160px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotateX(75deg) rotateZ(45deg);
+      animation: orbitRotate2 30s linear infinite;
+    }
+
+    @keyframes orbitRotate1 {
+      from { transform: translate(-50%, -50%) rotateX(75deg) rotateZ(0deg); }
+      to { transform: translate(-50%, -50%) rotateX(75deg) rotateZ(360deg); }
+    }
+
+    @keyframes orbitRotate2 {
+      from { transform: translate(-50%, -50%) rotateX(75deg) rotateZ(45deg); }
+      to { transform: translate(-50%, -50%) rotateX(75deg) rotateZ(405deg); }
+    }
+
+    /* ═══ PLANET PODIUMS ═══ */
     .podium-block {
       position: relative;
       display: flex;
@@ -723,106 +831,88 @@
       transform-style: preserve-3d;
     }
 
-    /* ═══ SUSPENSE OVERLAY SYSTEM ═══ */
-    .suspense-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(circle at center, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.85) 100%);
-      z-index: 10;
-      opacity: 0;
-      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-      backdrop-filter: blur(0px);
-    }
-
-    .suspense-overlay.active {
-      opacity: 1;
-      backdrop-filter: blur(3px);
-    }
-
-    /* ═══ MYSTERY SILHOUETTES ═══ */
-    .mystery-silhouette {
-      position: absolute;
-      bottom: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 80px;
-      height: 80px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%);
-      border-radius: 50% 50% 45% 45%;
-      margin-bottom: 15px;
-      opacity: 0;
-      filter: blur(8px);
-      transition: all 0.6s ease;
-    }
-
-    .mystery-silhouette.show {
-      opacity: 1;
-      animation: silhouettePulse 2s ease-in-out infinite;
-    }
-
-    @keyframes silhouettePulse {
-      0%, 100% { transform: translateX(-50%) scale(1); filter: blur(8px); opacity: 0.6; }
-      50% { transform: translateX(-50%) scale(1.05); filter: blur(6px); opacity: 0.8; }
-    }
-
-    /* ═══ 3RD PLACE - BRONZE ═══ */
+    /* 3RD PLACE - Mars-like Planet */
     .podium-3rd {
       order: 1;
-      z-index: 1;
+      z-index: 2;
+      transform: translateY(40px);
     }
 
-    .podium-3rd .podium-base {
-      width: 170px;
-      height: 110px;
-      background: linear-gradient(180deg, #b87333 0%, #8b5a2b 50%, #654321 100%);
-      border-radius: 10px 10px 0 0;
+    .planet-3rd {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: 
+        radial-gradient(circle at 30% 30%, rgba(255,150,100,0.8), transparent 50%),
+        radial-gradient(circle at 70% 70%, rgba(150,50,0,0.6), transparent 50%),
+        linear-gradient(135deg, #cd5c3c 0%, #8b3a22 50%, #5c2413 100%);
       box-shadow: 
-        0 0 30px rgba(184, 115, 51, 0.4),
-        0 10px 40px rgba(0,0,0,0.4),
-        inset 0 2px 15px rgba(255,255,255,0.2),
-        inset 0 -2px 10px rgba(0,0,0,0.2);
+        inset -10px -10px 30px rgba(0,0,0,0.6),
+        inset 10px 10px 30px rgba(255,150,100,0.3),
+        0 0 40px rgba(205,92,60,0.5),
+        0 0 80px rgba(205,92,60,0.3);
       position: relative;
-      transform: translateY(100vh) scale(0.8);
-      opacity: 0;
+      transform: scale(0) rotate(-180deg);
+      animation: planetFloat3rd 4s ease-in-out infinite;
     }
 
-    .podium-3rd .podium-base::before {
+    .planet-3rd::before {
       content: '3';
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 3.5rem;
+      font-size: 3rem;
       font-weight: 900;
-      color: rgba(255,255,255,0.25);
-      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      color: rgba(255,255,255,0.4);
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
     }
 
-    /* ═══ 2ND PLACE - SILVER ═══ */
+    /* Planet ring */
+    .planet-3rd::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 180px;
+      height: 40px;
+      border: 3px solid rgba(255,150,100,0.3);
+      border-radius: 50%;
+      transform: translate(-50%, -50%) rotateX(80deg);
+      box-shadow: 0 0 20px rgba(255,150,100,0.2);
+    }
+
+    @keyframes planetFloat3rd {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-15px) rotate(3deg); }
+    }
+
+    /* 2ND PLACE - Ice Planet */
     .podium-2nd {
       order: 3;
       z-index: 2;
+      transform: translateY(20px);
     }
 
-    .podium-2nd .podium-base {
-      width: 170px;
-      height: 150px;
-      background: linear-gradient(180deg, #e8e8e8 0%, #c0c0c0 50%, #909090 100%);
-      border-radius: 10px 10px 0 0;
+    .planet-2nd {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: 
+        radial-gradient(circle at 30% 30%, rgba(200,230,255,0.9), transparent 50%),
+        radial-gradient(circle at 70% 70%, rgba(100,150,200,0.5), transparent 50%),
+        linear-gradient(135deg, #e0f0ff 0%, #a0c0e0 50%, #6080a0 100%);
       box-shadow: 
-        0 0 40px rgba(192, 192, 192, 0.5),
-        0 10px 50px rgba(0,0,0,0.4),
-        inset 0 2px 15px rgba(255,255,255,0.4),
-        inset 0 -2px 10px rgba(0,0,0,0.2);
+        inset -12px -12px 35px rgba(0,0,0,0.5),
+        inset 12px 12px 35px rgba(255,255,255,0.4),
+        0 0 50px rgba(160,192,224,0.6),
+        0 0 100px rgba(160,192,224,0.3);
       position: relative;
-      transform: translateY(100vh) scale(0.8);
-      opacity: 0;
+      transform: scale(0) rotate(180deg);
+      animation: planetFloat2nd 4s ease-in-out infinite 0.5s;
     }
 
-    .podium-2nd .podium-base::before {
+    .planet-2nd::before {
       content: '2';
       position: absolute;
       top: 50%;
@@ -830,33 +920,52 @@
       transform: translate(-50%, -50%);
       font-size: 3.5rem;
       font-weight: 900;
-      color: rgba(255,255,255,0.3);
-      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      color: rgba(255,255,255,0.5);
+      text-shadow: 0 2px 10px rgba(0,0,0,0.4);
     }
 
-    /* ═══ 1ST PLACE - GOLD ═══ */
+    /* Ice crystals effect */
+    .planet-2nd::after {
+      content: '';
+      position: absolute;
+      top: 10%;
+      left: 20%;
+      width: 30%;
+      height: 30%;
+      background: radial-gradient(circle, rgba(255,255,255,0.4), transparent 70%);
+      border-radius: 50%;
+      filter: blur(5px);
+    }
+
+    @keyframes planetFloat2nd {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(-3deg); }
+    }
+
+    /* 1ST PLACE - Golden Sun Planet */
     .podium-1st {
       order: 2;
       z-index: 3;
     }
 
-    .podium-1st .podium-base {
-      width: 210px;
-      height: 190px;
-      background: linear-gradient(180deg, #ffd700 0%, #ffb800 30%, #ff9500 70%, #ff7800 100%);
-      border-radius: 14px 14px 0 0;
+    .planet-1st {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: 
+        radial-gradient(circle at 35% 35%, rgba(255,255,200,1), rgba(255,215,0,0.8) 30%, rgba(255,140,0,0.6) 60%, rgba(200,100,0,0.8) 100%);
       box-shadow: 
-        0 0 60px rgba(255, 215, 0, 0.6),
-        0 0 100px rgba(255, 140, 0, 0.3),
-        0 15px 60px rgba(0,0,0,0.5),
-        inset 0 3px 20px rgba(255,255,255,0.5),
-        inset 0 -3px 15px rgba(0,0,0,0.2);
+        inset -15px -15px 40px rgba(150,80,0,0.6),
+        inset 15px 15px 40px rgba(255,255,200,0.5),
+        0 0 60px rgba(255,215,0,0.8),
+        0 0 120px rgba(255,140,0,0.5),
+        0 0 180px rgba(255,100,0,0.3);
       position: relative;
-      transform: translateY(100vh) scale(0.8);
-      opacity: 0;
+      transform: scale(0);
+      animation: planetFloat1st 3s ease-in-out infinite, sunPulse 2s ease-in-out infinite;
     }
 
-    .podium-1st .podium-base::before {
+    .planet-1st::before {
       content: '1';
       position: absolute;
       top: 50%;
@@ -864,459 +973,261 @@
       transform: translate(-50%, -50%);
       font-size: 4.5rem;
       font-weight: 900;
-      color: rgba(255,255,255,0.35);
-      text-shadow: 0 2px 15px rgba(0,0,0,0.3);
+      color: rgba(255,255,255,0.6);
+      text-shadow: 0 0 30px rgba(255,215,0,0.8), 0 2px 10px rgba(0,0,0,0.3);
     }
 
-    /* Shimmer effect on gold podium */
-    .podium-1st .podium-base::after {
+    /* Solar flares */
+    .planet-1st::after {
       content: '';
       position: absolute;
-      top: 0;
-      left: -100%;
-      width: 50%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-      animation: shimmer 3s ease-in-out infinite;
+      top: -20%;
+      left: -20%;
+      width: 140%;
+      height: 140%;
+      background: conic-gradient(from 0deg, transparent 0deg, rgba(255,200,50,0.3) 30deg, transparent 60deg, transparent 120deg, rgba(255,180,30,0.2) 150deg, transparent 180deg, transparent 240deg, rgba(255,200,50,0.3) 270deg, transparent 300deg, transparent 360deg);
+      border-radius: 50%;
+      animation: solarFlare 8s linear infinite;
     }
 
-    @keyframes shimmer {
-      0%, 100% { left: -100%; }
-      50% { left: 150%; }
+    @keyframes planetFloat1st {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-25px) scale(1.02); }
     }
 
-    /* ═══ WINNER CARDS ═══ */
+    @keyframes sunPulse {
+      0%, 100% { box-shadow: inset -15px -15px 40px rgba(150,80,0,0.6), inset 15px 15px 40px rgba(255,255,200,0.5), 0 0 60px rgba(255,215,0,0.8), 0 0 120px rgba(255,140,0,0.5), 0 0 180px rgba(255,100,0,0.3); }
+      50% { box-shadow: inset -15px -15px 40px rgba(150,80,0,0.6), inset 15px 15px 40px rgba(255,255,200,0.5), 0 0 80px rgba(255,215,0,1), 0 0 150px rgba(255,140,0,0.7), 0 0 220px rgba(255,100,0,0.5); }
+    }
+
+    @keyframes solarFlare {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* ═══ WINNER INFO CARDS ═══ */
     .winner-card {
       position: absolute;
-      bottom: 100%;
+      bottom: 110%;
       left: 50%;
-      transform: translateX(-50%) translateY(50px) scale(0.8);
-      background: linear-gradient(145deg, rgba(255,255,255,0.98) 0%, rgba(250,250,250,0.95) 100%);
+      transform: translateX(-50%) scale(0);
+      background: rgba(10, 10, 30, 0.9);
+      border: 1px solid rgba(255,255,255,0.2);
       border-radius: 16px;
-      padding: 18px 22px;
+      padding: 16px 20px;
       text-align: center;
-      min-width: 180px;
-      box-shadow: 0 15px 50px rgba(0,0,0,0.3), 0 5px 20px rgba(0,0,0,0.2);
-      margin-bottom: 15px;
+      min-width: 160px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
       opacity: 0;
-      border: 1px solid rgba(255,255,255,0.3);
     }
 
     .podium-1st .winner-card {
-      min-width: 240px;
-      padding: 24px 28px;
-      border-radius: 20px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(255,215,0,0.2);
+      min-width: 200px;
+      padding: 20px 24px;
+      border: 1px solid rgba(255,215,0,0.3);
+      box-shadow: 0 15px 50px rgba(0,0,0,0.6), 0 0 30px rgba(255,215,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
     }
 
     .winner-rank {
-      font-size: 2.5rem;
-      margin-bottom: 6px;
+      font-size: 2rem;
+      margin-bottom: 4px;
       opacity: 0;
-      transform: scale(0.5);
+      transform: scale(0);
     }
 
     .winner-rank.show {
-      animation: trophyReveal 0.7s cubic-bezier(0.34, 1.8, 0.64, 1) forwards;
+      animation: rankPop 0.6s cubic-bezier(0.34, 1.8, 0.64, 1) forwards;
     }
 
-    @keyframes trophyReveal {
-      0% { opacity: 0; transform: scale(0.5) translateY(20px); }
-      40% { opacity: 1; transform: scale(1.2) translateY(-10px); }
-      70% { transform: scale(0.95) translateY(5px); }
+    @keyframes rankPop {
+      0% { opacity: 0; transform: scale(0) translateY(20px); }
+      50% { opacity: 1; transform: scale(1.3) translateY(-10px); }
       100% { opacity: 1; transform: scale(1) translateY(0); }
     }
 
     .podium-1st .winner-rank {
-      font-size: 3.5rem;
+      font-size: 2.5rem;
     }
 
     .winner-name {
-      font-size: 1.3rem;
-      font-weight: 800;
-      color: #1a1a2e;
-      margin-bottom: 6px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 4px;
       word-break: break-word;
       opacity: 0;
-      transform: translateY(10px);
+      text-shadow: 0 0 10px rgba(255,255,255,0.3);
     }
 
     .winner-name.reveal {
-      animation: nameReveal 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      animation: textReveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-    @keyframes nameReveal {
-      to { opacity: 1; transform: translateY(0); }
+    @keyframes textReveal {
+      from { opacity: 0; transform: translateY(10px); filter: blur(10px); }
+      to { opacity: 1; transform: translateY(0); filter: blur(0); }
     }
 
     .podium-1st .winner-name {
-      font-size: 1.7rem;
-      background: linear-gradient(90deg, #ffb800, #ff8c00);
+      font-size: 1.4rem;
+      background: linear-gradient(90deg, #ffd700, #ffec8b, #ffd700);
+      background-size: 200% 100%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      animation: goldShimmer 2s linear infinite;
+    }
+
+    @keyframes goldShimmer {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
     }
 
     .winner-score {
-      font-size: 1.4rem;
-      font-weight: 900;
-      color: #4338ca;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #00ccff;
       opacity: 0;
-      transform: translateY(10px);
     }
 
     .winner-score.reveal {
-      animation: scoreReveal 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.15s forwards;
+      animation: scoreGlow 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
     }
 
-    @keyframes scoreReveal {
-      to { opacity: 1; transform: translateY(0); }
+    @keyframes scoreGlow {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); text-shadow: 0 0 20px rgba(0,204,255,0.5); }
     }
 
     .podium-1st .winner-score {
-      font-size: 2rem;
-      background: linear-gradient(90deg, #ff8c00, #ffb800);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    /* ═══ CINEMATIC ANIMATION KEYFRAMES ═══ */
-
-    /* Smooth podium rise with anticipation */
-    @keyframes podiumRiseBronze {
-      0% { 
-        transform: translateY(100vh) scale(0.8) rotateX(-15deg); 
-        opacity: 0; 
-      }
-      60% { 
-        transform: translateY(-15px) scale(1.02) rotateX(3deg); 
-        opacity: 1; 
-      }
-      80% { 
-        transform: translateY(8px) scale(0.99) rotateX(-1deg); 
-      }
-      100% { 
-        transform: translateY(0) scale(1) rotateX(0); 
-        opacity: 1; 
-      }
-    }
-
-    @keyframes podiumRiseSilver {
-      0% { 
-        transform: translateY(100vh) scale(0.8) rotateX(-15deg); 
-        opacity: 0; 
-      }
-      55% { 
-        transform: translateY(-20px) scale(1.03) rotateX(4deg); 
-        opacity: 1; 
-      }
-      75% { 
-        transform: translateY(10px) scale(0.98) rotateX(-2deg); 
-      }
-      100% { 
-        transform: translateY(0) scale(1) rotateX(0); 
-        opacity: 1; 
-      }
-    }
-
-    @keyframes podiumRiseGold {
-      0% { 
-        transform: translateY(100vh) scale(0.7) rotateX(-20deg); 
-        opacity: 0; 
-      }
-      50% { 
-        transform: translateY(-30px) scale(1.05) rotateX(5deg); 
-        opacity: 1; 
-      }
-      70% { 
-        transform: translateY(15px) scale(0.97) rotateX(-3deg); 
-      }
-      85% { 
-        transform: translateY(-8px) scale(1.02) rotateX(2deg); 
-      }
-      100% { 
-        transform: translateY(0) scale(1) rotateX(0); 
-        opacity: 1; 
-      }
-    }
-
-    /* Winner card smooth reveal */
-    @keyframes cardRevealBronze {
-      0% { 
-        transform: translateX(-50%) translateY(50px) scale(0.8); 
-        opacity: 0; 
-      }
-      50% { 
-        transform: translateX(-50%) translateY(-20px) scale(1.05); 
-        opacity: 1; 
-      }
-      75% { 
-        transform: translateX(-50%) translateY(8px) scale(0.98); 
-      }
-      100% { 
-        transform: translateX(-50%) translateY(0) scale(1); 
-        opacity: 1; 
-      }
-    }
-
-    @keyframes cardRevealSilver {
-      0% { 
-        transform: translateX(-50%) translateY(50px) scale(0.8); 
-        opacity: 0; 
-      }
-      45% { 
-        transform: translateX(-50%) translateY(-25px) scale(1.06); 
-        opacity: 1; 
-      }
-      70% { 
-        transform: translateX(-50%) translateY(10px) scale(0.97); 
-      }
-      100% { 
-        transform: translateX(-50%) translateY(0) scale(1); 
-        opacity: 1; 
-      }
-    }
-
-    @keyframes cardRevealGold {
-      0% { 
-        transform: translateX(-50%) translateY(80px) scale(0.7); 
-        opacity: 0; 
-      }
-      40% { 
-        transform: translateX(-50%) translateY(-35px) scale(1.1); 
-        opacity: 1; 
-      }
-      60% { 
-        transform: translateX(-50%) translateY(15px) scale(0.95); 
-      }
-      80% { 
-        transform: translateX(-50%) translateY(-8px) scale(1.03); 
-      }
-      100% { 
-        transform: translateX(-50%) translateY(0) scale(1); 
-        opacity: 1; 
-      }
-    }
-
-    /* Gentle floating glow pulse */
-    @keyframes glowPulseBronze {
-      0%, 100% { 
-        box-shadow: 
-          0 0 30px rgba(184, 115, 51, 0.4),
-          0 10px 40px rgba(0,0,0,0.4),
-          inset 0 2px 15px rgba(255,255,255,0.2);
-      }
-      50% { 
-        box-shadow: 
-          0 0 50px rgba(184, 115, 51, 0.6),
-          0 10px 40px rgba(0,0,0,0.4),
-          inset 0 2px 20px rgba(255,255,255,0.3);
-      }
-    }
-
-    @keyframes glowPulseSilver {
-      0%, 100% { 
-        box-shadow: 
-          0 0 40px rgba(192, 192, 192, 0.5),
-          0 10px 50px rgba(0,0,0,0.4),
-          inset 0 2px 15px rgba(255,255,255,0.4);
-      }
-      50% { 
-        box-shadow: 
-          0 0 70px rgba(192, 192, 192, 0.7),
-          0 10px 50px rgba(0,0,0,0.4),
-          inset 0 2px 25px rgba(255,255,255,0.5);
-      }
-    }
-
-    @keyframes glowPulseGold {
-      0%, 100% { 
-        box-shadow: 
-          0 0 60px rgba(255, 215, 0, 0.6),
-          0 0 100px rgba(255, 140, 0, 0.3),
-          0 15px 60px rgba(0,0,0,0.5),
-          inset 0 3px 20px rgba(255,255,255,0.5);
-      }
-      50% { 
-        box-shadow: 
-          0 0 100px rgba(255, 215, 0, 0.9),
-          0 0 150px rgba(255, 140, 0, 0.5),
-          0 15px 60px rgba(0,0,0,0.5),
-          inset 0 3px 30px rgba(255,255,255,0.6);
-      }
+      font-size: 1.6rem;
+      color: #ff00cc;
     }
 
     /* ═══ ANIMATION CLASSES ═══ */
-    .animate-3rd .podium-base {
-      animation: 
-        podiumRiseBronze 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards,
-        glowPulseBronze 3s ease-in-out 1.4s infinite;
+    
+    /* 3rd Place Animations */
+    .animate-3rd .planet-3rd {
+      animation: planetWarp3rd 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards, planetFloat3rd 4s ease-in-out infinite 1.5s;
+    }
+
+    @keyframes planetWarp3rd {
+      0% { transform: scale(0) rotate(-180deg) translateZ(-500px); filter: blur(20px); opacity: 0; }
+      50% { transform: scale(1.2) rotate(10deg) translateZ(100px); filter: blur(0px); opacity: 1; }
+      100% { transform: scale(1) rotate(0deg) translateZ(0); filter: blur(0px); opacity: 1; }
     }
 
     .animate-3rd .winner-card {
-      animation: cardRevealBronze 1s cubic-bezier(0.34, 1.8, 0.64, 1) 1.2s forwards;
+      animation: cardMaterialize 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.2s forwards;
     }
 
-    .animate-2nd .podium-base {
-      animation: 
-        podiumRiseSilver 1.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards,
-        glowPulseSilver 3s ease-in-out 1.6s infinite;
+    /* 2nd Place Animations */
+    .animate-2nd .planet-2nd {
+      animation: planetWarp2nd 1.7s cubic-bezier(0.16, 1, 0.3, 1) forwards, planetFloat2nd 4s ease-in-out infinite 1.7s;
+    }
+
+    @keyframes planetWarp2nd {
+      0% { transform: scale(0) rotate(180deg) translateZ(-500px); filter: blur(20px); opacity: 0; }
+      50% { transform: scale(1.25) rotate(-10deg) translateZ(150px); filter: blur(0px); opacity: 1; }
+      100% { transform: scale(1) rotate(0deg) translateZ(0); filter: blur(0px); opacity: 1; }
     }
 
     .animate-2nd .winner-card {
-      animation: cardRevealSilver 1.2s cubic-bezier(0.34, 1.8, 0.64, 1) 1.4s forwards;
+      animation: cardMaterialize 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.4s forwards;
     }
 
-    .animate-1st .podium-base {
-      animation: 
-        podiumRiseGold 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards,
-        glowPulseGold 2s ease-in-out 2s infinite;
+    /* 1st Place Animations */
+    .animate-1st .planet-1st {
+      animation: planetWarp1st 2s cubic-bezier(0.16, 1, 0.3, 1) forwards, planetFloat1st 3s ease-in-out infinite 2s, sunPulse 2s ease-in-out infinite 2s;
+    }
+
+    @keyframes planetWarp1st {
+      0% { transform: scale(0) translateZ(-800px); filter: blur(30px) brightness(3); opacity: 0; }
+      40% { transform: scale(1.4) translateZ(200px); filter: blur(0px) brightness(1.5); opacity: 1; }
+      70% { transform: scale(0.95) translateZ(-50px); filter: blur(0px) brightness(1); }
+      100% { transform: scale(1) translateZ(0); filter: blur(0px) brightness(1); opacity: 1; }
     }
 
     .animate-1st .winner-card {
-      animation: cardRevealGold 1.5s cubic-bezier(0.34, 1.8, 0.64, 1) 1.8s forwards;
+      animation: cardMaterialize 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.8s forwards;
     }
 
-    /* ═══ TITLE STYLES ═══ */
-    .podium-title {
-      font-size: clamp(2rem, 6vw, 3.5rem);
-      font-weight: 900;
-      color: white;
-      text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
-      margin-bottom: 30px;
-      z-index: 5;
-      position: relative;
-      opacity: 0;
-      transform: translateY(-30px);
+    @keyframes cardMaterialize {
+      0% { transform: translateX(-50%) scale(0) translateY(30px); opacity: 0; filter: blur(10px); }
+      60% { transform: translateX(-50%) scale(1.1) translateY(-10px); opacity: 1; filter: blur(0px); }
+      100% { transform: translateX(-50%) scale(1) translateY(0); opacity: 1; filter: blur(0px); }
     }
 
-    .podium-title.entrance {
-      animation: titleCinematic 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-    }
-
-    @keyframes titleCinematic {
-      0% {
-        opacity: 0;
-        transform: translateY(-30px) scale(0.9);
-        letter-spacing: 10px;
-      }
-      50% {
-        opacity: 1;
-        transform: translateY(5px) scale(1.02);
-        letter-spacing: 2px;
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-        letter-spacing: normal;
-        text-shadow: 0 0 40px rgba(255, 215, 0, 0.8), 0 0 80px rgba(255, 140, 0, 0.4);
-      }
-    }
-
-    /* ═══ CONFETTI SYSTEM ═══ */
-    @keyframes confettiFallSmooth {
-      0% { 
-        transform: translateY(-20px) rotate(0deg) translateX(0); 
-        opacity: 1; 
-      }
-      25% {
-        transform: translateY(25vh) rotate(180deg) translateX(20px);
-      }
-      50% {
-        transform: translateY(50vh) rotate(360deg) translateX(-10px);
-      }
-      75% {
-        transform: translateY(75vh) rotate(540deg) translateX(15px);
-        opacity: 0.8;
-      }
-      100% { 
-        transform: translateY(105vh) rotate(720deg) translateX(0); 
-        opacity: 0; 
-      }
-    }
-
-    .confetti {
-      position: fixed;
-      width: 10px;
-      height: 10px;
-      top: -20px;
-      z-index: 100;
-      pointer-events: none;
-      border-radius: 2px;
-    }
-
-    /* ═══ PARTICLE BURST EFFECT ═══ */
-    .particle-burst {
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      pointer-events: none;
-    }
-
-    @keyframes particleFloat {
-      0% {
-        transform: translate(0, 0) scale(1);
-        opacity: 1;
-      }
-      100% {
-        transform: translate(var(--tx), var(--ty)) scale(0);
-        opacity: 0;
-      }
-    }
-
-    /* ═══ SPOTLIGHT FLASH EFFECT ═══ */
-    .spotlight-flash {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(circle at center, rgba(255,255,255,0.3) 0%, transparent 70%);
-      opacity: 0;
-      pointer-events: none;
-      z-index: 50;
-    }
-
-    .spotlight-flash.flash {
-      animation: spotlightPulse 0.4s ease-out;
-    }
-
-    @keyframes spotlightPulse {
-      0% { opacity: 0; }
-      30% { opacity: 1; }
-      100% { opacity: 0; }
-    }
-
-    /* ═══ VICTORY RAYS EFFECT ═══ */
-    .victory-rays {
+    /* ═══ HYPERSPACE EFFECT ═══ */
+    .hyperspace {
       position: fixed;
       top: 50%;
       left: 50%;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 0 0 0 rgba(255,255,255,1);
       transform: translate(-50%, -50%);
-      width: 200vmax;
-      height: 200vmax;
-      background: repeating-conic-gradient(
-        from 0deg at 50% 50%,
-        transparent 0deg,
-        rgba(255,215,0,0.03) 5deg,
-        transparent 10deg
-      );
-      animation: raysRotate 30s linear infinite;
       pointer-events: none;
-      z-index: 0;
+      z-index: 100;
       opacity: 0;
-      transition: opacity 1s ease;
     }
 
-    .victory-rays.active {
-      opacity: 1;
+    .hyperspace.active {
+      animation: hyperspaceJump 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-    @keyframes raysRotate {
-      from { transform: translate(-50%, -50%) rotate(0deg); }
-      to { transform: translate(-50%, -50%) rotate(360deg); }
+    @keyframes hyperspaceJump {
+      0% { 
+        opacity: 1;
+        box-shadow: 0 0 0 0 rgba(255,255,255,1);
+        transform: translate(-50%, -50%) scale(1);
+      }
+      50% {
+        box-shadow: 0 0 100px 50px rgba(255,255,255,0.8), 0 0 200px 100px rgba(100,200,255,0.5);
+      }
+      100% { 
+        opacity: 0;
+        box-shadow: 0 0 200px 100px rgba(255,255,255,0), 0 0 400px 200px rgba(100,200,255,0);
+        transform: translate(-50%, -50%) scale(3);
+      }
+    }
+
+    /* ═══ STAR PARTICLES ═══ */
+    .star-particle {
+      position: fixed;
+      width: 4px;
+      height: 4px;
+      background: white;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 50;
+      box-shadow: 0 0 10px white, 0 0 20px rgba(255,255,255,0.5);
+    }
+
+    @keyframes starBurst {
+      0% { transform: translate(0, 0) scale(1); opacity: 1; }
+      100% { transform: translate(var(--sx), var(--sy)) scale(0); opacity: 0; }
+    }
+
+    /* ═══ COSMIC DUST ═══ */
+    .cosmic-dust {
+      position: fixed;
+      width: 2px;
+      height: 2px;
+      background: rgba(255,255,255,0.6);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    @keyframes dustFloat {
+      0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-20px) translateX(50px); opacity: 0; }
     }
 
     /* Old podium styles - keeping for compatibility */
@@ -1551,7 +1462,7 @@
   <!-- ══════════════ SCREEN 1: HOME ══════════════ -->
   <div id="screen-home" class="screen active">
     <div class="home-logo">Ka<span>hoot</span>!</div>
-    <p class="home-subtitle">CREATED BY : WALEED</p>
+    <p class="home-subtitle">The fun quiz game — no account needed</p>
     <div class="home-btns">
       <button class="btn btn-yellow" onclick="goTo('screen-join-code')"
         style="color:#1a1a2e;font-size:1.3rem;padding:20px;">
@@ -1569,7 +1480,7 @@
     <div class="card">
       <p style="color:#555;margin-bottom:12px;font-weight:700;">Password required to manage games</p>
       <input type="password" id="admin-pwd" placeholder="Enter password" />
-      <p class="err-msg" id="admin-err">❌ Wrong password. Try "admin"</p>
+      <p class="err-msg" id="admin-err">❌ Wrong password.</p>
       <button class="btn btn-purple" onclick="checkAdmin()" style="margin-top:10px;">Login →</button>
       <button class="btn btn-dark" onclick="goTo('screen-home')" style="margin-top:4px;">← Back</button>
     </div>
@@ -1773,37 +1684,41 @@
 
   <!-- ══════════════ SCREEN 12: FINAL PODIUM ══════════════ -->
   <div id="screen-podium" class="screen">
-    <div class="podium-title">🏆 FINAL WINNERS 🏆</div>
+    <div class="podium-title">FINAL WINNERS</div>
     <div class="podium-container" id="podium-container">
-      <!-- 3rd Place -->
+      <!-- Orbit rings -->
+      <div class="orbit-ring orbit-ring-1"></div>
+      <div class="orbit-ring orbit-ring-2"></div>
+      
+      <!-- 3rd Place - Mars -->
       <div class="podium-block podium-3rd" id="podium-3rd">
         <div class="winner-card" id="winner-3rd">
           <div class="winner-rank">🥉</div>
           <div class="winner-name" id="name-3rd">-</div>
           <div class="winner-score" id="score-3rd">0</div>
         </div>
-        <div class="podium-base"></div>
+        <div class="planet-3rd"></div>
       </div>
-      <!-- 1st Place (Center) -->
+      <!-- 1st Place - Golden Sun (Center) -->
       <div class="podium-block podium-1st" id="podium-1st">
         <div class="winner-card" id="winner-1st">
           <div class="winner-rank">🥇</div>
           <div class="winner-name" id="name-1st">-</div>
           <div class="winner-score" id="score-1st">0</div>
         </div>
-        <div class="podium-base"></div>
+        <div class="planet-1st"></div>
       </div>
-      <!-- 2nd Place -->
+      <!-- 2nd Place - Ice Planet -->
       <div class="podium-block podium-2nd" id="podium-2nd">
         <div class="winner-card" id="winner-2nd">
           <div class="winner-rank">🥈</div>
           <div class="winner-name" id="name-2nd">-</div>
           <div class="winner-score" id="score-2nd">0</div>
         </div>
-        <div class="podium-base"></div>
+        <div class="planet-2nd"></div>
       </div>
     </div>
-    <button class="btn btn-outline btn-sm" onclick="location.reload()" style="margin-top: 40px;">Play Again 🔄</button>
+    <button class="btn btn-outline btn-sm" onclick="location.reload()" style="margin-top: 40px; z-index: 10; position: relative;">Play Again 🔄</button>
     <!-- Legacy list for compatibility -->
     <ul class="podium-list" id="podium-list"></ul>
   </div>
@@ -1960,7 +1875,7 @@
     // ── ADMIN LOGIN ──────────────────────────────────────────────────────────
     function checkAdmin() {
       const pwd = document.getElementById('admin-pwd').value;
-      if (pwd === 'admin') {
+      if (pwd === 'waleedgoat') {
         document.getElementById('admin-err').classList.remove('show');
         document.getElementById('admin-pwd').value = '';
         openAdminDash();
@@ -2422,7 +2337,7 @@
       showPlayerWaiting('✅', 'Answer submitted!', false);
     }
 
-    // ── CINEMATIC PODIUM ──────────────────────────────────────────────────────
+    // ── COSMIC GALAXY PODIUM ─────────────────────────────────────────────────
     function showPodium(code) {
       goTo('screen-podium');
       const players = Object.values(store.players[code] || {}).sort((a, b) => b.score - a.score);
@@ -2432,7 +2347,7 @@
         document.getElementById(`podium-${rank}`).classList.remove(`animate-${rank}`);
       });
       
-      // Reset content with suspense
+      // Reset content with mystery
       ['3rd', '2nd', '1st'].forEach(rank => {
         document.getElementById(`name-${rank}`).textContent = '???';
         document.getElementById(`score-${rank}`).textContent = '?';
@@ -2444,149 +2359,134 @@
       document.querySelectorAll('.winner-rank').forEach(el => el.classList.remove('show'));
       
       // Clean up old effects
-      document.querySelectorAll('.confetti, .particle-burst, .spotlight-flash, .victory-rays').forEach(c => c.remove());
+      document.querySelectorAll('.star-particle, .cosmic-dust, .hyperspace, .nebula').forEach(c => c.remove());
       
-      // Create suspense overlay
-      let overlay = document.querySelector('.suspense-overlay');
-      if (!overlay) {
-        overlay = document.createElement('div');
-        overlay.className = 'suspense-overlay';
-        document.getElementById('screen-podium').appendChild(overlay);
-      }
+      // Add nebula clouds
+      const nebula1 = document.createElement('div');
+      nebula1.className = 'nebula nebula-1';
+      document.getElementById('screen-podium').appendChild(nebula1);
       
-      // Create spotlight flash effect
-      let spotlight = document.querySelector('.spotlight-flash');
-      if (!spotlight) {
-        spotlight = document.createElement('div');
-        spotlight.className = 'spotlight-flash';
-        document.body.appendChild(spotlight);
-      }
+      const nebula2 = document.createElement('div');
+      nebula2.className = 'nebula nebula-2';
+      document.getElementById('screen-podium').appendChild(nebula2);
       
-      // Create victory rays for champion
-      let rays = document.querySelector('.victory-rays');
-      if (!rays) {
-        rays = document.createElement('div');
-        rays.className = 'victory-rays';
-        document.getElementById('screen-podium').appendChild(rays);
+      // Create hyperspace effect element
+      let hyperspace = document.querySelector('.hyperspace');
+      if (!hyperspace) {
+        hyperspace = document.createElement('div');
+        hyperspace.className = 'hyperspace';
+        document.body.appendChild(hyperspace);
       }
       
       if (!players.length) {
         document.getElementById('name-1st').textContent = 'No players 😢';
-        overlay.classList.remove('active');
         return;
       }
       
       const top3 = players.slice(0, 3);
       
-      // ═══ CINEMATIC SEQUENCE START ═══
+      // ═══ COSMIC SEQUENCE START ═══
       
-      // Title entrance
+      // Title warp entrance
       const titleEl = document.querySelector('.podium-title');
       titleEl.classList.remove('entrance');
       void titleEl.offsetWidth;
       titleEl.classList.add('entrance');
       
-      // Activate suspense overlay
-      setTimeout(() => overlay.classList.add('active'), 200);
+      // Start cosmic dust
+      createCosmicDust();
       
-      // Spotlight flash helper
-      const doSpotlight = () => {
-        spotlight.classList.add('flash');
-        setTimeout(() => spotlight.classList.remove('flash'), 400);
-      };
-      
-      // ═══ 3RD PLACE REVEAL ═══
+      // ═══ 3RD PLACE - MARS WARP ═══
       setTimeout(() => {
-        doSpotlight();
-        if (top3[2]) {
-          const nameEl = document.getElementById('name-3rd');
-          const scoreEl = document.getElementById('score-3rd');
-          
-          nameEl.textContent = escHtml(top3[2].name);
-          scoreEl.textContent = top3[2].score.toLocaleString();
-          
-          document.getElementById('podium-3rd').classList.add('animate-3rd');
-          
-          // Staggered text reveal
-          setTimeout(() => {
-            nameEl.classList.add('reveal');
-            document.querySelector('#winner-3rd .winner-rank').classList.add('show');
-          }, 1400);
-          
-          setTimeout(() => {
-            scoreEl.classList.add('reveal');
-            createElegantBurst('winner-3rd', '#b87333', 8);
-          }, 1600);
-        }
-      }, 2500);
+        hyperspace.classList.add('active');
+        setTimeout(() => hyperspace.classList.remove('active'), 1000);
+        
+        setTimeout(() => {
+          if (top3[2]) {
+            const nameEl = document.getElementById('name-3rd');
+            const scoreEl = document.getElementById('score-3rd');
+            
+            nameEl.textContent = escHtml(top3[2].name);
+            scoreEl.textContent = top3[2].score.toLocaleString();
+            
+            document.getElementById('podium-3rd').classList.add('animate-3rd');
+            createStarBurst(window.innerWidth * 0.3, window.innerHeight * 0.5, '#cd5c3c');
+            
+            setTimeout(() => {
+              nameEl.classList.add('reveal');
+              document.querySelector('#winner-3rd .winner-rank').classList.add('show');
+            }, 1200);
+            
+            setTimeout(() => {
+              scoreEl.classList.add('reveal');
+            }, 1400);
+          }
+        }, 500);
+      }, 2000);
       
-      // ═══ 2ND PLACE REVEAL ═══
+      // ═══ 2ND PLACE - ICE WARP ═══
       setTimeout(() => {
-        doSpotlight();
-        if (top3[1]) {
-          const nameEl = document.getElementById('name-2nd');
-          const scoreEl = document.getElementById('score-2nd');
-          
-          nameEl.textContent = escHtml(top3[1].name);
-          scoreEl.textContent = top3[1].score.toLocaleString();
-          
-          document.getElementById('podium-2nd').classList.add('animate-2nd');
-          
-          setTimeout(() => {
-            nameEl.classList.add('reveal');
-            document.querySelector('#winner-2nd .winner-rank').classList.add('show');
-          }, 1600);
-          
-          setTimeout(() => {
-            scoreEl.classList.add('reveal');
-            createElegantBurst('winner-2nd', '#c0c0c0', 10);
-          }, 1800);
-        }
-      }, 5000);
+        hyperspace.classList.add('active');
+        setTimeout(() => hyperspace.classList.remove('active'), 1000);
+        
+        setTimeout(() => {
+          if (top3[1]) {
+            const nameEl = document.getElementById('name-2nd');
+            const scoreEl = document.getElementById('score-2nd');
+            
+            nameEl.textContent = escHtml(top3[1].name);
+            scoreEl.textContent = top3[1].score.toLocaleString();
+            
+            document.getElementById('podium-2nd').classList.add('animate-2nd');
+            createStarBurst(window.innerWidth * 0.7, window.innerHeight * 0.45, '#a0c0e0');
+            
+            setTimeout(() => {
+              nameEl.classList.add('reveal');
+              document.querySelector('#winner-2nd .winner-rank').classList.add('show');
+            }, 1400);
+            
+            setTimeout(() => {
+              scoreEl.classList.add('reveal');
+            }, 1600);
+          }
+        }, 500);
+      }, 4500);
       
-      // ═══ 1ST PLACE - THE CHAMPION ═══
+      // ═══ 1ST PLACE - SUN SUPERNOVA ═══
       setTimeout(() => {
-        // Remove overlay for grand reveal
-        overlay.classList.remove('active');
+        // Supernova flash
+        hyperspace.classList.add('active');
+        setTimeout(() => hyperspace.classList.remove('active'), 1500);
         
-        // Activate victory rays
-        rays.classList.add('active');
+        // Massive star explosion
+        createSupernova();
         
-        // Triple spotlight flash
-        doSpotlight();
-        setTimeout(doSpotlight, 300);
-        setTimeout(doSpotlight, 600);
-        
-        if (top3[0]) {
-          const nameEl = document.getElementById('name-1st');
-          const scoreEl = document.getElementById('score-1st');
-          
-          nameEl.textContent = escHtml(top3[0].name);
-          scoreEl.textContent = top3[0].score.toLocaleString();
-          
-          document.getElementById('podium-1st').classList.add('animate-1st');
-          
-          // Grand reveal sequence
-          setTimeout(() => {
-            nameEl.classList.add('reveal');
-            document.querySelector('#winner-1st .winner-rank').classList.add('show');
-            createElegantBurst('winner-1st', '#ffd700', 15);
-          }, 2000);
-          
-          setTimeout(() => {
-            scoreEl.classList.add('reveal');
-            createElegantBurst('winner-1st', '#ff8c00', 12);
-          }, 2200);
-          
-          // Epic confetti celebration
-          setTimeout(() => createElegantConfetti(), 2500);
-          setTimeout(() => createElegantConfetti(), 3000);
-          setTimeout(() => createElegantConfetti(), 3500);
-          
-          // Golden sparkle burst
-          setTimeout(() => createGoldenSparkles(), 2800);
-        }
-      }, 8000);
+        setTimeout(() => {
+          if (top3[0]) {
+            const nameEl = document.getElementById('name-1st');
+            const scoreEl = document.getElementById('score-1st');
+            
+            nameEl.textContent = escHtml(top3[0].name);
+            scoreEl.textContent = top3[0].score.toLocaleString();
+            
+            document.getElementById('podium-1st').classList.add('animate-1st');
+            
+            setTimeout(() => {
+              nameEl.classList.add('reveal');
+              document.querySelector('#winner-1st .winner-rank').classList.add('show');
+              createStarBurst(window.innerWidth * 0.5, window.innerHeight * 0.4, '#ffd700');
+            }, 1800);
+            
+            setTimeout(() => {
+              scoreEl.classList.add('reveal');
+            }, 2000);
+            
+            // Victory starfield
+            setTimeout(() => createVictoryStars(), 2500);
+            setTimeout(() => createVictoryStars(), 3000);
+          }
+        }, 800);
+      }, 7500);
       
       // Update legacy list
       const medals = ['🥇','🥈','🥉'];
@@ -2600,76 +2500,98 @@
       });
     }
     
-    // Elegant particle burst - smooth and non-glitchy
-    function createElegantBurst(targetId, color, count) {
-      const target = document.getElementById(targetId);
-      if (!target) return;
-      
-      const rect = target.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      
-      for (let i = 0; i < count; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle-burst';
-        particle.style.background = color;
-        particle.style.left = centerX + 'px';
-        particle.style.top = centerY + 'px';
-        particle.style.boxShadow = `0 0 10px ${color}`;
-        
-        const angle = (i / count) * Math.PI * 2 + (Math.random() - 0.5) * 0.5;
-        const distance = 60 + Math.random() * 80;
-        particle.style.setProperty('--tx', Math.cos(angle) * distance + 'px');
-        particle.style.setProperty('--ty', Math.sin(angle) * distance + 'px');
-        particle.style.animation = `particleFloat ${0.8 + Math.random() * 0.4}s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards`;
-        
-        document.body.appendChild(particle);
-        setTimeout(() => particle.remove(), 1200);
-      }
-    }
-    
-    // Elegant confetti - smooth falling
-    function createElegantConfetti() {
-      const colors = ['#ffd700', '#ffb800', '#ff9500', '#ff6b6b', '#4ecdc4', '#c0c0c0', '#b87333'];
-      
+    // Star burst explosion effect
+    function createStarBurst(x, y, color) {
       for (let i = 0; i < 20; i++) {
-        setTimeout(() => {
-          const confetti = document.createElement('div');
-          confetti.className = 'confetti';
-          confetti.style.left = (Math.random() * 100) + '%';
-          confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-          confetti.style.width = (6 + Math.random() * 8) + 'px';
-          confetti.style.height = confetti.style.width;
-          confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-          confetti.style.animation = `confettiFallSmooth ${2.5 + Math.random() * 2}s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards`;
-          confetti.style.animationDelay = (Math.random() * 0.5) + 's';
-          
-          document.body.appendChild(confetti);
-          setTimeout(() => confetti.remove(), 5000);
-        }, i * 50);
+        const star = document.createElement('div');
+        star.className = 'star-particle';
+        star.style.left = x + 'px';
+        star.style.top = y + 'px';
+        star.style.background = color;
+        star.style.boxShadow = `0 0 10px ${color}, 0 0 20px ${color}`;
+        
+        const angle = (i / 20) * Math.PI * 2;
+        const distance = 100 + Math.random() * 150;
+        star.style.setProperty('--sx', Math.cos(angle) * distance + 'px');
+        star.style.setProperty('--sy', Math.sin(angle) * distance + 'px');
+        star.style.animation = `starBurst ${0.8 + Math.random() * 0.4}s cubic-bezier(0.16, 1, 0.3, 1) forwards`;
+        
+        document.body.appendChild(star);
+        setTimeout(() => star.remove(), 1200);
       }
     }
     
-    // Golden sparkles for champion
-    function createGoldenSparkles() {
-      const colors = ['#ffd700', '#ffb800', '#ffec8b', '#fff8dc'];
+    // Supernova explosion for champion
+    function createSupernova() {
+      const centerX = window.innerWidth * 0.5;
+      const centerY = window.innerHeight * 0.5;
       
+      // Core explosion
+      for (let ring = 0; ring < 3; ring++) {
+        setTimeout(() => {
+          const count = 30 + ring * 10;
+          const colors = ['#ffd700', '#ff8c00', '#ff6b00', '#ffffff', '#ffec8b'];
+          
+          for (let i = 0; i < count; i++) {
+            const star = document.createElement('div');
+            star.className = 'star-particle';
+            star.style.left = centerX + 'px';
+            star.style.top = centerY + 'px';
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            star.style.background = color;
+            star.style.boxShadow = `0 0 15px ${color}, 0 0 30px ${color}`;
+            star.style.width = (4 + Math.random() * 6) + 'px';
+            star.style.height = star.style.width;
+            
+            const angle = (i / count) * Math.PI * 2 + Math.random() * 0.5;
+            const distance = 150 + ring * 100 + Math.random() * 100;
+            star.style.setProperty('--sx', Math.cos(angle) * distance + 'px');
+            star.style.setProperty('--sy', Math.sin(angle) * distance + 'px');
+            star.style.animation = `starBurst ${1 + Math.random() * 0.5}s cubic-bezier(0.16, 1, 0.3, 1) forwards`;
+            
+            document.body.appendChild(star);
+            setTimeout(() => star.remove(), 1500);
+          }
+        }, ring * 200);
+      }
+    }
+    
+    // Cosmic dust particles
+    function createCosmicDust() {
       for (let i = 0; i < 30; i++) {
         setTimeout(() => {
-          const sparkle = document.createElement('div');
-          sparkle.className = 'confetti';
-          sparkle.style.left = (10 + Math.random() * 80) + '%';
-          sparkle.style.top = (20 + Math.random() * 40) + '%';
-          sparkle.style.background = colors[Math.floor(Math.random() * colors.length)];
-          sparkle.style.width = (4 + Math.random() * 6) + 'px';
-          sparkle.style.height = sparkle.style.width;
-          sparkle.style.borderRadius = '50%';
-          sparkle.style.boxShadow = `0 0 10px ${sparkle.style.background}`;
-          sparkle.style.animation = `confettiFallSmooth ${1.5 + Math.random() * 1.5}s ease-out forwards`;
+          const dust = document.createElement('div');
+          dust.className = 'cosmic-dust';
+          dust.style.left = Math.random() * 100 + '%';
+          dust.style.animation = `dustFloat ${8 + Math.random() * 6}s linear forwards`;
+          dust.style.opacity = 0.3 + Math.random() * 0.4;
           
-          document.body.appendChild(sparkle);
-          setTimeout(() => sparkle.remove(), 3500);
-        }, i * 40);
+          document.getElementById('screen-podium').appendChild(dust);
+          setTimeout(() => dust.remove(), 15000);
+        }, i * 300);
+      }
+    }
+    
+    // Victory stars rain
+    function createVictoryStars() {
+      const colors = ['#ffd700', '#ffec8b', '#ffffff', '#00ccff', '#ff00cc'];
+      
+      for (let i = 0; i < 25; i++) {
+        setTimeout(() => {
+          const star = document.createElement('div');
+          star.className = 'star-particle';
+          star.style.left = (Math.random() * 100) + '%';
+          star.style.top = '-10px';
+          const color = colors[Math.floor(Math.random() * colors.length)];
+          star.style.background = color;
+          star.style.boxShadow = `0 0 10px ${color}`;
+          star.style.width = (3 + Math.random() * 5) + 'px';
+          star.style.height = star.style.width;
+          star.style.animation = `dustFloat ${3 + Math.random() * 2}s linear forwards`;
+          
+          document.body.appendChild(star);
+          setTimeout(() => star.remove(), 5000);
+        }, i * 80);
       }
     }
 
