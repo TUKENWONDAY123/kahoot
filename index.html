@@ -1274,6 +1274,46 @@
       background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 60%, #312e81 100%);
     }
 
+    /* ─── GAME ENDED SCREEN ─── */
+    #screen-game-ended {
+      background: linear-gradient(135deg, #0f172a 0%, #1a1a2e 50%, #0d0d1a 100%);
+      overflow: hidden;
+    }
+
+    #screen-game-ended::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background:
+        radial-gradient(ellipse at 30% 40%, rgba(255,215,0,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse at 70% 60%, rgba(255,140,0,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    @keyframes gameEndedIcon {
+      0%   { opacity: 0; transform: scale(0) rotate(-30deg); }
+      60%  { opacity: 1; transform: scale(1.25) rotate(5deg); }
+      100% { opacity: 1; transform: scale(1) rotate(0deg); }
+    }
+
+    @keyframes gameEndedTitle {
+      0%   { opacity: 0; transform: translateY(30px); letter-spacing: 20px; }
+      60%  { opacity: 1; transform: translateY(-5px); letter-spacing: 5px; }
+      100% { opacity: 1; transform: translateY(0); letter-spacing: 4px; }
+    }
+
+    @keyframes gameEndedSub {
+      from { opacity: 0; transform: translateY(15px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes gameEndedBtn {
+      0%   { opacity: 0; transform: scale(0.6) translateY(20px); }
+      70%  { opacity: 1; transform: scale(1.08) translateY(-5px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
     .round-sb-card {
       background: rgba(255, 255, 255, .07);
       border: 1px solid rgba(255, 255, 255, .15);
@@ -1688,7 +1728,19 @@
     </div>
   </div>
 
-  <!-- ══════════════ SCREEN 12: FINAL PODIUM ══════════════ -->
+  <!-- ══════════════ SCREEN 11c: GAME ENDED ══════════════ -->
+  <div id="screen-game-ended" class="screen">
+    <div id="game-ended-content" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;text-align:center;">
+      <div style="font-size:5rem;animation:gameEndedIcon 1s cubic-bezier(0.34,1.8,0.64,1) both;">🏁</div>
+      <h1 style="font-size:clamp(2.5rem,8vw,4.5rem);font-weight:900;color:white;letter-spacing:4px;text-shadow:0 0 40px rgba(255,255,255,0.4);animation:gameEndedTitle 1.2s cubic-bezier(0.16,1,0.3,1) 0.3s both;">GAME ENDED</h1>
+      <p style="color:rgba(255,255,255,0.5);font-size:1.1rem;font-weight:600;animation:gameEndedSub 0.8s ease 0.8s both;">The final scores are in…</p>
+      <button id="btn-show-results" onclick="hostRevealPodium()" style="margin-top:16px;padding:18px 48px;font-size:1.4rem;font-weight:900;border:none;border-radius:50px;cursor:pointer;background:linear-gradient(135deg,#ffd700,#ff8c00);color:#1a1a1a;letter-spacing:2px;box-shadow:0 0 40px rgba(255,215,0,0.5),0 8px 30px rgba(0,0,0,0.4);animation:gameEndedBtn 0.8s cubic-bezier(0.34,1.8,0.64,1) 1.2s both;transition:transform 0.2s,box-shadow 0.2s;" onmouseover="this.style.transform='scale(1.06)';this.style.boxShadow='0 0 60px rgba(255,215,0,0.8),0 12px 40px rgba(0,0,0,0.5)'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 0 40px rgba(255,215,0,0.5),0 8px 30px rgba(0,0,0,0.4)'">
+        🏆 Show Results
+      </button>
+    </div>
+  </div>
+
+
   <div id="screen-podium" class="screen">
     <div class="podium-title">FINAL WINNERS</div>
     <div class="podium-container" id="podium-container">
@@ -2188,9 +2240,10 @@
       const isLast = hostQIndex >= game.questions.length - 1;
       
       if (isLast) {
-        store.state[curCode] = { status: 'podium' };
-        sendEvent('game_state', { status: 'podium', code: curCode, players: serializePlayers(curCode) });
-        showPodium(curCode);
+        // Show "Game Ended" screen — admin clicks to reveal podium
+        store.state[curCode] = { status: 'game_ended' };
+        sendEvent('game_state', { status: 'game_ended', code: curCode, players: serializePlayers(curCode) });
+        goTo('screen-game-ended');
         return;
       }
       
@@ -2330,6 +2383,9 @@
       } else if (status === 'reveal') {
         showPlayerWaiting('📊', 'Look at the screen!', false);
 
+      } else if (status === 'game_ended') {
+        showPlayerWaiting('🏁', 'Game Over! Results coming soon…', true);
+
       } else if (status === 'podium') {
         // Players don't see scores - redirect to home
         goTo('screen-home');
@@ -2369,6 +2425,13 @@
       // Tell host
       sendEvent('player_vote', { id: curPlayerId, answer: num, code: curCode });
       showPlayerWaiting('✅', 'Answer submitted!', false);
+    }
+
+    // ── HOST: REVEAL PODIUM (called by "Show Results" button) ─────────────────────
+    function hostRevealPodium() {
+      store.state[curCode] = { status: 'podium' };
+      sendEvent('game_state', { status: 'podium', code: curCode, players: serializePlayers(curCode) });
+      showPodium(curCode);
     }
 
     // ── COSMIC GALAXY PODIUM ─────────────────────────────────────────────────
