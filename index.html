@@ -1077,7 +1077,11 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      animation: goldShimmer 2s linear infinite;
+    }
+
+    /* Override: must come AFTER base .winner-name.reveal to win specificity */
+    .podium-1st .winner-name.reveal {
+      animation: textReveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards, goldShimmer 2s linear 0.5s infinite;
     }
 
     @keyframes goldShimmer {
@@ -1658,6 +1662,7 @@
     </div>
     <p style="color:rgba(255,255,255,.35);font-size:.82rem;font-weight:700;margin-top:18px;" id="rsb-next-hint">Moving
       to next question…</p>
+    <div id="rsb-countdown" style="display:none;margin-top:10px;font-size:3rem;font-weight:900;color:white;text-shadow:0 0 20px rgba(255,255,255,0.5);"></div>
   </div>
 
   <!-- ══════════════ SCREEN 10: PLAYER GAME VIEW ══════════════ -->
@@ -2219,11 +2224,37 @@
         }, i * 220);
       });
       setTimeout(() => {
-        hostQIndex++;
-        hostPhase = 'question';
-        store.state[curCode] = { status: 'question', qIndex: hostQIndex };
-        showHostQuestion();
-      }, 4500);
+        // 10-second countdown before next question
+        let remaining = 10;
+        const countdownEl = document.getElementById('rsb-countdown');
+        const hintEl = document.getElementById('rsb-next-hint');
+        countdownEl.style.display = 'block';
+        countdownEl.textContent = remaining;
+        hintEl.textContent = '⏭ Next question in…';
+
+        const tick = setInterval(() => {
+          remaining--;
+          countdownEl.textContent = remaining;
+          // Color shift as countdown nears zero
+          if (remaining <= 3) {
+            countdownEl.style.color = '#ff4444';
+            countdownEl.style.textShadow = '0 0 20px rgba(255,68,68,0.8)';
+          } else if (remaining <= 5) {
+            countdownEl.style.color = '#ffaa00';
+            countdownEl.style.textShadow = '0 0 20px rgba(255,170,0,0.8)';
+          }
+          if (remaining <= 0) {
+            clearInterval(tick);
+            countdownEl.style.display = 'none';
+            countdownEl.style.color = 'white';
+            countdownEl.style.textShadow = '0 0 20px rgba(255,255,255,0.5)';
+            hostQIndex++;
+            hostPhase = 'question';
+            store.state[curCode] = { status: 'question', qIndex: hostQIndex };
+            showHostQuestion();
+          }
+        }, 1000);
+      }, 2500);
     }
 
     // ── JOIN FLOW ────────────────────────────────────────────────────────────
