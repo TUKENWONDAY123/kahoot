@@ -971,7 +971,7 @@
     <div class="card">
       <input type="text" id="join-name" placeholder="Nickname (max 15 chars)" maxlength="15"
         onkeyup="if(event.key==='Enter')joinGame()" />
-      <button class="btn btn-green" onclick="joinGame()" style="margin-top:10px;">Let's Go! 🎉</button>
+      <button class="btn btn-green" id="join-go-btn" onclick="this.disabled=true;this.textContent='Joining…';joinGame()" style="margin-top:10px;">Let's Go! 🎉</button>
     </div>
   </div>
 
@@ -1252,6 +1252,12 @@
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
       const el = document.getElementById(id);
       if (el) el.classList.add('active');
+      // Reset join button state whenever the name screen is shown
+      if (id === 'screen-join-name') {
+        joiningInProgress = false;
+        const btn = document.getElementById('join-go-btn');
+        if (btn) { btn.disabled = false; btn.textContent = "Let's Go! 🎉"; }
+      }
     }
 
     // ─────────────────────────────────────────
@@ -1507,13 +1513,13 @@
     }
 
     function updateHostLobbyUI() {
-      // Build a deduplicated map: playerId → player, so each ID appears only once
       const playerMap = store.players[curCode] || {};
-      const seenIds = new Set();
+      const seenNames = new Set();
       const uniquePlayers = [];
-      Object.entries(playerMap).forEach(([id, p]) => {
-        if (!seenIds.has(id)) {
-          seenIds.add(id);
+      Object.values(playerMap).forEach(p => {
+        const key = p.name.trim().toLowerCase();
+        if (!seenNames.has(key)) {
+          seenNames.add(key);
           uniquePlayers.push(p);
         }
       });
@@ -1731,7 +1737,12 @@
       err.classList.add('show');
     }
 
+    let joiningInProgress = false;
+
     async function joinGame() {
+      if (joiningInProgress) return;
+      joiningInProgress = true;
+
       const name = document.getElementById('join-name').value.trim() || 'Player';
       curName = name;
       curPlayerId = 'p_' + Math.random().toString(36).slice(2, 9);
