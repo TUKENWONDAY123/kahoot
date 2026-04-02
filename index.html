@@ -716,13 +716,13 @@
     }
 
     .round-sb-card {
-      background: rgba(255,255,255,.07);
-      border: 1px solid rgba(255,255,255,.15);
+      background: rgba(255, 255, 255, .07);
+      border: 1px solid rgba(255, 255, 255, .15);
       border-radius: 20px;
       padding: 28px 32px;
       width: 100%;
       max-width: 520px;
-      box-shadow: 0 24px 60px rgba(0,0,0,.5);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, .5);
     }
 
     .round-sb-title {
@@ -730,7 +730,7 @@
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 2px;
-      color: rgba(255,255,255,.5);
+      color: rgba(255, 255, 255, .5);
       margin-bottom: 18px;
     }
 
@@ -754,11 +754,30 @@
       transform: translateX(0);
     }
 
-    .rsb-item:nth-child(1) { background: linear-gradient(90deg, rgba(251,191,36,.35), rgba(251,191,36,.1)); border: 1px solid rgba(251,191,36,.5); }
-    .rsb-item:nth-child(2) { background: linear-gradient(90deg, rgba(192,192,192,.25), rgba(192,192,192,.07)); border: 1px solid rgba(192,192,192,.4); }
-    .rsb-item:nth-child(3) { background: linear-gradient(90deg, rgba(205,127,50,.25), rgba(205,127,50,.07)); border: 1px solid rgba(205,127,50,.4); }
-    .rsb-item:nth-child(4) { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); }
-    .rsb-item:nth-child(5) { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); }
+    .rsb-item:nth-child(1) {
+      background: linear-gradient(90deg, rgba(251, 191, 36, .35), rgba(251, 191, 36, .1));
+      border: 1px solid rgba(251, 191, 36, .5);
+    }
+
+    .rsb-item:nth-child(2) {
+      background: linear-gradient(90deg, rgba(192, 192, 192, .25), rgba(192, 192, 192, .07));
+      border: 1px solid rgba(192, 192, 192, .4);
+    }
+
+    .rsb-item:nth-child(3) {
+      background: linear-gradient(90deg, rgba(205, 127, 50, .25), rgba(205, 127, 50, .07));
+      border: 1px solid rgba(205, 127, 50, .4);
+    }
+
+    .rsb-item:nth-child(4) {
+      background: rgba(255, 255, 255, .06);
+      border: 1px solid rgba(255, 255, 255, .12);
+    }
+
+    .rsb-item:nth-child(5) {
+      background: rgba(255, 255, 255, .06);
+      border: 1px solid rgba(255, 255, 255, .12);
+    }
 
     .rsb-rank {
       font-size: 1.5rem;
@@ -766,7 +785,9 @@
       text-align: center;
     }
 
-    .rsb-name { flex: 1; }
+    .rsb-name {
+      flex: 1;
+    }
 
     .rsb-score {
       font-size: 1.3rem;
@@ -778,7 +799,7 @@
       font-size: .85rem;
       font-weight: 700;
       color: #4ade80;
-      background: rgba(74,222,128,.15);
+      background: rgba(74, 222, 128, .15);
       border-radius: 20px;
       padding: 2px 10px;
       min-width: 58px;
@@ -786,8 +807,15 @@
     }
 
     @keyframes scoreCount {
-      from { opacity: 0; transform: scale(.7); }
-      to   { opacity: 1; transform: scale(1); }
+      from {
+        opacity: 0;
+        transform: scale(.7);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
     }
 
     .rsb-score.counting {
@@ -795,9 +823,20 @@
     }
 
     @keyframes countPulse {
-      0%   { transform: scale(1);    opacity: 1; }
-      45%  { transform: scale(1.18); opacity: .9; }
-      100% { transform: scale(1);    opacity: 1; }
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      45% {
+        transform: scale(1.18);
+        opacity: .9;
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
     }
 
     /* ─── UTILS ─── */
@@ -971,7 +1010,8 @@
     <div class="card">
       <input type="text" id="join-name" placeholder="Nickname (max 15 chars)" maxlength="15"
         onkeyup="if(event.key==='Enter')joinGame()" />
-      <button class="btn btn-green" id="join-go-btn" onclick="this.disabled=true;this.textContent='Joining…';joinGame()" style="margin-top:10px;">Let's Go! 🎉</button>
+      <button class="btn btn-green" id="join-go-btn" onclick="this.disabled=true;this.textContent='Joining…';joinGame()"
+        style="margin-top:10px;">Let's Go! 🎉</button>
     </div>
   </div>
 
@@ -1007,11 +1047,11 @@
   </div>
 
   <!-- ══════════════ SCREEN 8b: PRE-GAME COUNTDOWN ══════════════ -->
-  <div id="screen-countdown" class="screen" style="background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);">
+  <div id="screen-countdown" class="screen"
+    style="background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);">
     <div style="display:flex;flex-direction:column;align-items:center;gap:24px;">
       <h2 style="color:rgba(255,255,255,.7);letter-spacing:2px;text-transform:uppercase;font-size:1rem;">Get Ready!</h2>
-      <div id="countdown-number"
-        style="font-size:clamp(6rem,25vw,12rem);font-weight:900;color:#fbbf24;
+      <div id="countdown-number" style="font-size:clamp(6rem,25vw,12rem);font-weight:900;color:#fbbf24;
                text-shadow:0 0 60px rgba(251,191,36,.5);
                line-height:1;
                animation:countPulse .9s ease-in-out infinite;">10</div>
@@ -1027,9 +1067,12 @@
     <div style="display:flex;align-items:center;gap:12px;width:100%;max-width:800px;margin-bottom:14px;">
       <span style="color:rgba(255,255,255,.6);font-size:.9rem;font-weight:700;white-space:nowrap;">Votes:</span>
       <div style="flex:1;height:10px;background:rgba(255,255,255,.15);border-radius:10px;overflow:hidden;">
-        <div id="vote-bar" style="height:100%;background:linear-gradient(90deg,#4ade80,#22c55e);border-radius:10px;width:0%;transition:width .4s ease;"></div>
+        <div id="vote-bar"
+          style="height:100%;background:linear-gradient(90deg,#4ade80,#22c55e);border-radius:10px;width:0%;transition:width .4s ease;">
+        </div>
       </div>
-      <span id="vote-count-label" style="color:rgba(255,255,255,.8);font-size:.9rem;font-weight:800;white-space:nowrap;">0/0</span>
+      <span id="vote-count-label"
+        style="color:rgba(255,255,255,.8);font-size:.9rem;font-weight:800;white-space:nowrap;">0/0</span>
     </div>
     <div class="answers-grid" id="host-answers">
       <div class="ans-btn btn-red" id="ha-1">
@@ -1045,7 +1088,8 @@
         <div class="shape">■</div><span id="hat-4"></span>
       </div>
     </div>
-    <p style="color:rgba(255,255,255,.45);font-size:.85rem;font-weight:700;margin-top:18px;">⏳ Round ends automatically when everyone has voted</p>
+    <p style="color:rgba(255,255,255,.45);font-size:.85rem;font-weight:700;margin-top:18px;">⏳ Round ends automatically
+      when everyone has voted</p>
   </div>
 
   <!-- ══════════════ SCREEN 11b: ROUND SCOREBOARD ══════════════ -->
@@ -1057,7 +1101,8 @@
       <div class="round-sb-title">Leaderboard</div>
       <div id="rsb-list"></div>
     </div>
-    <p style="color:rgba(255,255,255,.35);font-size:.82rem;font-weight:700;margin-top:18px;" id="rsb-next-hint">Moving to next question…</p>
+    <p style="color:rgba(255,255,255,.35);font-size:.82rem;font-weight:700;margin-top:18px;" id="rsb-next-hint">Moving
+      to next question…</p>
   </div>
 
   <!-- ══════════════ SCREEN 10: PLAYER GAME VIEW ══════════════ -->
@@ -1092,151 +1137,134 @@
   </div>
 
   <script>
-    // ─────────────────────────────────────────
-    // SUPABASE CONFIG
-    // Fill in your project URL and anon key to enable real multiplayer.
-    // ─────────────────────────────────────────
+    // ── SUPABASE CONFIG ──────────────────────────────────────────────────────
     const SB_URL = 'https://afwtmvturyetaqruihsr.supabase.co';
     const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFmd3RtdnR1cnlldGFxcnVpaHNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxMzM3MjUsImV4cCI6MjA5MDcwOTcyNX0.MmBoHJSe5uH_sOhe1WK5egr1znH-4hlm3eBzwgRwL10';
 
     let sb = null;
     let useSB = false;
-    if (SB_URL !== 'YOUR_SUPABASE_URL_HERE' && SB_URL.startsWith('https')) {
-      try { sb = window.supabase.createClient(SB_URL, SB_KEY); useSB = true; } catch (e) { }
+    if (SB_URL.startsWith('https')) {
+      try { sb = window.supabase.createClient(SB_URL, SB_KEY); useSB = true; } catch (e) { console.error('Supabase init error', e); }
     }
 
-    // ─────────────────────────────────────────
-    // SUPABASE — persists saved games
-    // ─────────────────────────────────────────
-
+    // ── SAVED GAMES (Supabase table: saved_games) ────────────────────────────
     async function getSavedGames() {
-      if (useSB && sb) {
+      if (useSB) {
         const { data, error } = await sb.from('saved_games').select('*');
-        if (error) { console.error('Error loading games:', error); return {}; }
+        if (error) { console.error(error); return {}; }
         const obj = {};
-        data.forEach(row => { obj[row.id] = row.game_data; });
+        (data || []).forEach(row => { obj[row.id] = row.game_data; });
         return obj;
       }
-      try { return JSON.parse(localStorage.getItem('kahoot_saved_games') || '{}'); } catch (e) { return {}; }
+      try { return JSON.parse(localStorage.getItem('kahoot_saved') || '{}'); } catch(e) { return {}; }
     }
 
     async function saveGameToStorage(id, gameObj) {
-      if (useSB && sb) {
+      if (useSB) {
         const { error } = await sb.from('saved_games').upsert({ id, game_data: gameObj, updated_at: new Date().toISOString() }, { onConflict: 'id' });
-        if (error) { console.error('Error saving game:', error); }
+        if (error) console.error(error);
         return;
       }
       const all = await getSavedGames();
       all[id] = gameObj;
-      localStorage.setItem('kahoot_saved_games', JSON.stringify(all));
+      localStorage.setItem('kahoot_saved', JSON.stringify(all));
     }
 
     async function deleteGameFromStorage(id) {
-      if (useSB && sb) {
+      if (useSB) {
         const { error } = await sb.from('saved_games').delete().eq('id', id);
-        if (error) { console.error('Error deleting game:', error); }
+        if (error) console.error(error);
         return;
       }
       const all = await getSavedGames();
       delete all[id];
-      localStorage.setItem('kahoot_saved_games', JSON.stringify(all));
+      localStorage.setItem('kahoot_saved', JSON.stringify(all));
     }
 
-    // ─────────────────────────────────────────
-    // BROADCAST CHANNEL  (same-browser real-time)
-    // ─────────────────────────────────────────
-    const bc = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel('kahoot_chan') : null;
+    // ── REALTIME CHANNEL ─────────────────────────────────────────────────────
+    // Uses Supabase Realtime broadcast — works across ALL devices on any network.
+    // Host sends events; players subscribe and react.
+    // ─────────────────────────────────────────────────────────────────────────
+    let realtimeChannel = null;
+    let isHost = false;
 
+    // In-memory store (authoritative on the HOST side only)
     const store = {
-      games: {},     // code → { code, title, questions:[] }
-      state: {},     // code → { status, qIndex, revealAnswer }
+      games:   {},   // code → { code, title, questions }
+      state:   {},   // code → { status, qIndex, correct }
       players: {},   // code → { playerId → { name, score, answered } }
     };
 
-    const listeners = [];
-
-    function broadcastStore(code) {
-      if (!bc) return;
-      bc.postMessage({ type: 'STORE_UPDATE', code, state: store.state[code], players: store.players[code] });
-    }
-
-    if (bc) {
-      bc.onmessage = (e) => {
-        const { type, code, state, players } = e.data;
-        if (type === 'STORE_UPDATE') {
-          if (state) store.state[code] = state;
-          if (players) {
-            // Merge incoming players into existing store instead of overwriting,
-            // so players joining from separate tabs all accumulate correctly.
-            if (!store.players[code]) store.players[code] = {};
-            Object.entries(players).forEach(([id, data]) => {
-              // Only update answered/score if newer data says answered, to
-              // avoid a late broadcast clearing an already-answered flag.
-              const existing = store.players[code][id];
-              if (existing) {
-                store.players[code][id] = {
-                  ...existing,
-                  ...data,
-                  answered: existing.answered || data.answered,
-                  score: Math.max(existing.score, data.score),
-                };
-              } else {
-                store.players[code][id] = data;
-              }
-            });
-          }
-          listeners.forEach(fn => fn(code));
-        }
-      };
-    }
-
-    function setState(code, patch) {
-      store.state[code] = { ...(store.state[code] || {}), ...patch };
-      broadcastStore(code);
-      listeners.forEach(fn => fn(code));
-    }
-
-    function addPlayer(code, id, name) {
-      if (!store.players[code]) store.players[code] = {};
-      store.players[code][id] = { name, score: 0, answered: false };
-      broadcastStore(code);
-      listeners.forEach(fn => fn(code));
-    }
-
-    function updatePlayerScore(code, id, score) {
-      if (store.players[code] && store.players[code][id]) {
-        store.players[code][id].score = score;
-        broadcastStore(code);
-        listeners.forEach(fn => fn(code));
+    // Broadcast an event to everyone in the game room (including self)
+    function sendEvent(eventName, payload) {
+      if (realtimeChannel) {
+        realtimeChannel.send({ type: 'broadcast', event: eventName, payload });
       }
+      // Always fire locally too so the sender reacts
+      onEvent(eventName, payload);
     }
 
-    function getPlayers(code) {
-      const playerMap = store.players[code] || {};
-      // Deduplicate by ID (Object.entries guarantees unique keys)
-      return Object.values(playerMap);
+    // Subscribe to a game room and set up listener
+    function subscribeToGame(code, onReady) {
+      if (realtimeChannel) {
+        try { sb && sb.removeChannel(realtimeChannel); } catch(_) {}
+        realtimeChannel = null;
+      }
+
+      if (!useSB) {
+        // No Supabase — fall back to BroadcastChannel (same browser only)
+        if (!window._localBC) {
+          window._localBC = new BroadcastChannel('kahoot_local_' + code);
+          window._localBC.onmessage = e => onEvent(e.data.event, e.data.payload);
+        }
+        if (onReady) onReady();
+        return;
+      }
+
+      realtimeChannel = sb.channel('game_room_' + code, {
+        config: { broadcast: { self: false } }
+      });
+
+      realtimeChannel
+        .on('broadcast', { event: '*' }, ({ event, payload }) => {
+          onEvent(event, payload);
+        })
+        .subscribe(status => {
+          console.log('Channel status:', status);
+          if (status === 'SUBSCRIBED' && onReady) onReady();
+        });
     }
 
-    // ─────────────────────────────────────────
-    // APP STATE
-    // ─────────────────────────────────────────
+    // ── EVENT DISPATCHER ─────────────────────────────────────────────────────
+    // Runs on every connected device whenever an event arrives.
+    function onEvent(event, payload) {
+      if (event === 'game_state')   handleGameState(payload);
+      if (event === 'player_join')  { if (isHost) hostOnPlayerJoin(payload); }
+      if (event === 'player_vote')  { if (isHost) hostOnPlayerVote(payload); }
+      if (event === 'request_state'){ if (isHost) hostResendState(); }
+    }
+
+    function serializePlayers(code) {
+      return Object.entries(store.players[code] || {}).map(([id, p]) => ({ id, ...p }));
+    }
+
+    // ── APP STATE ────────────────────────────────────────────────────────────
     let QUESTIONS = [];
-    let editingIndex = -1;   // -1 = adding new, >=0 = editing existing question
-    let editingGameId = null; // localStorage key of game being edited
+    let editingIndex = -1;
+    let editingGameId = null;
     let curCode = '';
     let curPlayerId = '';
     let curName = '';
     let myScore = 0;
     let myAnswered = false;
-
+    let lastQIndex = -1;
     let hostQIndex = 0;
     let hostPhase = 'question';
-    // track scores before this round to compute deltas
     let prevScores = {};
+    let joiningInProgress = false;
+    let playerCountdownInterval = null;
 
-    // ─────────────────────────────────────────
-    // TOAST
-    // ─────────────────────────────────────────
+    // ── TOAST ────────────────────────────────────────────────────────────────
     function showToast(msg, color) {
       const t = document.getElementById('toast');
       t.textContent = msg;
@@ -1245,14 +1273,11 @@
       setTimeout(() => t.classList.remove('show'), 2600);
     }
 
-    // ─────────────────────────────────────────
-    // NAV
-    // ─────────────────────────────────────────
+    // ── NAVIGATION ───────────────────────────────────────────────────────────
     function goTo(id) {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
       const el = document.getElementById(id);
       if (el) el.classList.add('active');
-      // Reset join button state whenever the name screen is shown
       if (id === 'screen-join-name') {
         joiningInProgress = false;
         const btn = document.getElementById('join-go-btn');
@@ -1260,24 +1285,19 @@
       }
     }
 
-    // ─────────────────────────────────────────
-    // ADMIN LOGIN
-    // ─────────────────────────────────────────
+    // ── ADMIN LOGIN ──────────────────────────────────────────────────────────
     function checkAdmin() {
       const pwd = document.getElementById('admin-pwd').value;
-      const err = document.getElementById('admin-err');
       if (pwd === 'admin') {
-        err.classList.remove('show');
+        document.getElementById('admin-err').classList.remove('show');
         document.getElementById('admin-pwd').value = '';
         openAdminDash();
       } else {
-        err.classList.add('show');
+        document.getElementById('admin-err').classList.add('show');
       }
     }
 
-    // ─────────────────────────────────────────
-    // ADMIN DASHBOARD
-    // ─────────────────────────────────────────
+    // ── ADMIN DASHBOARD ──────────────────────────────────────────────────────
     async function openAdminDash() {
       await renderSavedGames();
       goTo('screen-admin-dash');
@@ -1287,25 +1307,22 @@
       const all = await getSavedGames();
       const container = document.getElementById('saved-games-list');
       const ids = Object.keys(all);
-      if (ids.length === 0) {
-        container.innerHTML = '<p class="no-saved">No saved games yet. Create one!</p>';
-        return;
-      }
+      if (!ids.length) { container.innerHTML = '<p class="no-saved">No saved games yet. Create one!</p>'; return; }
       container.innerHTML = '';
       ids.forEach(id => {
         const g = all[id];
         const div = document.createElement('div');
         div.className = 'saved-game-card';
         div.innerHTML = `
-      <div style="flex:1;">
-        <div class="sg-title">${escHtml(g.title)}</div>
-        <div class="sg-meta">${g.questions.length} question${g.questions.length !== 1 ? 's' : ''} · Saved ${g.savedAt || ''}</div>
-      </div>
-      <div class="sg-actions">
-        <button class="sg-btn sg-edit" onclick="event.stopPropagation();loadGameForEdit('${id}')">✏️ Edit</button>
-        <button class="sg-btn sg-host" onclick="event.stopPropagation();loadGameAndHost('${id}')">🚀 Host</button>
-        <button class="sg-btn sg-del"  onclick="event.stopPropagation();deleteSavedGame('${id}')">🗑</button>
-      </div>`;
+          <div style="flex:1">
+            <div class="sg-title">${escHtml(g.title)}</div>
+            <div class="sg-meta">${g.questions.length} question${g.questions.length !== 1 ? 's' : ''} · ${g.savedAt || ''}</div>
+          </div>
+          <div class="sg-actions">
+            <button class="sg-btn sg-edit" onclick="event.stopPropagation();loadGameForEdit('${id}')">✏️ Edit</button>
+            <button class="sg-btn sg-host" onclick="event.stopPropagation();loadGameAndHost('${id}')">🚀 Host</button>
+            <button class="sg-btn sg-del"  onclick="event.stopPropagation();deleteSavedGame('${id}')">🗑</button>
+          </div>`;
         container.appendChild(div);
       });
     }
@@ -1317,95 +1334,67 @@
       showToast('Game deleted', '#e21b3c');
     }
 
-    // ─────────────────────────────────────────
-    // CREATE / EDIT GAME SCREEN
-    // ─────────────────────────────────────────
+    // ── CREATE / EDIT GAME ───────────────────────────────────────────────────
     function startNewGame() {
-      QUESTIONS = [];
-      editingGameId = null;
-      editingIndex = -1;
+      QUESTIONS = []; editingGameId = null; editingIndex = -1;
       document.getElementById('game-title').value = '';
       document.getElementById('create-game-title').textContent = '✏️ Create Game';
-      clearBuilder();
-      renderQuestionList();
-      goTo('screen-create-game');
+      clearBuilder(); renderQuestionList(); goTo('screen-create-game');
     }
 
     async function loadGameForEdit(id) {
       const all = await getSavedGames();
-      const g = all[id];
-      if (!g) return;
-      QUESTIONS = [...g.questions];
-      editingGameId = id;
-      editingIndex = -1;
+      const g = all[id]; if (!g) return;
+      QUESTIONS = [...g.questions]; editingGameId = id; editingIndex = -1;
       document.getElementById('game-title').value = g.title;
       document.getElementById('create-game-title').textContent = '✏️ Edit Game';
-      clearBuilder();
-      renderQuestionList();
-      goTo('screen-create-game');
+      clearBuilder(); renderQuestionList(); goTo('screen-create-game');
     }
 
-    // ─────────────────────────────────────────
-    // QUESTION BUILDER
-    // ─────────────────────────────────────────
+    // ── QUESTION BUILDER ─────────────────────────────────────────────────────
     function addOrUpdateQuestion() {
-      const q = document.getElementById('qb-q').value.trim();
+      const q  = document.getElementById('qb-q').value.trim();
       const a1 = document.getElementById('qb-a1').value.trim();
       const a2 = document.getElementById('qb-a2').value.trim();
       const a3 = document.getElementById('qb-a3').value.trim();
       const a4 = document.getElementById('qb-a4').value.trim();
-      const c = parseInt(document.getElementById('qb-correct').value);
-      const t = parseInt(document.getElementById('qb-time').value) || 20;
-
-      if (!q) { alert('Enter a question!'); return; }
+      const c  = parseInt(document.getElementById('qb-correct').value);
+      const t  = parseInt(document.getElementById('qb-time').value) || 20;
+      if (!q)  { alert('Enter a question!'); return; }
       if (!a1) { alert('Enter Answer 1!'); return; }
       if (!a2) { alert('Enter Answer 2!'); return; }
-
       const qObj = { q, a1, a2, a3, a4, c, t };
-
-      if (editingIndex >= 0) {
-        QUESTIONS[editingIndex] = qObj;
-        showToast(`Question ${editingIndex + 1} updated ✅`, '#26890c');
-      } else {
-        QUESTIONS.push(qObj);
-        showToast('Question added! ✅', '#26890c');
-      }
-
-      cancelEdit();
-      renderQuestionList();
+      if (editingIndex >= 0) { QUESTIONS[editingIndex] = qObj; showToast('Question updated ✅', '#26890c'); }
+      else { QUESTIONS.push(qObj); showToast('Question added ✅', '#26890c'); }
+      cancelEdit(); renderQuestionList();
     }
 
     function editQuestion(i) {
       editingIndex = i;
       const q = QUESTIONS[i];
-      document.getElementById('qb-q').value = q.q;
+      document.getElementById('qb-q').value  = q.q;
       document.getElementById('qb-a1').value = q.a1;
       document.getElementById('qb-a2').value = q.a2;
       document.getElementById('qb-a3').value = q.a3 || '';
       document.getElementById('qb-a4').value = q.a4 || '';
       document.getElementById('qb-correct').value = String(q.c);
       document.getElementById('qb-time').value = q.t;
-
       document.getElementById('builder-title').textContent = '✏️ Edit Question';
       document.getElementById('add-q-btn').textContent = '💾 Save Changes';
       document.getElementById('add-q-btn').className = 'btn btn-orange';
       document.getElementById('cancel-edit-btn').style.display = 'block';
       document.getElementById('edit-banner').classList.add('show');
       document.getElementById('edit-banner-num').textContent = i + 1;
-
       renderQuestionList();
-      // Scroll builder into view
       document.getElementById('builder-title').scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
     function cancelEdit() {
-      editingIndex = -1;
-      clearBuilder();
-      renderQuestionList();
+      editingIndex = -1; clearBuilder(); renderQuestionList();
     }
 
     function clearBuilder() {
-      ['qb-q', 'qb-a1', 'qb-a2', 'qb-a3', 'qb-a4', 'qb-time'].forEach(id => document.getElementById(id).value = '');
+      ['qb-q','qb-a1','qb-a2','qb-a3','qb-a4','qb-time'].forEach(id => document.getElementById(id).value = '');
       document.getElementById('qb-correct').value = '1';
       document.getElementById('builder-title').textContent = '➕ Add a Question';
       document.getElementById('add-q-btn').textContent = '+ Add Question';
@@ -1429,107 +1418,100 @@
         const d = document.createElement('div');
         d.className = 'q-item' + (editingIndex === i ? ' editing' : '');
         d.onclick = () => editQuestion(i);
-        d.innerHTML = `
-      <div class="q-num">${i + 1}</div>
-      <span style="flex:1;text-align:left;">${escHtml(q.q)}</span>
-      <span style="font-size:.8rem;color:#888;margin-right:6px;">${q.t}s</span>
-      <button class="q-del" onclick="event.stopPropagation();deleteQuestion(${i})">✕</button>`;
+        d.innerHTML = `<div class="q-num">${i+1}</div><span style="flex:1;text-align:left">${escHtml(q.q)}</span><span style="font-size:.8rem;color:#888;margin-right:6px">${q.t}s</span><button class="q-del" onclick="event.stopPropagation();deleteQuestion(${i})">✕</button>`;
         list.appendChild(d);
       });
     }
 
-    // ─────────────────────────────────────────
-    // SAVE GAME ONLY  (no hosting)
-    // ─────────────────────────────────────────
+    // ── SAVE GAME ────────────────────────────────────────────────────────────
     function saveGameOnly() {
       const title = document.getElementById('game-title').value.trim() || 'Kahoot Game';
-      if (QUESTIONS.length === 0) { alert('Add at least one question!'); return; }
-
+      if (!QUESTIONS.length) { alert('Add at least one question!'); return; }
       const id = editingGameId || ('game_' + Date.now());
-      const now = new Date().toLocaleString();
-      const gameObj = { id, title, questions: [...QUESTIONS], savedAt: now };
+      const gameObj = { id, title, questions: [...QUESTIONS], savedAt: new Date().toLocaleString() };
       saveGameToStorage(id, gameObj);
       editingGameId = id;
-
       showToast('💾 Game saved!', '#1368ce');
     }
 
-    // ─────────────────────────────────────────
-    // HOST GAME (from saved or inline)
-    // ─────────────────────────────────────────
+    // ── HOST GAME ────────────────────────────────────────────────────────────
     async function saveAndHost() {
       const title = document.getElementById('game-title').value.trim() || 'Kahoot Game';
-      if (QUESTIONS.length === 0) { alert('Add at least one question!'); return; }
-
-      // Auto-save first
+      if (!QUESTIONS.length) { alert('Add at least one question!'); return; }
       saveGameOnly();
-
       await startHosting(title, QUESTIONS);
     }
 
     async function loadGameAndHost(id) {
       const all = await getSavedGames();
-      const g = all[id];
-      if (!g) return;
+      const g = all[id]; if (!g) return;
       await startHosting(g.title, g.questions);
     }
 
     async function startHosting(title, questions) {
+      isHost = true;
       const code = String(Math.floor(100000 + Math.random() * 900000));
       curCode = code;
-
-      store.games[code] = { code, title, questions: [...questions] };
+      store.games[code]   = { code, title, questions: [...questions] };
       store.players[code] = {};
-      setState(code, { status: 'lobby', qIndex: 0, revealAnswer: false });
-
-      if (useSB) {
-        await sb.from('game_state').upsert({ code, status: 'lobby', current_question: 0 });
-      }
+      store.state[code]   = { status: 'lobby', qIndex: 0 };
 
       document.getElementById('host-pin-display').textContent = code;
       updateHostLobbyUI();
       goTo('screen-lobby-host');
 
-      if (!listeners.includes(hostStoreListener)) listeners.push(hostStoreListener);
-
-      if (useSB) {
-        sb.channel('host_' + code)
-          .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'players', filter: `game_code=eq.${code}` }, p => {
-            addPlayer(code, p.new.id, p.new.name);
-          })
-          .subscribe();
-      }
+      subscribeToGame(code, () => {
+        console.log('✅ Host subscribed to game_room_' + code);
+        showToast('Game ready! PIN: ' + code, '#26890c');
+      });
     }
 
-    function hostStoreListener(code) {
+    function hostResendState() {
+      const st = store.state[curCode];
+      if (!st) return;
+      sendEvent('game_state', { ...st, code: curCode, players: serializePlayers(curCode) });
+    }
+
+    function hostOnPlayerJoin(payload) {
+      const { id, name, code } = payload;
       if (code !== curCode) return;
-      const currentScreen = document.querySelector('.screen.active');
-      if (currentScreen && currentScreen.id === 'screen-lobby-host') {
+      if (!store.players[curCode][id]) {
+        store.players[curCode][id] = { name, score: 0, answered: false };
         updateHostLobbyUI();
+        showToast('👋 ' + name + ' joined!', '#26890c');
       }
-      if (currentScreen && currentScreen.id === 'screen-host-game') {
-        updateVoteBar();
+      // Always re-send state so player gets synced even if they joined late
+      hostResendState();
+    }
+
+    function hostOnPlayerVote(payload) {
+      const { id, answer, code } = payload;
+      if (code !== curCode) return;
+      const player = store.players[curCode] && store.players[curCode][id];
+      if (!player || player.answered) return;
+      const st = store.state[curCode];
+      const game = store.games[curCode];
+      if (!st || !game || st.status !== 'question') return;
+      const q = game.questions[st.qIndex];
+      player.answered = true;
+      player.score += (q && q.c === answer) ? 200 : 100;
+      // Broadcast updated state (triggers vote bar update on all screens)
+      sendEvent('game_state', { ...store.state[curCode], code: curCode, players: serializePlayers(curCode) });
+      updateVoteBar();
+      // Auto-end round if everyone voted
+      const all = Object.values(store.players[curCode]);
+      if (all.length > 0 && all.every(p => p.answered) && hostPhase === 'question') {
+        hostRevealAnswer();
       }
     }
 
     function updateHostLobbyUI() {
-      const playerMap = store.players[curCode] || {};
-      const seenNames = new Set();
-      const uniquePlayers = [];
-      Object.values(playerMap).forEach(p => {
-        const key = p.name.trim().toLowerCase();
-        if (!seenNames.has(key)) {
-          seenNames.add(key);
-          uniquePlayers.push(p);
-        }
-      });
-
-      const count = uniquePlayers.length;
+      const players = Object.values(store.players[curCode] || {});
+      const count = players.length;
       document.getElementById('player-count-badge').textContent = count + ' player' + (count !== 1 ? 's' : '');
-
       const list = document.getElementById('host-players-list');
       list.innerHTML = '';
-      uniquePlayers.forEach(p => {
+      players.forEach(p => {
         const el = document.createElement('div');
         el.className = 'player-pill';
         el.textContent = p.name;
@@ -1537,30 +1519,24 @@
       });
     }
 
-    // ─────────────────────────────────────────
-    // HOST GAME FLOW
-    // ─────────────────────────────────────────
+    // ── HOST GAME FLOW ───────────────────────────────────────────────────────
     function hostStartGame() {
-      const players = getPlayers(curCode);
-      if (players.length === 0 && !confirm('No players yet — start anyway for a demo?')) return;
+      const players = Object.values(store.players[curCode] || {});
+      if (!players.length && !confirm('No players yet — start anyway for a demo?')) return;
       hostQIndex = 0;
-      hostPhase = 'question';
-
-      // Tell all player tabs to show the countdown too
-      setState(curCode, { status: 'countdown' });
-
-      // Show countdown on host
+      hostPhase  = 'question';
+      store.state[curCode] = { status: 'countdown', qIndex: 0 };
+      // Tell everyone to show countdown
+      sendEvent('game_state', { status: 'countdown', code: curCode, players: serializePlayers(curCode) });
       goTo('screen-countdown');
       let count = 10;
-      const numEl = document.getElementById('countdown-number');
-      numEl.textContent = count;
-
+      document.getElementById('countdown-number').textContent = count;
       const tick = setInterval(() => {
         count--;
-        numEl.textContent = count;
+        document.getElementById('countdown-number').textContent = count;
         if (count <= 0) {
           clearInterval(tick);
-          setState(curCode, { status: 'question', qIndex: hostQIndex, revealAnswer: false });
+          store.state[curCode] = { status: 'question', qIndex: hostQIndex };
           showHostQuestion();
         }
       }, 1000);
@@ -1568,334 +1544,229 @@
 
     function showHostQuestion() {
       const game = store.games[curCode];
-      const q = game.questions[hostQIndex];
-
-      // snapshot scores before this round
+      const q    = game.questions[hostQIndex];
+      // Snapshot scores pre-round
       prevScores = {};
-      if (store.players[curCode]) {
-        Object.keys(store.players[curCode]).forEach(id => {
-          prevScores[id] = store.players[curCode][id].score;
-        });
-      }
-
+      Object.entries(store.players[curCode] || {}).forEach(([id, p]) => prevScores[id] = p.score);
+      // Reset answered flags
+      Object.values(store.players[curCode] || {}).forEach(p => p.answered = false);
+      store.state[curCode] = { status: 'question', qIndex: hostQIndex };
+      // ★ Send full question data so players can identify answers
+      sendEvent('game_state', { status: 'question', qIndex: hostQIndex, question: q, code: curCode, players: serializePlayers(curCode) });
       goTo('screen-host-game');
-
       document.getElementById('host-q-meta').textContent = `Question ${hostQIndex + 1} of ${game.questions.length}`;
       document.getElementById('host-question-text').textContent = q.q;
-
-      const labels = [q.a1, q.a2, q.a3, q.a4];
-      ['hat-1', 'hat-2', 'hat-3', 'hat-4'].forEach((id, i) => {
-        document.getElementById(id).textContent = labels[i] || '';
-        document.getElementById('ha-' + (i + 1)).style.opacity = labels[i] ? '1' : '0.15';
-        document.getElementById('ha-' + (i + 1)).classList.remove('dim', 'correct');
+      [q.a1, q.a2, q.a3, q.a4].forEach((label, i) => {
+        document.getElementById('hat-' + (i+1)).textContent = label || '';
+        const ha = document.getElementById('ha-' + (i+1));
+        ha.style.opacity = label ? '1' : '0.15';
+        ha.classList.remove('dim', 'correct');
       });
-
       hostPhase = 'question';
-
-      if (store.players[curCode]) {
-        Object.keys(store.players[curCode]).forEach(id => {
-          store.players[curCode][id].answered = false;
-        });
-      }
-
-      // reset vote bar
       updateVoteBar();
-
-      setState(curCode, { status: 'question', qIndex: hostQIndex, revealAnswer: false });
     }
 
     function updateVoteBar() {
-      const players = getPlayers(curCode);
+      const players = Object.values(store.players[curCode] || {});
       const total = players.length;
       const voted = players.filter(p => p.answered).length;
-      const pct = total > 0 ? Math.round((voted / total) * 100) : 0;
-      const bar = document.getElementById('vote-bar');
+      const pct   = total > 0 ? Math.round((voted / total) * 100) : 0;
+      const bar   = document.getElementById('vote-bar');
       const label = document.getElementById('vote-count-label');
-      if (bar) bar.style.width = pct + '%';
-      if (label) label.textContent = `${voted}/${total}`;
-      // auto-end round when everyone voted
-      if (total > 0 && voted >= total && hostPhase === 'question') {
-        hostRevealAnswer();
-      }
+      if (bar)   bar.style.width = pct + '%';
+      if (label) label.textContent = voted + '/' + total;
     }
 
     function hostRevealAnswer() {
       if (hostPhase !== 'question') return;
       hostPhase = 'reveal';
-      const game = store.games[curCode];
-      const correct = game.questions[hostQIndex].c;
+      const correct = store.games[curCode].questions[hostQIndex].c;
       for (let i = 1; i <= 4; i++) {
         const el = document.getElementById('ha-' + i);
-        if (i === correct) el.classList.add('correct');
-        else el.classList.add('dim');
+        if (i === correct) el.classList.add('correct'); else el.classList.add('dim');
       }
-      setState(curCode, { status: 'reveal', qIndex: hostQIndex, revealAnswer: true, correct });
-
-      // show round scoreboard after short delay
+      store.state[curCode] = { status: 'reveal', qIndex: hostQIndex, correct };
+      sendEvent('game_state', { status: 'reveal', qIndex: hostQIndex, correct, code: curCode, players: serializePlayers(curCode) });
       setTimeout(() => showRoundScoreboard(), 1200);
     }
 
     function showRoundScoreboard() {
-      const game = store.games[curCode];
+      const game  = store.games[curCode];
       const isLast = hostQIndex >= game.questions.length - 1;
-      const players = getPlayers(curCode).sort((a, b) => b.score - a.score);
-      const top5 = players.slice(0, 5);
+      const players = Object.entries(store.players[curCode] || {}).map(([id, p]) => ({ id, ...p })).sort((a, b) => b.score - a.score);
+      const top5  = players.slice(0, 5);
       const medals = ['🥇','🥈','🥉','4️⃣','5️⃣'];
-
-      document.getElementById('rsb-header').textContent = `Round ${hostQIndex + 1} Results`;
+      document.getElementById('rsb-header').textContent  = `Round ${hostQIndex + 1} Results`;
       document.getElementById('rsb-subheader').textContent = `Question ${hostQIndex + 1} of ${game.questions.length}`;
       document.getElementById('rsb-next-hint').textContent = isLast ? '🏆 Final scores coming up…' : '⏭ Next question coming up…';
-
       const list = document.getElementById('rsb-list');
       list.innerHTML = '';
-
       top5.forEach((p, i) => {
-        const delta = p.score - (prevScores[Object.keys(store.players[curCode]).find(k => store.players[curCode][k] === p)] || 0);
+        const delta = p.score - (prevScores[p.id] || 0);
         const div = document.createElement('div');
         div.className = 'rsb-item';
-        div.innerHTML = `
-          <span class="rsb-rank">${medals[i] || (i + 1)}</span>
-          <span class="rsb-name">${escHtml(p.name)}</span>
-          <span class="rsb-delta">+${delta}</span>
-          <span class="rsb-score" id="rsb-score-${i}">0</span>`;
+        div.innerHTML = `<span class="rsb-rank">${medals[i]||i+1}</span><span class="rsb-name">${escHtml(p.name)}</span><span class="rsb-delta">+${delta}</span><span class="rsb-score" id="rsb-score-${i}">0</span>`;
         list.appendChild(div);
       });
-
       goTo('screen-round-scores');
-
-      // animate each row in then count up score
       top5.forEach((p, i) => {
         setTimeout(() => {
-          const el = list.children[i];
-          if (el) el.classList.add('show');
-          // count up score
-          const scoreEl = document.getElementById('rsb-score-' + i);
-          if (!scoreEl) return;
-          const target = p.score;
-          const duration = 900;
-          const steps = 30;
-          let step = 0;
-          const interval = setInterval(() => {
+          if (list.children[i]) list.children[i].classList.add('show');
+          const el = document.getElementById('rsb-score-' + i);
+          if (!el) return;
+          let step = 0; const steps = 30; const duration = 900;
+          const iv = setInterval(() => {
             step++;
-            const val = Math.round((step / steps) * target);
-            scoreEl.textContent = val.toLocaleString();
-            if (step >= steps) {
-              scoreEl.textContent = target.toLocaleString();
-              clearInterval(interval);
-            }
+            el.textContent = Math.round((step / steps) * p.score).toLocaleString();
+            if (step >= steps) { el.textContent = p.score.toLocaleString(); clearInterval(iv); }
           }, duration / steps);
         }, i * 220);
       });
-
-      // broadcast so players see reveal/waiting
-      setState(curCode, { status: 'reveal', qIndex: hostQIndex, correct: game.questions[hostQIndex].c });
-
-      // auto-advance after 4 seconds
       setTimeout(() => {
         if (isLast) {
-          setState(curCode, { status: 'podium' });
+          store.state[curCode] = { status: 'podium' };
+          sendEvent('game_state', { status: 'podium', code: curCode, players: serializePlayers(curCode) });
           showPodium(curCode);
         } else {
           hostQIndex++;
           hostPhase = 'question';
+          store.state[curCode] = { status: 'question', qIndex: hostQIndex };
           showHostQuestion();
         }
       }, 4500);
     }
 
-    // ─────────────────────────────────────────
-    // JOIN FLOW
-    // ─────────────────────────────────────────
+    // ── JOIN FLOW ────────────────────────────────────────────────────────────
     function checkPin() {
       const pin = document.getElementById('join-pin').value.trim();
       const err = document.getElementById('pin-err');
-      if (!pin) return;
-
-      if (store.games[pin]) {
-        const st = store.state[pin];
-        if (st && st.status === 'lobby') {
-          curCode = pin;
-          err.classList.remove('show');
-          goTo('screen-join-name');
-          return;
-        }
-      }
-
-      if (useSB) {
-        sb.from('game_state').select('*').eq('code', pin).single().then(({ data }) => {
-          if (data && data.status === 'lobby') {
-            curCode = pin;
-            err.classList.remove('show');
-            goTo('screen-join-name');
-          } else {
-            err.classList.add('show');
-          }
-        });
-        return;
-      }
-
-      err.classList.add('show');
+      if (!pin || pin.length < 6) { err.classList.add('show'); return; }
+      err.classList.remove('show');
+      curCode = pin;
+      goTo('screen-join-name');
     }
-
-    let joiningInProgress = false;
 
     async function joinGame() {
       if (joiningInProgress) return;
       joiningInProgress = true;
-
       const name = document.getElementById('join-name').value.trim() || 'Player';
-      curName = name;
-      curPlayerId = 'p_' + Math.random().toString(36).slice(2, 9);
-      myScore = 0;
-      myAnswered = false;
-
-      addPlayer(curCode, curPlayerId, name);
-
-      if (useSB) {
-        const { data } = await sb.from('players').insert([{ game_code: curCode, name, score: 0 }]).select();
-        if (data && data[0]) curPlayerId = data[0].id;
-      }
-
+      curName      = name;
+      curPlayerId  = 'p_' + Math.random().toString(36).slice(2, 9);
+      myScore      = 0;
+      myAnswered   = false;
+      lastQIndex   = -1;
       document.getElementById('player-lobby-name').textContent = name;
       goTo('screen-lobby-player');
 
-      listeners.push(playerStoreListener);
+      // Subscribe to the game channel
+      subscribeToGame(curCode, () => {
+        console.log('✅ Player subscribed to game_room_' + curCode);
+        // Announce join and request current state
+        sendEvent('player_join', { id: curPlayerId, name, code: curCode });
+        setTimeout(() => sendEvent('request_state', { code: curCode }), 800);
+      });
+    }
 
-      if (useSB) {
-        sb.channel('player_' + curCode + '_' + curPlayerId)
-          .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'game_state', filter: `code=eq.${curCode}` }, p => {
-            handlePlayerState(p.new.status, p.new.current_question, p.new.correct_answer);
-          })
-          .subscribe();
+    // ── PLAYER — handle incoming game state ──────────────────────────────────
+    function handleGameState(payload) {
+      if (isHost) return;   // host never processes its own game_state events
+      const { status, qIndex, correct, question, players, code } = payload;
+      if (code && code !== curCode) return;
+
+      // Sync player list locally (for podium)
+      if (players) {
+        if (!store.players[curCode]) store.players[curCode] = {};
+        players.forEach(p => { store.players[curCode][p.id] = { name: p.name, score: p.score, answered: p.answered }; });
       }
-    }
 
-    function playerStoreListener(code) {
-      if (code !== curCode) return;
-      const st = store.state[code];
-      if (!st) return;
-      handlePlayerState(st.status, st.qIndex, st.correct);
-    }
+      if (status === 'lobby') {
+        // Stay on lobby screen
+        const active = document.querySelector('.screen.active');
+        if (active && active.id !== 'screen-lobby-player' && active.id !== 'screen-join-name') goTo('screen-lobby-player');
 
-    let lastQIndex = -1;
-
-    let playerCountdownInterval = null;
-
-    function handlePlayerState(status, qIndex, correct) {
-      if (status === 'countdown') {
-        // Show player-side countdown
-        if (playerCountdownInterval) return; // already counting
+      } else if (status === 'countdown') {
+        if (playerCountdownInterval) return;
         let count = 10;
         goTo('screen-countdown');
-        const numEl = document.getElementById('countdown-number');
-        numEl.textContent = count;
+        document.getElementById('countdown-number').textContent = count;
         playerCountdownInterval = setInterval(() => {
           count--;
-          numEl.textContent = count;
-          if (count <= 0) {
-            clearInterval(playerCountdownInterval);
-            playerCountdownInterval = null;
-          }
+          document.getElementById('countdown-number').textContent = count;
+          if (count <= 0) { clearInterval(playerCountdownInterval); playerCountdownInterval = null; }
         }, 1000);
+
       } else if (status === 'question') {
-        if (playerCountdownInterval) {
-          clearInterval(playerCountdownInterval);
-          playerCountdownInterval = null;
+        if (playerCountdownInterval) { clearInterval(playerCountdownInterval); playerCountdownInterval = null; }
+        // Store question data locally so we can compute score client-side
+        if (question) {
+          if (!store.games[curCode]) store.games[curCode] = { questions: [] };
+          store.games[curCode].questions[qIndex] = question;
         }
         if (qIndex !== lastQIndex) { lastQIndex = qIndex; myAnswered = false; }
         if (!myAnswered) showPlayerButtons();
         else showPlayerWaiting('⏳', 'Answer sent!', false);
+
       } else if (status === 'reveal') {
         showPlayerWaiting('📊', 'Look at the screen!', true);
+
       } else if (status === 'podium') {
-        showPodium(curCode);
+        showPodium(code || curCode);
       }
     }
 
     function showPlayerButtons() {
       goTo('screen-player-game');
       document.getElementById('player-buttons').classList.remove('hidden');
-      document.getElementById('player-waiting').classList.remove('show');
-      document.getElementById('player-waiting').style.display = 'none';
+      const w = document.getElementById('player-waiting');
+      w.classList.remove('show');
+      w.style.display = 'none';
     }
 
     function showPlayerWaiting(icon, msg, showScore) {
       goTo('screen-player-game');
       document.getElementById('player-buttons').classList.add('hidden');
-      const wEl = document.getElementById('player-waiting');
-      wEl.style.display = 'flex';
-      wEl.classList.add('show');
+      const w = document.getElementById('player-waiting');
+      w.style.display = 'flex';
+      w.classList.add('show');
       document.getElementById('wait-icon').textContent = icon;
       document.getElementById('player-status-msg').textContent = msg;
-      const scoreEl = document.getElementById('player-score-badge');
-      if (showScore) {
-        scoreEl.style.display = 'block';
-        scoreEl.textContent = `Score: ${myScore.toLocaleString()}`;
-      } else {
-        scoreEl.style.display = 'none';
-      }
+      const sc = document.getElementById('player-score-badge');
+      sc.style.display = showScore ? 'block' : 'none';
+      if (showScore) sc.textContent = 'Score: ' + myScore.toLocaleString();
     }
 
     function playerAnswer(num) {
       if (myAnswered) return;
       myAnswered = true;
-      const st = store.state[curCode];
-      // everyone gets points; more for correct answer
-      if (st) {
-        const game = store.games[curCode];
-        if (game) {
-          const q = game.questions[st.qIndex];
-          if (q) {
-            if (q.c === num) {
-              myScore += 200; // correct answer bonus
-            } else {
-              myScore += 100; // participation points
-            }
-            updatePlayerScore(curCode, curPlayerId, myScore);
-          }
-        }
-      }
-      // mark as answered so host can detect all-voted
-      if (store.players[curCode] && store.players[curCode][curPlayerId]) {
-        store.players[curCode][curPlayerId].answered = true;
-        broadcastStore(curCode);
-        listeners.forEach(fn => fn(curCode));
-      }
+      // Optimistic local score update for display
+      const q = store.games[curCode] && store.games[curCode].questions[lastQIndex];
+      if (q) myScore += (q.c === num ? 200 : 100);
+      // Tell host
+      sendEvent('player_vote', { id: curPlayerId, answer: num, code: curCode });
       showPlayerWaiting('✅', 'Answer submitted!', false);
     }
 
-    // ─────────────────────────────────────────
-    // PODIUM
-    // ─────────────────────────────────────────
+    // ── PODIUM ────────────────────────────────────────────────────────────────
     function showPodium(code) {
       goTo('screen-podium');
-      const players = getPlayers(code).sort((a, b) => b.score - a.score);
-      const medals = ['🥇', '🥈', '🥉'];
-      const list = document.getElementById('podium-list');
+      const players = Object.values(store.players[code] || {}).sort((a, b) => b.score - a.score);
+      const medals  = ['🥇','🥈','🥉'];
+      const list    = document.getElementById('podium-list');
       list.innerHTML = '';
-      if (players.length === 0) {
-        list.innerHTML = '<li class="podium-item" style="justify-content:center">No players 😢</li>';
-        return;
-      }
+      if (!players.length) { list.innerHTML = '<li class="podium-item" style="justify-content:center">No players 😢</li>'; return; }
       players.slice(0, 10).forEach((p, i) => {
         const li = document.createElement('li');
         li.className = 'podium-item';
         li.style.animationDelay = (i * 0.1) + 's';
-        li.innerHTML = `
-      <span class="podium-rank">${medals[i] || (i + 1)}</span>
-      <span style="flex:1">${escHtml(p.name)}</span>
-      <span class="podium-score">${p.score.toLocaleString()}</span>`;
+        li.innerHTML = `<span class="podium-rank">${medals[i]||i+1}</span><span style="flex:1">${escHtml(p.name)}</span><span class="podium-score">${p.score.toLocaleString()}</span>`;
         list.appendChild(li);
       });
     }
 
     function escHtml(s) {
-      return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     }
 
-    // ─────────────────────────────────────────
-    // KEYBOARD
-    // ─────────────────────────────────────────
     document.getElementById('admin-pwd').addEventListener('keyup', e => { if (e.key === 'Enter') checkAdmin(); });
   </script>
 </body>
