@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kahoot Clone</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col font-sans text-gray-900">
+    <!-- App Container -->
+    <div id="app" class="flex-1 flex flex-col">
+        <!-- Home View -->
+        <div id="view-home" class="flex-1 flex flex-col items-center justify-center bg-purple-600 text-white p-4">
+            <h1 class="text-6xl font-bold mb-12 tracking-tight">Kahoot Clone</h1>
+            <div class="space-y-4 w-full max-w-md">
+                <button onclick="showView('view-join')" class="w-full py-4 bg-white text-purple-600 font-bold text-xl rounded shadow-lg hover:bg-gray-100 transition">Join Game</button>
+                <button onclick="showView('view-admin-login')" class="w-full py-4 bg-purple-800 text-white font-bold text-xl rounded shadow-lg hover:bg-purple-900 transition">Admin</button>
+            </div>
+        </div>
+
+        <!-- Admin Login View -->
+        <div id="view-admin-login" class="hidden flex-1 flex flex-col items-center justify-center p-4">
+            <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+                <h2 class="text-3xl font-bold mb-6 text-center">Admin Login</h2>
+                <input type="password" id="admin-password" placeholder="Enter password" class="w-full p-3 border rounded mb-4 focus:outline-none focus:ring-2 focus:ring-purple-600">
+                <button onclick="loginAdmin()" class="w-full py-3 bg-purple-600 text-white font-bold rounded hover:bg-purple-700 transition">Login</button>
+                <button onclick="showView('view-home')" class="mt-4 text-gray-500 hover:text-gray-700 w-full text-center">Back to Home</button>
+            </div>
+        </div>
+
+        <!-- Admin Dashboard View -->
+        <div id="view-admin-dashboard" class="hidden flex-1 p-8">
+            <div class="max-w-4xl mx-auto">
+                <div class="flex justify-between items-center mb-8">
+                    <h1 class="text-3xl font-bold">Admin Dashboard</h1>
+                    <div class="space-x-4">
+                        <button onclick="showView('view-create-game')" class="px-4 py-2 bg-purple-600 text-white font-bold rounded hover:bg-purple-700">Create Game</button>
+                        <button onclick="showView('view-home')" class="px-4 py-2 bg-gray-300 text-gray-800 font-bold rounded hover:bg-gray-400">Logout</button>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h2 class="text-xl font-semibold mb-4">Your Games</h2>
+                    <p class="text-gray-500">Games are managed via the React App in this project. This standalone HTML file is a demo interface.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Create Game View -->
+        <div id="view-create-game" class="hidden flex-1 p-8 overflow-y-auto">
+            <div class="max-w-4xl mx-auto">
+                <div class="flex justify-between items-center mb-8">
+                    <h1 class="text-3xl font-bold">Create Game</h1>
+                    <div class="space-x-4">
+                        <button onclick="showView('view-admin-dashboard')" class="px-4 py-2 bg-gray-300 text-gray-800 font-bold rounded hover:bg-gray-400">Cancel</button>
+                        <button onclick="alert('Save functionality requires Supabase setup. Use the React app for full features.')" class="px-4 py-2 bg-green-500 text-white font-bold rounded hover:bg-green-600">Save Game</button>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow p-6 mb-8">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Game Title</label>
+                    <input type="text" class="w-full p-3 border rounded text-xl font-bold focus:ring-2 focus:ring-purple-600 outline-none" placeholder="Enter Kahoot Title...">
+                </div>
+                <div class="bg-white rounded-lg shadow p-6 relative">
+                    <input type="text" class="w-full p-3 border rounded mb-6 text-lg focus:ring-2 focus:ring-purple-600 outline-none text-center" placeholder="Start typing your question">
+                    <div class="grid grid-cols-2 gap-4">
+                        <input type="text" class="w-full p-4 border rounded focus:ring-2 focus:ring-purple-600 outline-none bg-red-100 placeholder-red-800" placeholder="Add answer 1">
+                        <input type="text" class="w-full p-4 border rounded focus:ring-2 focus:ring-purple-600 outline-none bg-blue-100 placeholder-blue-800" placeholder="Add answer 2">
+                        <input type="text" class="w-full p-4 border rounded focus:ring-2 focus:ring-purple-600 outline-none bg-yellow-100 placeholder-yellow-800" placeholder="Add answer 3">
+                        <input type="text" class="w-full p-4 border rounded focus:ring-2 focus:ring-purple-600 outline-none bg-green-100 placeholder-green-800" placeholder="Add answer 4">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Join Game View -->
+        <div id="view-join" class="hidden flex-1 flex flex-col items-center justify-center bg-purple-600 p-4">
+            <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md text-center">
+                <h1 class="text-4xl font-bold mb-8 text-purple-600 tracking-tight">Kahoot Clone</h1>
+                <input type="text" placeholder="Game PIN" class="w-full p-4 border-2 border-gray-200 rounded text-center text-2xl font-bold focus:outline-none focus:border-purple-600 mb-4">
+                <input type="text" placeholder="Nickname" class="w-full p-4 border-2 border-gray-200 rounded text-center text-xl font-bold focus:outline-none focus:border-purple-600 mb-4">
+                <button onclick="alert('Join functionality requires Supabase setup. Use the React app for full features.')" class="w-full py-4 bg-gray-900 text-white font-bold text-xl rounded hover:bg-black transition">Enter</button>
+                <button onclick="showView('view-home')" class="mt-6 text-gray-500 hover:text-gray-700">Back</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showView(viewId) {
+            document.querySelectorAll('#app > div').forEach(el => el.classList.add('hidden'));
+            document.getElementById(viewId).classList.remove('hidden');
+        }
+
+        function loginAdmin() {
+            const pwd = document.getElementById('admin-password').value;
+            if (pwd === 'admin') {
+                showView('view-admin-dashboard');
+                document.getElementById('admin-password').value = '';
+            } else {
+                alert('Incorrect password');
+            }
+        }
+    </script>
+</body>
+</html>
