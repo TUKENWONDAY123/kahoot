@@ -1489,6 +1489,79 @@
       background: rgba(255, 255, 255, 0.05);
     }
 
+    /* ═══════════════════════════════════════════════════════════════════════════
+       PLAYER FEEDBACK (CORRECT/RANK/POSITION)
+       ═══════════════════════════════════════════════════════════════════════════ */
+    
+    .feedback-banner {
+      font-size: clamp(2.5rem, 8vw, 4.5rem);
+      font-weight: 900;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      margin-bottom: 10px;
+      animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+      text-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .feedback-correct { color: #4ade80; text-shadow: 0 0 40px rgba(74, 222, 128, 0.4); }
+    .feedback-incorrect { color: #f87171; text-shadow: 0 0 40px rgba(248, 113, 113, 0.4); }
+
+    .rank-container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 30px;
+      padding: 30px 50px;
+      margin: 20px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+    }
+
+    .rank-number {
+      font-size: clamp(4rem, 12vw, 7rem);
+      font-weight: 900;
+      line-height: 1;
+      background: linear-gradient(135deg, #fff, #cbd5e1);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));
+    }
+
+    .rank-label {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.6);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .position-info {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: white;
+      margin-top: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+    }
+
+    .position-info span {
+      color: #fbbf24;
+      font-weight: 800;
+    }
+
+    @keyframes slideUpFade {
+      from { opacity: 0; transform: translateY(30px); filter: blur(10px); }
+      to { opacity: 1; transform: translateY(0); filter: blur(0); }
+    }
+
     /* ADMIN LOGIN */
     #screen-admin-login {
       background: 
@@ -1750,6 +1823,23 @@
       <h2 id="player-status-msg" style="color:white;font-size:1.7rem;"></h2>
       <div class="score-badge" id="player-score-badge" style="display:none"></div>
     </div>
+    
+    <!-- RANK FEEDBACK SECTION -->
+    <div id="player-rank-feedback" style="display:none;flex-direction:column;align-items:center;justify-content:center;width:100%;max-width:500px;animation:fadeIn 0.5s ease;">
+      <div id="feedback-banner" class="feedback-banner">CORRECT</div>
+      <div class="rank-container">
+        <div class="rank-label">You are in</div>
+        <div id="feedback-rank" class="rank-number">1st</div>
+        <div class="rank-label">Place</div>
+      </div>
+      <div id="feedback-position" class="position-info">
+        Tied with <span>Alice</span>
+      </div>
+      <div class="score-badge" id="feedback-total-score" style="margin-top:25px;font-size:1.2rem;padding:10px 24px;">
+        1,250 pts
+      </div>
+    </div>
+
     <div class="player-answer-grid" id="player-buttons">
       <button class="player-ans-btn btn-red" onclick="playerAnswer(1)">
         <div class="sym sym-triangle"></div>
@@ -2488,8 +2578,38 @@
         else showPlayerWaiting('⏳', 'Answer sent!', false);
 
       } else if (status === 'reveal') {
-        const msg = payload.skipped ? '⏭ Question Skipped!' : '📊 Look at the screen!';
-        showPlayerWaiting(payload.skipped ? '⏭' : '📊', msg, false);
+        const q = store.games[curCode] && store.games[curCode].questions[qIndex];
+        const isCorrect = q && q.c === correct;
+        const wasSkipped = payload.skipped;
+        
+        // Calculate Rank and Position
+        const sorted = (players || []).sort((a, b) => b.score - a.score);
+        const myIdx = sorted.findIndex(p => p.id === curPlayerId);
+        const myPlayer = sorted[myIdx];
+        
+        if (myPlayer) {
+          myScore = myPlayer.score; // Sync score from host
+          const rank = myIdx + 1;
+          const suffix = (rank === 1 ? 'st' : rank === 2 ? 'nd' : rank === 3 ? 'rd' : 'th');
+          
+          let positionMsg = "";
+          if (rank === 1) {
+            positionMsg = "You're in the lead! 🏆";
+          } else {
+            const ahead = sorted[myIdx - 1];
+            const diff = ahead.score - myPlayer.score;
+            if (diff === 0) {
+              positionMsg = `Tied with <span>${escHtml(ahead.name)}</span>`;
+            } else {
+              positionMsg = `Behind <span>${escHtml(ahead.name)}</span> by ${diff.toLocaleString()} pts`;
+            }
+          }
+          
+          showPlayerRankFeedback(wasSkipped ? '⏭ SKIPPED' : (isCorrect ? '✅ CORRECT' : '❌ INCORRECT'), isCorrect, rank + suffix, positionMsg);
+        } else {
+          const msg = wasSkipped ? '⏭ Question Skipped!' : '📊 Look at the screen!';
+          showPlayerWaiting(wasSkipped ? '⏭' : '📊', msg, false);
+        }
 
       } else if (status === 'game_ended') {
         showPlayerWaiting('🏁', 'Game Over! Results coming soon…', true);
@@ -2506,6 +2626,8 @@
     function showPlayerButtons() {
       goTo('screen-player-game');
       document.getElementById('player-buttons').classList.remove('hidden');
+      document.getElementById('player-rank-feedback').style.display = 'none';
+      document.getElementById('screen-player-game').style.background = ''; // reset color
       const w = document.getElementById('player-waiting');
       w.classList.remove('show');
       w.style.display = 'none';
@@ -2514,6 +2636,7 @@
     function showPlayerWaiting(icon, msg, showScore) {
       goTo('screen-player-game');
       document.getElementById('player-buttons').classList.add('hidden');
+      document.getElementById('player-rank-feedback').style.display = 'none';
       const w = document.getElementById('player-waiting');
       w.style.display = 'flex';
       w.classList.add('show');
@@ -2522,6 +2645,33 @@
       const sc = document.getElementById('player-score-badge');
       sc.style.display = showScore ? 'block' : 'none';
       if (showScore) sc.textContent = 'Score: ' + myScore.toLocaleString();
+    }
+
+    function showPlayerRankFeedback(title, isCorrect, rankStr, posMsg) {
+      goTo('screen-player-game');
+      document.getElementById('player-buttons').classList.add('hidden');
+      document.getElementById('player-waiting').style.display = 'none';
+      
+      const fb = document.getElementById('player-rank-feedback');
+      fb.style.display = 'flex';
+      
+      const banner = document.getElementById('feedback-banner');
+      banner.textContent = title;
+      banner.className = 'feedback-banner ' + (title.includes('CORRECT') ? 'feedback-correct' : (title.includes('INCORRECT') ? 'feedback-incorrect' : ''));
+      
+      document.getElementById('feedback-rank').textContent = rankStr;
+      document.getElementById('feedback-position').innerHTML = posMsg;
+      document.getElementById('feedback-total-score').textContent = myScore.toLocaleString() + ' pts';
+      
+      // Change background color based on status (like Kahoot)
+      const screen = document.getElementById('screen-player-game');
+      if (title.includes('CORRECT')) {
+        screen.style.background = 'linear-gradient(135deg, #064e3b 0%, #065f46 100%)';
+      } else if (title.includes('INCORRECT')) {
+        screen.style.background = 'linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%)';
+      } else {
+        screen.style.background = ''; // default
+      }
     }
 
     function playerAnswer(num) {
