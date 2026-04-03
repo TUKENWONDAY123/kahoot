@@ -1940,6 +1940,7 @@
     let curName = '';
     let myScore = 0;
     let myAnswered = false;
+    let questionStartTime = 0;
     let lastQIndex = -1;
     let hostQIndex = 0;
     let hostPhase = 'question';
@@ -2177,7 +2178,20 @@
       if (!st || !game || st.status !== 'question') return;
       const q = game.questions[st.qIndex];
       player.answered = true;
-      player.score += (q && q.c === answer) ? 200 : 100;
+      
+      // Kahoot Point Formula: Points = MaxPoints * (1 - ((TimeTaken / QuestionTime) / 2))
+      // MaxPoints = 1000, TimeTaken from payload (ms), QuestionTime from q.t (seconds)
+      let points = 0;
+      if (q && q.c === answer) {
+        const timeTakenMs = payload.timeTaken || 0;
+        const totalTimeMs = (q.t || 20) * 1000;
+        points = Math.round(1000 * (1 - ((timeTakenMs / totalTimeMs) / 2)));
+        points = Math.max(500, Math.min(1000, points)); // Correct gets 500-1000
+      } else {
+        points = 0; // 0 for incorrect to match real Kahoot
+      }
+      
+      player.score += points;
       // Broadcast updated state (triggers vote bar update on all screens)
       sendEvent('game_state', { ...store.state[curCode], code: curCode, players: serializePlayers(curCode) });
       updateVoteBar();
@@ -2465,7 +2479,11 @@
           if (!store.games[curCode]) store.games[curCode] = { questions: [] };
           store.games[curCode].questions[qIndex] = question;
         }
-        if (qIndex !== lastQIndex) { lastQIndex = qIndex; myAnswered = false; }
+        if (qIndex !== lastQIndex) { 
+          lastQIndex = qIndex; 
+          myAnswered = false; 
+          questionStartTime = performance.now(); // Start the timer for speed points
+        }
         if (!myAnswered) showPlayerButtons();
         else showPlayerWaiting('⏳', 'Answer sent!', false);
 
@@ -2511,9 +2529,20 @@
       myAnswered = true;
       // Optimistic local score update for display
       const q = store.games[curCode] && store.games[curCode].questions[lastQIndex];
-      if (q) myScore += (q.c === num ? 200 : 100);
+      let earned = 0;
+      if (q) {
+        if (q.c === num) {
+          const timeTakenMs = performance.now() - questionStartTime;
+          const totalTimeMs = (q.t || 20) * 1000;
+          earned = Math.round(1000 * (1 - ((timeTakenMs / totalTimeMs) / 2)));
+          earned = Math.max(500, Math.min(1000, earned));
+        } else {
+          earned = 0;
+        }
+      }
+      myScore += earned;
       // Tell host
-      sendEvent('player_vote', { id: curPlayerId, answer: num, code: curCode });
+      sendEvent('player_vote', { id: curPlayerId, answer: num, code: curCode, timeTaken: performance.now() - questionStartTime });
       showPlayerWaiting('✅', 'Answer submitted!', false);
     }
 
