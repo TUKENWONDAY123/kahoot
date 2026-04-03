@@ -2030,6 +2030,7 @@
     let curName = '';
     let myScore = 0;
     let myAnswered = false;
+    let myLastAnswer = null;
     let questionStartTime = 0;
     let lastQIndex = -1;
     let hostQIndex = 0;
@@ -2572,14 +2573,14 @@
         if (qIndex !== lastQIndex) { 
           lastQIndex = qIndex; 
           myAnswered = false; 
+          myLastAnswer = null; 
           questionStartTime = performance.now(); // Start the timer for speed points
         }
         if (!myAnswered) showPlayerButtons();
         else showPlayerWaiting('⏳', 'Answer sent!', false);
 
       } else if (status === 'reveal') {
-        const q = store.games[curCode] && store.games[curCode].questions[qIndex];
-        const isCorrect = q && q.c === correct;
+        const isCorrect = myLastAnswer === correct;
         const wasSkipped = payload.skipped;
         
         // Calculate Rank and Position
@@ -2677,6 +2678,7 @@
     function playerAnswer(num) {
       if (myAnswered) return;
       myAnswered = true;
+      myLastAnswer = num;
       // Optimistic local score update for display
       const q = store.games[curCode] && store.games[curCode].questions[lastQIndex];
       let earned = 0;
