@@ -1482,6 +1482,12 @@
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.08); }
     }
+    
+    #skip-btn:hover {
+      opacity: 1 !important;
+      border-color: rgba(255, 255, 255, 0.5) !important;
+      background: rgba(255, 255, 255, 0.05);
+    }
 
     /* ADMIN LOGIN */
     #screen-admin-login {
@@ -1721,6 +1727,7 @@
       </div>
     </div>
     <p style="color:rgba(255,255,255,0.35);font-size:0.9rem;font-weight:700;margin-top:20px;">⏳ Round ends automatically when everyone has voted</p>
+    <button class="btn btn-outline" id="skip-btn" onclick="hostSkipQuestion()" style="margin-top:15px; width:auto; padding:10px 40px; border-color:rgba(255,255,255,0.2); font-size:0.9rem; opacity:0.6; transition:opacity 0.3s;">⏭ Skip Question</button>
   </div>
 
   <!-- ══════════════ SCREEN 11b: ROUND SCOREBOARD ══════════════ -->
@@ -2295,7 +2302,29 @@
       }
     }
 
-    function showRoundScoreboard() {
+    function hostSkipQuestion() {
+      if (!isHost || hostPhase !== 'question') return;
+      
+      // 1. Add 50 points to ALL players
+      const players = store.players[curCode] || {};
+      Object.values(players).forEach(p => {
+        p.score += 50;
+        p.answered = true; // Mark as answered
+      });
+
+      showToast('⏭ Question Skipped! +50 points for everyone', '#f59e0b');
+      hostPhase = 'reveal'; // prevent multiple clicks/votes
+
+      // 2. Broadcast updated state so players see they answered the round (and see their score update later)
+      sendEvent('game_state', { status: 'reveal', qIndex: hostQIndex, code: curCode, players: serializePlayers(curCode), skipped: true });
+
+      // 3. Move to scoreboard immediately (or after a very small delay for feedback)
+      setTimeout(() => {
+        showRoundScoreboard(true);
+      }, 800);
+    }
+
+    function showRoundScoreboard(wasSkipped = false) {
       const game  = store.games[curCode];
       const isLast = hostQIndex >= game.questions.length - 1;
       
@@ -2310,8 +2339,8 @@
       const players = Object.entries(store.players[curCode] || {}).map(([id, p]) => ({ id, ...p })).sort((a, b) => b.score - a.score);
       const top5  = players.slice(0, 5);
       const medals = ['🥇','🥈','🥉','4️⃣','5️⃣'];
-      document.getElementById('rsb-header').textContent  = `Round ${hostQIndex + 1} Results`;
-      document.getElementById('rsb-subheader').textContent = `Question ${hostQIndex + 1} of ${game.questions.length}`;
+      document.getElementById('rsb-header').textContent  = wasSkipped ? '⏭ Question Skipped!' : `Round ${hostQIndex + 1} Results`;
+      document.getElementById('rsb-subheader').textContent = wasSkipped ? 'Everyone received 50 points!' : `Question ${hostQIndex + 1} of ${game.questions.length}`;
       document.getElementById('rsb-next-hint').textContent = isLast ? '🏆 Final scores coming up…' : '⏭ Next question coming up…';
       const list = document.getElementById('rsb-list');
       list.innerHTML = '';
@@ -2367,7 +2396,7 @@
             showHostQuestion();
           }
         }, 1000);
-      }, 2500);
+      }, wasSkipped ? 800 : 2500);
     }
 
     // ── JOIN FLOW ────────────────────────────────────────────────────────────
@@ -2441,7 +2470,8 @@
         else showPlayerWaiting('⏳', 'Answer sent!', false);
 
       } else if (status === 'reveal') {
-        showPlayerWaiting('📊', 'Look at the screen!', false);
+        const msg = payload.skipped ? '⏭ Question Skipped!' : '📊 Look at the screen!';
+        showPlayerWaiting(payload.skipped ? '⏭' : '📊', msg, false);
 
       } else if (status === 'game_ended') {
         showPlayerWaiting('🏁', 'Game Over! Results coming soon…', true);
