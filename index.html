@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kahoot</title>
+  <title>Kahoot Clone</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&display=swap" rel="stylesheet" />
   <style>
@@ -1625,7 +1625,7 @@
   <!-- ══════════════ SCREEN 1: HOME ══════════════ -->
   <div id="screen-home" class="screen active">
     <div class="home-logo">Kahoot<span>!</span></div>
-    <p class="home-subtitle">CREATED BY : WALEED</p>
+    <p class="home-subtitle">The fun quiz game — no account needed</p>
     <div class="home-btns">
       <button class="btn btn-yellow" onclick="goTo('screen-join-code')"
         style="color:#0f172a;font-size:1.2rem;padding:20px;">
@@ -2658,7 +2658,9 @@
       
       const banner = document.getElementById('feedback-banner');
       banner.textContent = title;
-      banner.className = 'feedback-banner ' + (title.includes('CORRECT') ? 'feedback-correct' : (title.includes('INCORRECT') ? 'feedback-incorrect' : ''));
+      
+      const isSkipped = title.includes('SKIPPED');
+      banner.className = 'feedback-banner ' + (isSkipped ? '' : (isCorrect ? 'feedback-correct' : 'feedback-incorrect'));
       
       document.getElementById('feedback-rank').textContent = rankStr;
       document.getElementById('feedback-position').innerHTML = posMsg;
@@ -2666,12 +2668,12 @@
       
       // Change background color based on status (like Kahoot)
       const screen = document.getElementById('screen-player-game');
-      if (title.includes('CORRECT')) {
+      if (isSkipped) {
+        screen.style.background = '';
+      } else if (isCorrect) {
         screen.style.background = 'linear-gradient(135deg, #064e3b 0%, #065f46 100%)';
-      } else if (title.includes('INCORRECT')) {
-        screen.style.background = 'linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%)';
       } else {
-        screen.style.background = ''; // default
+        screen.style.background = 'linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%)';
       }
     }
 
