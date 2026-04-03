@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kahoot Clone</title>
+  <title>Kahoot</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&display=swap" rel="stylesheet" />
   <style>
@@ -1625,7 +1625,7 @@
   <!-- ══════════════ SCREEN 1: HOME ══════════════ -->
   <div id="screen-home" class="screen active">
     <div class="home-logo">Kahoot<span>!</span></div>
-    <p class="home-subtitle">The fun quiz game — no account needed</p>
+    <p class="home-subtitle">By : Waleed</p>
     <div class="home-btns">
       <button class="btn btn-yellow" onclick="goTo('screen-join-code')"
         style="color:#0f172a;font-size:1.2rem;padding:20px;">
@@ -1643,7 +1643,7 @@
     <div class="card">
       <p style="color:#64748b;margin-bottom:16px;font-weight:600;">Password required to manage games</p>
       <input type="password" id="admin-pwd" placeholder="Enter password" />
-      <p class="err-msg" id="admin-err">❌ Wrong password. Try "admin"</p>
+      <p class="err-msg" id="admin-err">❌ Wrong password."</p>
       <button class="btn btn-purple" onclick="checkAdmin()" style="margin-top:12px;">Login →</button>
       <button class="btn btn-dark" onclick="goTo('screen-home')" style="margin-top:6px;">← Back</button>
     </div>
@@ -2063,7 +2063,7 @@
     // ── ADMIN LOGIN ──────────────────────────────────────────────────────────
     function checkAdmin() {
       const pwd = document.getElementById('admin-pwd').value;
-      if (pwd === 'admin') {
+      if (pwd === 'waleedgoat') {
         document.getElementById('admin-err').classList.remove('show');
         document.getElementById('admin-pwd').value = '';
         openAdminDash();
@@ -2508,21 +2508,7 @@
     function checkPin() {
       const pin = document.getElementById('join-pin').value.trim();
       const err = document.getElementById('pin-err');
-      if (!pin || pin.length !== 6 || !/^\d+$/.test(pin)) {
-        err.textContent = '❌ PIN must be exactly 6 digits.';
-        err.classList.add('show');
-        return;
-      }
-      if (!store.state[pin]) {
-        err.textContent = '❌ Game not found. Check the PIN.';
-        err.classList.add('show');
-        return;
-      }
-      if (store.state[pin].status !== 'lobby') {
-        err.textContent = '❌ Game already started. Please wait for the next round.';
-        err.classList.add('show');
-        return;
-      }
+      if (!pin || pin.length < 6) { err.classList.add('show'); return; }
       err.classList.remove('show');
       curCode = pin;
       goTo('screen-join-name');
