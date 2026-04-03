@@ -2453,7 +2453,7 @@
         const delta = p.score - (prevScores[p.id] || 0);
         const div = document.createElement('div');
         div.className = 'rsb-item';
-        div.innerHTML = `<span class="rsb-rank">${medals[i]||i+1}</span><span class="rsb-name">${escHtml(p.name)}</span><span class="rsb-delta">+${delta}</span><span class="rsb-score" id="rsb-score-${i}">0</span>`;
+        div.innerHTML = `<span class="rsb-rank">${medals[i]||i+1}</span><span class="rsb-name">${escHtml(p.name)}</span><span class="rsb-score" id="rsb-score-${i}">0</span>`;
         list.appendChild(div);
       });
       goTo('screen-round-scores');
