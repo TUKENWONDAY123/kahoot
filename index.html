@@ -85,6 +85,17 @@
       <input type="number" id="qb-time" placeholder="Time limit (seconds, default 20)" min="5" max="120"
         style="text-align:left;" />
 
+      <div style="margin-top:12px;">
+        <label style="display:block;text-align:left;font-size:0.9rem;color:#94a3b8;margin-bottom:6px;">🖼️ Add Image (optional)</label>
+        <input type="file" id="qb-img" accept="image/*" onchange="handleImageUpload(this)" style="display:none;" />
+        <button class="btn btn-dark btn-sm" onclick="document.getElementById('qb-img').click()" style="width:100%;margin-bottom:8px;">📁 Upload Image</button>
+        <div id="img-preview" style="display:none;position:relative;background:#1e293b;border-radius:12px;padding:10px;">
+          <img id="img-preview-src" style="max-width:100%;max-height:150px;border-radius:8px;display:block;margin:0 auto;" />
+          <button onclick="removeImage()" style="position:absolute;top:5px;right:5px;background:#ef4444;border:none;border-radius:50%;width:28px;height:28px;color:white;font-size:16px;cursor:pointer;">✕</button>
+        </div>
+        <p id="img-uploading" style="display:none;color:#fbbf24;font-size:0.85rem;margin-top:6px;">⏳ Uploading image...</p>
+      </div>
+
       <div style="display:flex;gap:10px;margin-top:12px;">
         <button class="btn btn-green" id="add-q-btn" onclick="addOrUpdateQuestion()" style="flex:2;">+ Add
           Question</button>
@@ -174,6 +185,7 @@
       CORRECT!</div>
     <p class="host-meta" id="host-q-meta">Question 1 of 1</p>
     <div class="host-question-box" id="host-question-text">…</div>
+    <img id="host-question-img" style="display:none;max-width:100%;max-height:300px;border-radius:16px;margin:16px auto;box-shadow:0 8px 32px rgba(0,0,0,0.3);" />
     
     <div style="display:flex;align-items:center;gap:14px;width:100%;max-width:850px;margin-bottom:16px;">
       <span style="color:rgba(255,255,255,0.5);font-size:0.95rem;font-weight:700;white-space:nowrap;">Votes:</span>
@@ -230,6 +242,10 @@
       <div class="score-badge" id="player-score-badge" style="display:none"></div>
     </div>
 
+    
+    <div id="player-question-img-container" style="display:none;text-align:center;margin-bottom:10px;">
+      <img id="player-question-img" style="max-width:100%;max-height:200px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.3);" />
+    </div>
     
     <div id="player-rank-feedback"
       style="display:none;flex-direction:column;align-items:center;justify-content:center;width:100%;max-width:500px;animation:fadeIn 0.5s ease;">
