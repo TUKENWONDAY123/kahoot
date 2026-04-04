@@ -1,2976 +1,1591 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kahoot</title>
+  <title>Kahoot Clone</title>
+  <!-- Supabase JS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&display=swap" rel="stylesheet" />
   <style>
+    /* ─── Reset & Base ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --red: #e21b3c;
-      --blue: #1368ce;
-      --yellow: #d89e00;
-      --green: #26890c;
-      --dark: #1a1a2e;
-      --light: #f8fafc;
-      --white: #ffffff;
-      --purple: #7c3aed;
-      --accent: #6366f1;
+      --primary:   #46178f;
+      --secondary: #ff3355;
+      --accent:    #ffcc00;
+      --green:     #26890c;
+      --blue:      #1368ce;
+      --orange:    #e05c00;
+      --red:       #e21b3c;
+      --bg:        #f0e6ff;
+      --card:      #ffffff;
+      --text:      #1a1a2e;
+      --muted:     #6b7280;
+      --radius:    14px;
+      --shadow:    0 8px 32px rgba(70,23,143,.18);
     }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Montserrat', sans-serif;
-    }
-
     body {
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #46178f 0%, #6a0dad 50%, #9b59b6 100%);
       min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
+      color: var(--text);
     }
+    /* ─── Screens ──────────────────────────────────────────────── */
+    .screen { display: none; min-height: 100vh; padding: 24px 16px; }
+    .screen.active { display: flex; flex-direction: column; align-items: center; justify-content: center; }
 
-    .screen {
-      display: none;
-      position: fixed;
-      inset: 0;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      text-align: center;
-      overflow-y: auto;
-    }
-
-    .screen.active {
-      display: flex;
-      animation: fadeIn 0.4s ease forwards;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    h1 {
-      font-size: clamp(2rem, 6vw, 3.5rem);
-      font-weight: 900;
-      color: var(--white);
-      margin-bottom: 1rem;
-      letter-spacing: -0.5px;
-    }
-
-    h2 {
-      font-size: clamp(1rem, 3vw, 1.5rem);
-      font-weight: 700;
-      color: rgba(255, 255, 255, 0.7);
-      margin-bottom: 0.5rem;
-    }
-
-    h3 {
-      font-weight: 700;
-      color: var(--dark);
-    }
-
+    /* ─── Card ──────────────────────────────────────────────────── */
     .card {
-      background: var(--white);
-      border-radius: 24px;
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
       padding: 40px 36px;
       width: 100%;
-      max-width: 420px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+      max-width: 480px;
     }
+    .card-wide { max-width: 780px; }
+    .card-full { max-width: 960px; }
 
-    .card-lg {
-      max-width: 800px;
+    /* ─── Logo / Header ─────────────────────────────────────────── */
+    .logo {
+      font-size: 3rem;
+      font-weight: 900;
+      color: #fff;
+      text-align: center;
+      letter-spacing: -1px;
+      margin-bottom: 8px;
+      text-shadow: 0 4px 16px rgba(0,0,0,.3);
     }
-
-    .card-full {
-      max-width: 95vw;
-      width: 800px;
-    }
-
-    input,
-    select {
-      width: 100%;
-      padding: 16px 20px;
-      margin: 10px 0;
-      border: 2px solid #e2e8f0;
-      border-radius: 12px;
+    .logo span { color: var(--accent); }
+    .tagline {
+      color: rgba(255,255,255,.8);
+      text-align: center;
       font-size: 1rem;
-      font-weight: 600;
-      font-family: 'Montserrat', sans-serif;
-      background: #f8fafc;
-      transition: all 0.25s ease;
+      margin-bottom: 40px;
+    }
+    .card-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 24px;
       text-align: center;
     }
 
-    input:focus,
-    select:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
-      background: var(--white);
-    }
-
+    /* ─── Buttons ───────────────────────────────────────────────── */
     .btn {
-      width: 100%;
-      padding: 16px;
-      margin: 10px 0;
-      border: none;
-      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
       font-size: 1rem;
       font-weight: 700;
-      font-family: 'Montserrat', sans-serif;
-      color: var(--white);
+      border: none;
+      border-radius: 10px;
       cursor: pointer;
-      position: relative;
-      top: 0;
-      box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2);
-      transition: all 0.15s ease;
-      letter-spacing: 0.5px;
+      padding: 14px 28px;
+      transition: transform .12s, box-shadow .12s, filter .12s;
+      width: 100%;
+      text-decoration: none;
     }
-
-    .btn:hover {
-      filter: brightness(1.08);
-      transform: translateY(-1px);
-    }
-
-    .btn:active {
-      top: 3px;
-      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
-      transform: translateY(0);
-    }
-
-    .btn-red { background: linear-gradient(135deg, #ef4444, #dc2626); }
-    .btn-blue { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-    .btn-yellow { background: linear-gradient(135deg, #f59e0b, #d97706); color: #1a1a2e; }
-    .btn-green { background: linear-gradient(135deg, #22c55e, #16a34a); }
-    .btn-dark { background: linear-gradient(135deg, #475569, #334155); }
-    .btn-purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
-    .btn-orange { background: linear-gradient(135deg, #f97316, #ea580c); }
-
-    .btn-sm {
-      font-size: 0.9rem;
-      padding: 12px 20px;
-      width: auto;
-    }
-
-    .btn-outline {
+    .btn:active { transform: scale(.97); }
+    .btn-primary { background: var(--primary); color: #fff; box-shadow: 0 4px 16px rgba(70,23,143,.35); }
+    .btn-primary:hover { filter: brightness(1.1); }
+    .btn-secondary { background: var(--secondary); color: #fff; box-shadow: 0 4px 16px rgba(255,51,85,.3); }
+    .btn-secondary:hover { filter: brightness(1.1); }
+    .btn-accent { background: var(--accent); color: var(--text); box-shadow: 0 4px 12px rgba(255,204,0,.4); }
+    .btn-accent:hover { filter: brightness(1.05); }
+    .btn-success { background: var(--green); color: #fff; }
+    .btn-success:hover { filter: brightness(1.1); }
+    .btn-ghost {
       background: transparent;
-      border: 2px solid rgba(255, 255, 255, 0.4);
-      color: white;
+      color: var(--primary);
+      border: 2px solid var(--primary);
       box-shadow: none;
     }
-
-    .btn-outline:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.6);
+    .btn-ghost:hover { background: var(--bg); }
+    .btn-sm { padding: 8px 16px; font-size: .875rem; width: auto; }
+    .btn-icon {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      font-size: 1.4rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow);
+      transition: transform .12s;
+      flex-shrink: 0;
     }
+    .btn-icon:hover { transform: scale(1.1); }
+    .btn-danger { background: var(--red); color: #fff; }
+    .btn-danger:hover { filter: brightness(1.1); }
+    .btn-row { display: flex; gap: 12px; flex-wrap: wrap; }
 
-    /* HOME */
-    #screen-home {
-      background: 
-        radial-gradient(ellipse at 20% 80%, rgba(99, 102, 241, 0.3) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 20%, rgba(139, 92, 246, 0.3) 0%, transparent 50%),
-        linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    /* ─── Form controls ─────────────────────────────────────────── */
+    .form-group { margin-bottom: 18px; }
+    label { display: block; font-weight: 600; font-size: .9rem; color: var(--muted); margin-bottom: 6px; }
+    input[type="text"], input[type="password"], textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-family: inherit;
+      color: var(--text);
+      background: #fafafa;
+      transition: border-color .2s;
+      outline: none;
+      resize: vertical;
     }
+    input:focus, textarea:focus { border-color: var(--primary); background: #fff; }
 
-    .home-logo {
-      font-size: clamp(3.5rem, 12vw, 5.5rem);
-      font-weight: 900;
-      color: var(--white);
-      letter-spacing: -3px;
-      margin-bottom: 12px;
-      text-shadow: 0 0 60px rgba(139, 92, 246, 0.5);
-    }
-
-    .home-logo span {
-      background: linear-gradient(135deg, #f59e0b, #fbbf24);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .home-subtitle {
-      color: rgba(255, 255, 255, 0.5);
-      margin-bottom: 2.5rem;
-      font-size: 1.1rem;
-      font-weight: 500;
-    }
-
-    .home-btns {
+    /* ─── Home Buttons Grid ─────────────────────────────────────── */
+    .home-grid {
       display: flex;
       flex-direction: column;
-      gap: 14px;
-      width: 320px;
+      gap: 16px;
     }
-
-    /* ADMIN DASH */
-    .admin-scroll {
-      background: var(--white);
-      border-radius: 20px;
-      padding: 32px;
-      width: 100%;
-      max-width: 720px;
-      max-height: 90vh;
-      overflow-y: auto;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
-    }
-
-    .section-title {
-      font-weight: 800;
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: #94a3b8;
-      margin: 20px 0 10px;
-    }
-
-    .saved-game-card {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-      border: 2px solid #e2e8f0;
+    .home-btn {
       border-radius: 14px;
-      padding: 16px 20px;
-      margin: 10px 0;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .saved-game-card:hover {
-      background: linear-gradient(135deg, #eef2ff, #e0e7ff);
-      border-color: #6366f1;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(99, 102, 241, 0.15);
-    }
-
-    .saved-game-card .sg-title {
-      flex: 1;
+      padding: 22px 28px;
+      font-size: 1.15rem;
       font-weight: 800;
-      font-size: 1.05rem;
-      color: #1e293b;
-    }
-
-    .saved-game-card .sg-meta {
-      font-size: 0.8rem;
-      color: #64748b;
-      font-weight: 600;
-    }
-
-    .sg-actions {
-      display: flex;
-      gap: 8px;
-    }
-
-    .sg-btn {
-      border: none;
-      border-radius: 8px;
-      padding: 8px 14px;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 0.8rem;
-      color: white;
-      transition: transform 0.15s ease;
-    }
-
-    .sg-btn:hover { transform: scale(1.05); }
-    .sg-edit { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-    .sg-host { background: linear-gradient(135deg, #22c55e, #16a34a); }
-    .sg-del { background: linear-gradient(135deg, #ef4444, #dc2626); }
-
-    .q-item {
       display: flex;
       align-items: center;
-      gap: 12px;
-      background: #f8fafc;
-      border: 2px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 14px 18px;
-      margin: 8px 0;
-      font-weight: 600;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .q-item:hover {
-      background: #eef2ff;
-      border-color: #6366f1;
-    }
-
-    .q-item.editing {
-      background: linear-gradient(135deg, #fef3c7, #fde68a);
-      border-color: #f59e0b;
-    }
-
-    .q-item .q-num {
-      background: linear-gradient(135deg, #3b82f6, #2563eb);
-      color: white;
-      border-radius: 10px;
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.85rem;
-      font-weight: 800;
-      flex-shrink: 0;
-    }
-
-    .q-item.editing .q-num {
-      background: linear-gradient(135deg, #f59e0b, #d97706);
-    }
-
-    .q-item .q-del {
-      margin-left: auto;
-      background: linear-gradient(135deg, #ef4444, #dc2626);
-      color: white;
+      gap: 14px;
       border: none;
-      border-radius: 8px;
-      padding: 6px 12px;
       cursor: pointer;
-      font-weight: 700;
-      font-size: 0.8rem;
-      flex-shrink: 0;
+      transition: transform .13s, box-shadow .13s;
+      box-shadow: 0 4px 18px rgba(0,0,0,.15);
+      color: #fff;
     }
+    .home-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,.2); }
+    .home-btn .icon { font-size: 1.7rem; }
+    .home-btn-join  { background: linear-gradient(135deg, #26890c, #3cb816); }
+    .home-btn-admin { background: linear-gradient(135deg, #1368ce, #1e90ff); }
 
-    .answers-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
+    /* ─── Question Builder ──────────────────────────────────────── */
+    .question-card {
+      background: #fafafa;
+      border: 2px solid #e5e7eb;
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 20px;
+      position: relative;
     }
-
-    .row-btns {
-      display: flex;
-      gap: 12px;
-      margin-top: 16px;
-    }
-
-    .edit-banner {
-      background: linear-gradient(135deg, #fef3c7, #fde68a);
-      border: 2px solid #f59e0b;
-      border-radius: 12px;
-      padding: 12px 18px;
-      font-weight: 700;
-      font-size: 0.9rem;
-      color: #92400e;
-      margin-bottom: 10px;
-      display: none;
-    }
-
-    .edit-banner.show {
-      display: block;
-      animation: fadeIn 0.3s ease;
-    }
-
-    /* PIN DISPLAY */
-    .pin-display {
-      font-size: clamp(3rem, 10vw, 6rem);
-      font-weight: 900;
-      color: var(--white);
-      letter-spacing: 12px;
-      background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(139, 92, 246, 0.3));
-      border: 3px solid rgba(255, 255, 255, 0.2);
-      border-radius: 20px;
-      padding: 24px 48px;
-      margin: 20px 0 30px;
-      text-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
-    }
-
-    /* LOBBY */
-    #screen-lobby-host {
-      background: 
-        radial-gradient(ellipse at 30% 70%, rgba(34, 197, 94, 0.2) 0%, transparent 50%),
-        linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-    }
-
-    .players-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      justify-content: center;
-      margin-top: 20px;
-    }
-
-    .player-pill {
-      background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
-      border: 2px solid rgba(255, 255, 255, 0.25);
-      color: white;
-      padding: 10px 22px;
-      border-radius: 25px;
-      font-weight: 700;
-      font-size: 1rem;
-      animation: popIn 0.4s cubic-bezier(0.34, 1.6, 0.64, 1);
-      backdrop-filter: blur(10px);
-    }
-
-    @keyframes popIn {
-      from { transform: scale(0.5); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-
-    .lobby-box {
-      background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
-      border: 2px solid rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      padding: 24px 32px;
-      width: 100%;
-      max-width: 720px;
-      margin-top: 16px;
-      max-height: 50vh;
-      overflow-y: auto;
-      backdrop-filter: blur(20px);
-    }
-
-    .lobby-top {
+    .question-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
-
-    .player-count-badge {
-      background: linear-gradient(135deg, #f59e0b, #fbbf24);
-      color: #1a1a2e;
-      border-radius: 25px;
-      padding: 8px 18px;
+    .q-number {
+      background: var(--primary);
+      color: #fff;
       font-weight: 800;
-      font-size: 1rem;
-    }
-
-    /* PLAYER LOBBY */
-    #screen-lobby-player {
-      background: 
-        radial-gradient(ellipse at 30% 70%, rgba(34, 197, 94, 0.3) 0%, transparent 50%),
-        linear-gradient(135deg, #052e16 0%, #14532d 100%);
-    }
-
-    /* HOST GAME */
-    #screen-host-game {
-      background: 
-        radial-gradient(ellipse at 50% 0%, rgba(59, 130, 246, 0.2) 0%, transparent 50%),
-        linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
-    }
-
-    .host-question-box {
-      background: var(--white);
+      font-size: .85rem;
+      padding: 4px 12px;
       border-radius: 20px;
-      padding: 32px 40px;
-      font-size: clamp(1.3rem, 3.5vw, 2.2rem);
-      font-weight: 800;
-      color: #1e293b;
-      width: 100%;
-      max-width: 850px;
-      box-shadow: 0 20px 40px -8px rgba(0, 0, 0, 0.3);
-      margin-bottom: 24px;
-      line-height: 1.4;
     }
-
-    .host-meta {
-      color: rgba(255, 255, 255, 0.5);
-      font-size: 0.95rem;
-      font-weight: 700;
-      margin-bottom: 12px;
-      letter-spacing: 1px;
-    }
-
     .answers-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      width: 100%;
-      max-width: 850px;
+      gap: 12px;
+      margin-top: 14px;
     }
-
-    .ans-btn {
-      border: none;
-      border-radius: 16px;
-      padding: 28px 20px;
-      font-size: 1.2rem;
-      font-weight: 800;
-      font-family: 'Montserrat', sans-serif;
-      color: white;
-      cursor: default;
+    .answer-box {
       display: flex;
       align-items: center;
-      gap: 14px;
-      text-align: left;
-      box-shadow: 0 8px 0 rgba(0, 0, 0, 0.25);
-      transition: opacity 0.4s, transform 0.2s;
-      position: relative;
+      gap: 8px;
+      background: var(--card);
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+    .answer-box .color-dot {
+      width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0;
+    }
+    .answer-box input { border: none; background: transparent; padding: 0; font-size: .95rem; }
+    .answer-box input:focus { border: none; background: transparent; }
+    .correct-label { font-size: .75rem; color: var(--green); font-weight: 700; white-space: nowrap; }
+    .answer-box.correct-ans { border-color: var(--green); background: #f0fdf4; }
+    .correct-toggle {
+      background: none; border: none; cursor: pointer; font-size: 1.1rem; margin-left: auto; padding: 0 4px;
     }
 
-    .ans-btn .shape {
-      width: 40px;
-      height: 40px;
-      border-radius: 6px;
-      background: rgba(255, 255, 255, 0.25);
-      flex-shrink: 0;
+    /* ─── Saved Games List ──────────────────────────────────────── */
+    .game-list-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #fafafa;
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 12px;
+    }
+    .game-list-item .game-name { font-weight: 700; font-size: 1rem; }
+    .game-list-item .game-meta { font-size: .8rem; color: var(--muted); margin-top: 2px; }
+
+    /* ─── Lobby / Players ───────────────────────────────────────── */
+    .lobby-code {
+      font-size: 4rem;
+      font-weight: 900;
+      letter-spacing: 12px;
+      color: var(--primary);
+      text-align: center;
+      background: var(--bg);
+      border-radius: 14px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    .players-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      min-height: 60px;
+      margin: 16px 0;
+    }
+    .player-chip {
+      background: var(--primary);
+      color: #fff;
+      border-radius: 24px;
+      padding: 8px 18px;
+      font-weight: 700;
+      font-size: .9rem;
+      animation: popIn .3s ease;
+    }
+    @keyframes popIn {
+      from { transform: scale(.7); opacity: 0; }
+      to   { transform: scale(1);  opacity: 1; }
+    }
+
+    /* ─── Game Playing ──────────────────────────────────────────── */
+    .question-display {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #fff;
+      text-align: center;
+      background: rgba(255,255,255,.12);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      margin-bottom: 24px;
+      min-height: 100px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.2rem;
+      backdrop-filter: blur(6px);
     }
-
-    .ans-btn.dim { opacity: 0.1; filter: grayscale(90%); transform: scale(0.95); transition: all 0.5s ease; }
-    .ans-btn.correct { 
-      outline: 8px solid #fff; 
-      outline-offset: 8px; 
-      transform: scale(1.08); 
-      z-index: 10;
-      opacity: 1 !important;
-      animation: correctPulse 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards, correctGlow 1.5s ease-in-out infinite;
-      box-shadow: 0 0 60px rgba(255, 255, 255, 0.4), 0 12px 0 rgba(0, 0, 0, 0.3) !important;
-    }
-
-    .ans-btn.correct::after {
-      content: '✓';
-      position: absolute;
-      right: 25px;
-      font-size: 3rem;
-      font-weight: 900;
-      color: white;
-      text-shadow: 0 0 20px rgba(0,0,0,0.3);
-      animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-    }
-
-    @keyframes correctPulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.15); }
-      100% { transform: scale(1.08); }
-    }
-
-    @keyframes correctGlow {
-      0%, 100% { box-shadow: 0 0 40px rgba(255, 255, 255, 0.3), 0 12px 0 rgba(0, 0, 0, 0.3); }
-      50% { box-shadow: 0 0 80px rgba(255, 255, 255, 0.6), 0 15px 0 rgba(0, 0, 0, 0.35); }
-    }
-
-    /* PLAYER GAME */
-    #screen-player-game {
-      background: 
-        radial-gradient(ellipse at 50% 100%, rgba(139, 92, 246, 0.25) 0%, transparent 50%),
-        linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-    }
-
-    .player-answer-grid {
+    .answers-play-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 18px;
-      width: 100%;
-      max-width: 650px;
-      height: 55vh;
-    }
-
-    .player-ans-btn {
-      border: none;
-      border-radius: 20px;
-      width: 100%;
-      height: 100%;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
       gap: 16px;
-      box-shadow: 0 10px 0 rgba(0, 0, 0, 0.25);
-      transition: all 0.15s ease;
-      position: relative;
-      top: 0;
     }
-
-    .player-ans-btn:hover {
-      filter: brightness(1.1);
-      transform: translateY(-3px) scale(1.02);
-    }
-
-    .player-ans-btn:active {
-      top: 6px;
-      box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2);
-      transform: scale(0.98);
-    }
-
-    .player-ans-btn .sym {
-      width: 64px;
-      height: 64px;
-      background: rgba(255, 255, 255, 0.25);
-    }
-
-    .sym-triangle { clip-path: polygon(50% 0%, 0% 100%, 100% 100%); border-radius: 0; }
-    .sym-diamond { clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); }
-    .sym-circle { border-radius: 50%; }
-    .sym-square { border-radius: 8px; }
-
-    .player-waiting {
-      display: none;
-      flex-direction: column;
+    .answer-play-btn {
+      border: none;
+      border-radius: 14px;
+      padding: 28px 20px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      cursor: pointer;
+      transition: transform .1s, filter .1s;
+      display: flex;
       align-items: center;
-      gap: 20px;
+      gap: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,.2);
     }
+    .answer-play-btn:hover { transform: scale(1.02); filter: brightness(1.08); }
+    .answer-play-btn:disabled { opacity: .6; cursor: default; transform: none; }
+    .answer-play-btn .ans-icon { font-size: 1.5rem; }
+    .ans-a { background: var(--red); }
+    .ans-b { background: var(--blue); }
+    .ans-c { background: var(--orange); }
+    .ans-d { background: var(--green); }
 
-    .player-waiting.show { display: flex; }
-
-    .wait-icon {
-      font-size: 4.5rem;
-      animation: pulse 1.2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-    }
-
-    .score-badge {
-      background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
-      border: 2px solid rgba(255, 255, 255, 0.25);
-      color: white;
-      padding: 14px 32px;
-      border-radius: 35px;
-      font-size: 1.6rem;
-      font-weight: 900;
-      backdrop-filter: blur(10px);
-    }
-
-    /* ═══════════════════════════════════════════════════════════════════════════
-       PODIUM - COSMIC GALAXY ARENA (PRESERVED)
-       ═══════════════════════════════════════════════════════════════════════════ */
-    
-    #screen-podium {
-      background: 
-        radial-gradient(ellipse at 20% 80%, rgba(120, 20, 180, 0.4) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 20%, rgba(20, 100, 200, 0.4) 0%, transparent 50%),
-        radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 1) 0%, #0a0a1a 100%);
-      perspective: 1500px;
+    /* ─── Timer ─────────────────────────────────────────────────── */
+    .timer-bar-wrap {
+      background: rgba(255,255,255,.2);
+      border-radius: 50px;
+      height: 14px;
+      margin-bottom: 20px;
       overflow: hidden;
     }
-
-    /* Animated starfield background */
-    #screen-podium::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
+    .timer-bar {
       height: 100%;
-      background-image: 
-        radial-gradient(2px 2px at 20px 30px, white, transparent),
-        radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
-        radial-gradient(1px 1px at 90px 40px, white, transparent),
-        radial-gradient(2px 2px at 160px 120px, rgba(255,255,255,0.9), transparent),
-        radial-gradient(1px 1px at 230px 80px, white, transparent),
-        radial-gradient(2px 2px at 300px 150px, rgba(255,255,255,0.7), transparent),
-        radial-gradient(1px 1px at 400px 60px, white, transparent),
-        radial-gradient(2px 2px at 500px 200px, rgba(255,255,255,0.8), transparent);
-      background-size: 550px 250px;
-      animation: starfieldMove 100s linear infinite;
-      pointer-events: none;
-      z-index: 0;
+      background: var(--accent);
+      border-radius: 50px;
+      transition: width 1s linear;
     }
-
-    @keyframes starfieldMove {
-      from { transform: translateY(0); }
-      to { transform: translateY(-250px); }
-    }
-
-    /* Nebula clouds */
-    .nebula {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.3;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .nebula-1 {
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(138, 43, 226, 0.6), transparent 70%);
-      top: -200px;
-      left: -200px;
-      animation: nebulaFloat1 20s ease-in-out infinite;
-    }
-
-    .nebula-2 {
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(0, 150, 255, 0.5), transparent 70%);
-      bottom: -150px;
-      right: -150px;
-      animation: nebulaFloat2 25s ease-in-out infinite;
-    }
-
-    @keyframes nebulaFloat1 {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      50% { transform: translate(50px, 30px) scale(1.1); }
-    }
-
-    @keyframes nebulaFloat2 {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      50% { transform: translate(-40px, -20px) scale(1.15); }
-    }
-
-    /* ═══ COSMIC TITLE ═══ */
-    .podium-title {
-      font-size: clamp(2.5rem, 8vw, 5rem);
-      font-weight: 900;
-      background: linear-gradient(90deg, #ff00cc, #3333ff, #00ccff, #ff00cc);
-      background-size: 300% 100%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-shadow: none;
-      margin-bottom: 50px;
-      z-index: 10;
-      position: relative;
-      opacity: 0;
-      letter-spacing: 8px;
-      animation: cosmicGradient 4s linear infinite;
-    }
-
-    @keyframes cosmicGradient {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 300% 50%; }
-    }
-
-    .podium-title.entrance {
-      animation: cosmicTitleEntrance 2s cubic-bezier(0.16, 1, 0.3, 1) forwards, cosmicGradient 4s linear infinite;
-    }
-
-    @keyframes cosmicTitleEntrance {
-      0% {
-        opacity: 0;
-        transform: scale(3) translateZ(-500px);
-        filter: blur(20px);
-        letter-spacing: 50px;
-      }
-      60% {
-        opacity: 1;
-        transform: scale(0.9) translateZ(50px);
-        filter: blur(0px);
-        letter-spacing: 4px;
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1) translateZ(0);
-        filter: blur(0px);
-        letter-spacing: 8px;
-      }
-    }
-
-    /* ═══ PLANET PODIUM CONTAINER ═══ */
-    .podium-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 30px;
-      height: 60vh;
-      width: 100%;
-      max-width: 1000px;
-      position: relative;
-      z-index: 5;
-      padding: 0 20px;
-    }
-
-    /* ═══ ORBIT RINGS ═══ */
-    .orbit-ring {
-      position: absolute;
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 50%;
-      pointer-events: none;
-    }
-
-    .orbit-ring-1 {
-      width: 400px;
-      height: 120px;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) rotateX(75deg);
-      animation: orbitRotate1 20s linear infinite;
-    }
-
-    .orbit-ring-2 {
-      width: 550px;
-      height: 160px;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) rotateX(75deg) rotateZ(45deg);
-      animation: orbitRotate2 30s linear infinite;
-    }
-
-    @keyframes orbitRotate1 {
-      from { transform: translate(-50%, -50%) rotateX(75deg) rotateZ(0deg); }
-      to { transform: translate(-50%, -50%) rotateX(75deg) rotateZ(360deg); }
-    }
-
-    @keyframes orbitRotate2 {
-      from { transform: translate(-50%, -50%) rotateX(75deg) rotateZ(45deg); }
-      to { transform: translate(-50%, -50%) rotateX(75deg) rotateZ(405deg); }
-    }
-
-    /* ═══ PLANET PODIUMS ═══ */
-    .podium-block {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      transform-style: preserve-3d;
-    }
-
-    /* 3RD PLACE - Mars-like Planet */
-    .podium-3rd {
-      order: 1;
-      z-index: 2;
-      transform: translateY(40px);
-    }
-
-    .planet-3rd {
-      width: 140px;
-      height: 140px;
-      border-radius: 50%;
-      background: 
-        radial-gradient(circle at 30% 30%, rgba(255,150,100,0.8), transparent 50%),
-        radial-gradient(circle at 70% 70%, rgba(150,50,0,0.6), transparent 50%),
-        linear-gradient(135deg, #cd5c3c 0%, #8b3a22 50%, #5c2413 100%);
-      box-shadow: 
-        inset -10px -10px 30px rgba(0,0,0,0.6),
-        inset 10px 10px 30px rgba(255,150,100,0.3),
-        0 0 40px rgba(205,92,60,0.5),
-        0 0 80px rgba(205,92,60,0.3);
-      position: relative;
-      transform: scale(0) rotate(-180deg);
-      animation: planetFloat3rd 4s ease-in-out infinite;
-    }
-
-    .planet-3rd::before {
-      content: '3';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 3rem;
-      font-weight: 900;
-      color: rgba(255,255,255,0.4);
-      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
-    }
-
-    /* Planet ring */
-    .planet-3rd::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 180px;
-      height: 40px;
-      border: 3px solid rgba(255,150,100,0.3);
-      border-radius: 50%;
-      transform: translate(-50%, -50%) rotateX(80deg);
-      box-shadow: 0 0 20px rgba(255,150,100,0.2);
-    }
-
-    @keyframes planetFloat3rd {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-15px) rotate(3deg); }
-    }
-
-    /* 2ND PLACE - Ice Planet */
-    .podium-2nd {
-      order: 3;
-      z-index: 2;
-      transform: translateY(20px);
-    }
-
-    .planet-2nd {
-      width: 160px;
-      height: 160px;
-      border-radius: 50%;
-      background: 
-        radial-gradient(circle at 30% 30%, rgba(200,230,255,0.9), transparent 50%),
-        radial-gradient(circle at 70% 70%, rgba(100,150,200,0.5), transparent 50%),
-        linear-gradient(135deg, #e0f0ff 0%, #a0c0e0 50%, #6080a0 100%);
-      box-shadow: 
-        inset -12px -12px 35px rgba(0,0,0,0.5),
-        inset 12px 12px 35px rgba(255,255,255,0.4),
-        0 0 50px rgba(160,192,224,0.6),
-        0 0 100px rgba(160,192,224,0.3);
-      position: relative;
-      transform: scale(0) rotate(180deg);
-      animation: planetFloat2nd 4s ease-in-out infinite 0.5s;
-    }
-
-    .planet-2nd::before {
-      content: '2';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 3.5rem;
-      font-weight: 900;
-      color: rgba(255,255,255,0.5);
-      text-shadow: 0 2px 10px rgba(0,0,0,0.4);
-    }
-
-    /* Ice crystals effect */
-    .planet-2nd::after {
-      content: '';
-      position: absolute;
-      top: 10%;
-      left: 20%;
-      width: 30%;
-      height: 30%;
-      background: radial-gradient(circle, rgba(255,255,255,0.4), transparent 70%);
-      border-radius: 50%;
-      filter: blur(5px);
-    }
-
-    @keyframes planetFloat2nd {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-20px) rotate(-3deg); }
-    }
-
-    /* 1ST PLACE - Golden Sun Planet */
-    .podium-1st {
-      order: 2;
-      z-index: 3;
-    }
-
-    .planet-1st {
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      background: 
-        radial-gradient(circle at 35% 35%, rgba(255,255,200,1), rgba(255,215,0,0.8) 30%, rgba(255,140,0,0.6) 60%, rgba(200,100,0,0.8) 100%);
-      box-shadow: 
-        inset -15px -15px 40px rgba(150,80,0,0.6),
-        inset 15px 15px 40px rgba(255,255,200,0.5),
-        0 0 60px rgba(255,215,0,0.8),
-        0 0 120px rgba(255,140,0,0.5),
-        0 0 180px rgba(255,100,0,0.3);
-      position: relative;
-      transform: scale(0);
-      animation: planetFloat1st 3s ease-in-out infinite, sunPulse 2s ease-in-out infinite;
-    }
-
-    .planet-1st::before {
-      content: '1';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 4.5rem;
-      font-weight: 900;
-      color: rgba(255,255,255,0.6);
-      text-shadow: 0 0 30px rgba(255,215,0,0.8), 0 2px 10px rgba(0,0,0,0.3);
-    }
-
-    /* Solar flares */
-    .planet-1st::after {
-      content: '';
-      position: absolute;
-      top: -20%;
-      left: -20%;
-      width: 140%;
-      height: 140%;
-      background: conic-gradient(from 0deg, transparent 0deg, rgba(255,200,50,0.3) 30deg, transparent 60deg, transparent 120deg, rgba(255,180,30,0.2) 150deg, transparent 180deg, transparent 240deg, rgba(255,200,50,0.3) 270deg, transparent 300deg, transparent 360deg);
-      border-radius: 50%;
-      animation: solarFlare 8s linear infinite;
-    }
-
-    @keyframes planetFloat1st {
-      0%, 100% { transform: translateY(0) scale(1); }
-      50% { transform: translateY(-25px) scale(1.02); }
-    }
-
-    @keyframes sunPulse {
-      0%, 100% { box-shadow: inset -15px -15px 40px rgba(150,80,0,0.6), inset 15px 15px 40px rgba(255,255,200,0.5), 0 0 60px rgba(255,215,0,0.8), 0 0 120px rgba(255,140,0,0.5), 0 0 180px rgba(255,100,0,0.3); }
-      50% { box-shadow: inset -15px -15px 40px rgba(150,80,0,0.6), inset 15px 15px 40px rgba(255,255,200,0.5), 0 0 80px rgba(255,215,0,1), 0 0 150px rgba(255,140,0,0.7), 0 0 220px rgba(255,100,0,0.5); }
-    }
-
-    @keyframes solarFlare {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    /* ═══ WINNER INFO CARDS ═══ */
-    .winner-card {
-      position: absolute;
-      bottom: 110%;
-      left: 50%;
-      transform: translateX(-50%) scale(0);
-      background: rgba(10, 10, 30, 0.9);
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 16px;
-      padding: 16px 20px;
-      text-align: center;
-      min-width: 160px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 10px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
-      opacity: 0;
-    }
-
-    .podium-1st .winner-card {
-      min-width: 200px;
-      padding: 20px 24px;
-      border: 1px solid rgba(255,215,0,0.3);
-      box-shadow: 0 15px 50px rgba(0,0,0,0.6), 0 0 30px rgba(255,215,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
-      z-index: 200;
-    }
-
-    .winner-rank {
+    .timer-num {
       font-size: 2rem;
-      margin-bottom: 4px;
-      opacity: 0;
-      transform: scale(0);
+      font-weight: 900;
+      color: #fff;
+      text-align: center;
+      margin-bottom: 10px;
     }
 
-    .winner-rank.show {
-      animation: rankPop 0.6s cubic-bezier(0.34, 1.8, 0.64, 1) forwards;
-    }
-
-    @keyframes rankPop {
-      0% { opacity: 0; transform: scale(0) translateY(20px); }
-      50% { opacity: 1; transform: scale(1.3) translateY(-10px); }
-      100% { opacity: 1; transform: scale(1) translateY(0); }
-    }
-
-    .podium-1st .winner-rank {
-      font-size: 2.5rem;
-    }
-
-    .winner-name {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: white;
-      margin-bottom: 4px;
-      word-break: break-word;
-      opacity: 0;
-      text-shadow: 0 0 10px rgba(255,255,255,0.3);
-    }
-
-    .winner-name.reveal {
-      animation: textReveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    @keyframes textReveal {
-      from { opacity: 0; transform: translateY(10px); filter: blur(10px); }
-      to { opacity: 1; transform: translateY(0); filter: blur(0); }
-    }
-
-    .podium-1st .winner-name {
-      font-size: 1.4rem;
-      background: linear-gradient(90deg, #ffd700, #ffec8b, #ffd700);
-      background-size: 200% 100%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    /* Override: must come AFTER base .winner-name.reveal to win specificity */
-    .podium-1st .winner-name.reveal {
-      animation: textReveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards, goldShimmer 2s linear 0.5s infinite;
-    }
-
-    @keyframes goldShimmer {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 200% 50%; }
-    }
-
-    .winner-score {
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: #00ccff;
-      opacity: 0;
-    }
-
-    .winner-score.reveal {
-      animation: scoreGlow 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
-    }
-
-    @keyframes scoreGlow {
-      from { opacity: 0; transform: scale(0.8); }
-      to { opacity: 1; transform: scale(1); text-shadow: 0 0 20px rgba(0,204,255,0.5); }
-    }
-
-    .podium-1st .winner-score {
-      font-size: 1.6rem;
-      color: #ff00cc;
-    }
-
-    /* ═══ ANIMATION CLASSES ═══ */
-    
-    /* 3rd Place Animations */
-    .animate-3rd .planet-3rd {
-      animation: planetWarp3rd 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards, planetFloat3rd 4s ease-in-out infinite 1.5s;
-    }
-
-    @keyframes planetWarp3rd {
-      0% { transform: scale(0) rotate(-180deg) translateZ(-500px); filter: blur(20px); opacity: 0; }
-      50% { transform: scale(1.2) rotate(10deg) translateZ(100px); filter: blur(0px); opacity: 1; }
-      100% { transform: scale(1) rotate(0deg) translateZ(0); filter: blur(0px); opacity: 1; }
-    }
-
-    .animate-3rd .winner-card {
-      animation: cardMaterialize 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.2s forwards;
-    }
-
-    /* 2nd Place Animations */
-    .animate-2nd .planet-2nd {
-      animation: planetWarp2nd 1.7s cubic-bezier(0.16, 1, 0.3, 1) forwards, planetFloat2nd 4s ease-in-out infinite 1.7s;
-    }
-
-    @keyframes planetWarp2nd {
-      0% { transform: scale(0) rotate(180deg) translateZ(-500px); filter: blur(20px); opacity: 0; }
-      50% { transform: scale(1.25) rotate(-10deg) translateZ(150px); filter: blur(0px); opacity: 1; }
-      100% { transform: scale(1) rotate(0deg) translateZ(0); filter: blur(0px); opacity: 1; }
-    }
-
-    .animate-2nd .winner-card {
-      animation: cardMaterialize 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.4s forwards;
-    }
-
-    /* 1st Place Animations */
-    .animate-1st .planet-1st {
-      animation: planetWarp1st 2s cubic-bezier(0.16, 1, 0.3, 1) forwards, planetFloat1st 3s ease-in-out infinite 2s, sunPulse 2s ease-in-out infinite 2s;
-    }
-
-    @keyframes planetWarp1st {
-      0% { transform: scale(0) translateZ(-800px); filter: blur(30px) brightness(3); opacity: 0; }
-      40% { transform: scale(1.4) translateZ(200px); filter: blur(0px) brightness(1.5); opacity: 1; }
-      70% { transform: scale(0.95) translateZ(-50px); filter: blur(0px) brightness(1); }
-      100% { transform: scale(1) translateZ(0); filter: blur(0px) brightness(1); opacity: 1; }
-    }
-
-    .animate-1st .winner-card {
-      animation: cardMaterialize 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.8s forwards;
-    }
-
-    @keyframes cardMaterialize {
-      0% { transform: translateX(-50%) scale(0) translateY(30px); opacity: 0; filter: blur(10px); }
-      60% { transform: translateX(-50%) scale(1.1) translateY(-10px); opacity: 1; filter: blur(0px); }
-      100% { transform: translateX(-50%) scale(1) translateY(0); opacity: 1; filter: blur(0px); }
-    }
-
-    /* ═══ HYPERSPACE EFFECT ═══ */
-    .hyperspace {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      width: 2px;
-      height: 2px;
-      background: white;
-      border-radius: 50%;
-      box-shadow: 0 0 0 0 rgba(255,255,255,1);
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-      z-index: 100;
-      opacity: 0;
-    }
-
-    .hyperspace.active {
-      animation: hyperspaceJump 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    @keyframes hyperspaceJump {
-      0% { 
-        opacity: 1;
-        box-shadow: 0 0 0 0 rgba(255,255,255,1);
-        transform: translate(-50%, -50%) scale(1);
-      }
-      50% {
-        box-shadow: 0 0 100px 50px rgba(255,255,255,0.8), 0 0 200px 100px rgba(100,200,255,0.5);
-      }
-      100% { 
-        opacity: 0;
-        box-shadow: 0 0 200px 100px rgba(255,255,255,0), 0 0 400px 200px rgba(100,200,255,0);
-        transform: translate(-50%, -50%) scale(3);
-      }
-    }
-
-    /* ═══ STAR PARTICLES ═══ */
-    .star-particle {
-      position: fixed;
-      width: 4px;
-      height: 4px;
-      background: white;
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 50;
-      box-shadow: 0 0 10px white, 0 0 20px rgba(255,255,255,0.5);
-    }
-
-    @keyframes starBurst {
-      0% { transform: translate(0, 0) scale(1); opacity: 1; }
-      100% { transform: translate(var(--sx), var(--sy)) scale(0); opacity: 0; }
-    }
-
-    /* ═══ COSMIC DUST ═══ */
-    .cosmic-dust {
-      position: fixed;
-      width: 2px;
-      height: 2px;
-      background: rgba(255,255,255,0.6);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    @keyframes dustFloat {
-      0% { transform: translateY(100vh) translateX(0); opacity: 0; }
-      10% { opacity: 1; }
-      90% { opacity: 1; }
-      100% { transform: translateY(-20px) translateX(50px); opacity: 0; }
-    }
-
-    /* Old podium styles - keeping for compatibility */
-    .podium-list {
-      list-style: none;
-      width: 100%;
-      max-width: 480px;
-      margin: 16px auto;
-      display: none;
-    }
-
-    .podium-item {
+    /* ─── Scoreboard ─────────────────────────────────────────────── */
+    .scoreboard-row {
       display: flex;
       align-items: center;
       gap: 14px;
-      padding: 14px 20px;
-      background: rgba(255, 255, 255, .1);
-      border: 1px solid rgba(255, 255, 255, .2);
-      border-radius: 12px;
+      padding: 12px 16px;
+      border-radius: 10px;
       margin-bottom: 10px;
-      color: white;
-      font-weight: 700;
-      font-size: 1.2rem;
+      background: #fafafa;
     }
-
-    .podium-rank {
-      font-size: 1.6rem;
-      min-width: 36px;
+    .rank-badge {
+      font-size: 1.3rem;
+      font-weight: 900;
+      width: 36px;
       text-align: center;
     }
+    .score-name { font-weight: 700; flex: 1; }
+    .score-pts { font-weight: 800; color: var(--primary); font-size: 1.1rem; }
+    .scoreboard-row.top1 { background: linear-gradient(90deg,#ffd700,#ffec70); }
+    .scoreboard-row.top2 { background: linear-gradient(90deg,#e0e0e0,#f5f5f5); }
+    .scoreboard-row.top3 { background: linear-gradient(90deg,#cd7f32,#e8b47a); }
 
-    .podium-score {
-      margin-left: auto;
-      font-size: 1.4rem;
+    /* ─── Waiting / Result for player ──────────────────────────── */
+    .wait-icon { font-size: 4rem; text-align: center; margin: 20px 0; animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%,100%{transform:scale(1)}50%{transform:scale(1.1)} }
+    .result-icon { font-size: 5rem; text-align: center; margin: 10px 0; }
+    .result-correct { color: var(--green); }
+    .result-wrong   { color: var(--red); }
+
+    /* ─── Toast ─────────────────────────────────────────────────── */
+    #toast {
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+      background: #1a1a2e; color: #fff; padding: 12px 28px; border-radius: 50px;
+      font-weight: 600; font-size: .95rem; z-index: 9999;
+      opacity: 0; transition: opacity .3s; pointer-events: none;
+      box-shadow: 0 4px 20px rgba(0,0,0,.3);
+    }
+    #toast.show { opacity: 1; }
+
+    /* ─── Supabase Config Modal ─────────────────────────────────── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.55);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 8888; backdrop-filter: blur(4px);
+    }
+    .modal-overlay.hidden { display: none; }
+    .modal-box {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 40px 36px;
+      width: 100%; max-width: 480px;
+      box-shadow: 0 16px 64px rgba(0,0,0,.3);
+      animation: slideUp .3s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(40px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
     }
 
-    /* ROUND SCOREBOARD */
-    #screen-round-scores {
-      background: 
-        radial-gradient(ellipse at 30% 20%, rgba(99, 102, 241, 0.25) 0%, transparent 50%),
-        radial-gradient(ellipse at 70% 80%, rgba(139, 92, 246, 0.2) 0%, transparent 50%),
-        linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+    /* ─── Progress Dots ─────────────────────────────────────────── */
+    .progress-dots {
+      display: flex; gap: 8px; justify-content: center; margin-bottom: 16px;
+    }
+    .dot {
+      width: 12px; height: 12px; border-radius: 50%;
+      background: rgba(255,255,255,.35);
+      transition: background .3s;
+    }
+    .dot.active { background: var(--accent); }
+    .dot.done   { background: rgba(255,255,255,.7); }
+
+    /* ─── Responsive ─────────────────────────────────────────────── */
+    @media (max-width: 520px) {
+      .card { padding: 28px 18px; }
+      .answers-grid, .answers-play-grid { grid-template-columns: 1fr; }
+      .lobby-code { font-size: 2.5rem; letter-spacing: 6px; }
+      .question-display { font-size: 1.2rem; }
     }
 
-    /* GAME ENDED SCREEN */
-    #screen-game-ended {
-      background: 
-        radial-gradient(ellipse at 30% 30%, rgba(251, 191, 36, 0.15) 0%, transparent 50%),
-        radial-gradient(ellipse at 70% 70%, rgba(249, 115, 22, 0.1) 0%, transparent 50%),
-        linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
-      overflow: hidden;
+    /* ─── Misc Helpers ──────────────────────────────────────────── */
+    .mt-4  { margin-top: 16px; }
+    .mt-6  { margin-top: 24px; }
+    .mt-8  { margin-top: 32px; }
+    .mb-2  { margin-bottom: 8px; }
+    .mb-4  { margin-bottom: 16px; }
+    .center { text-align: center; }
+    .text-muted { color: var(--muted); font-size: .9rem; }
+    .divider { border: none; border-top: 2px solid #f0f0f0; margin: 20px 0; }
+    .badge {
+      display: inline-block; background: var(--bg); color: var(--primary);
+      border-radius: 20px; padding: 3px 12px; font-size: .8rem; font-weight: 700;
     }
-
-    @keyframes gameEndedIcon {
-      0%   { opacity: 0; transform: scale(0) rotate(-30deg); }
-      60%  { opacity: 1; transform: scale(1.2) rotate(5deg); }
-      100% { opacity: 1; transform: scale(1) rotate(0deg); }
+    .flex-between { display: flex; align-items: center; justify-content: space-between; }
+    .back-link {
+      color: rgba(255,255,255,.8); font-size: .9rem; cursor: pointer;
+      margin-bottom: 12px; display: inline-flex; align-items: center; gap: 6px;
+      background: none; border: none; font-family: inherit; font-weight: 600;
     }
-
-    @keyframes gameEndedTitle {
-      0%   { opacity: 0; transform: translateY(30px); letter-spacing: 20px; }
-      60%  { opacity: 1; transform: translateY(-5px); letter-spacing: 5px; }
-      100% { opacity: 1; transform: translateY(0); letter-spacing: 4px; }
-    }
-
-    @keyframes gameEndedSub {
-      from { opacity: 0; transform: translateY(15px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes gameEndedBtn {
-      0%   { opacity: 0; transform: scale(0.6) translateY(20px); }
-      70%  { opacity: 1; transform: scale(1.05) translateY(-5px); }
-      100% { opacity: 1; transform: scale(1) translateY(0); }
-    }
-
-    .round-sb-card {
-      background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 24px;
-      padding: 32px 36px;
-      width: 100%;
-      max-width: 540px;
-      box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(20px);
-    }
-
-    .round-sb-title {
-      font-size: 0.9rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      color: rgba(255, 255, 255, 0.4);
-      margin-bottom: 20px;
-    }
-
-    .rsb-item {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 16px 20px;
-      border-radius: 14px;
-      margin-bottom: 12px;
-      color: white;
-      font-weight: 700;
-      font-size: 1.1rem;
-      opacity: 0;
-      transform: translateX(-40px);
-      transition: all 0.4s ease;
-      border: 1px solid transparent;
-    }
-
-    .rsb-item.show {
-      opacity: 1;
-      transform: translateX(0);
-    }
-
-    .rsb-item:nth-child(1) {
-      background: linear-gradient(135deg, rgba(251, 191, 36, 0.3), rgba(251, 191, 36, 0.1));
-      border-color: rgba(251, 191, 36, 0.4);
-    }
-
-    .rsb-item:nth-child(2) {
-      background: linear-gradient(135deg, rgba(148, 163, 184, 0.25), rgba(148, 163, 184, 0.08));
-      border-color: rgba(148, 163, 184, 0.3);
-    }
-
-    .rsb-item:nth-child(3) {
-      background: linear-gradient(135deg, rgba(234, 88, 12, 0.25), rgba(234, 88, 12, 0.08));
-      border-color: rgba(234, 88, 12, 0.35);
-    }
-
-    .rsb-item:nth-child(4) {
-      background: rgba(255, 255, 255, 0.05);
-      border-color: rgba(255, 255, 255, 0.1);
-    }
-
-    .rsb-item:nth-child(5) {
-      background: rgba(255, 255, 255, 0.03);
-      border-color: rgba(255, 255, 255, 0.08);
-    }
-
-    .rsb-rank {
-      font-size: 1.6rem;
-      min-width: 38px;
-      text-align: center;
-    }
-
-    .rsb-name {
-      flex: 1;
-    }
-
-    .rsb-score {
-      font-size: 1.4rem;
-      font-weight: 900;
-      color: #fbbf24;
-    }
-
-    .rsb-delta {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: #4ade80;
-      background: rgba(74, 222, 128, 0.15);
-      border-radius: 25px;
-      padding: 4px 12px;
-      min-width: 60px;
-      text-align: center;
-    }
-
-    @keyframes scoreCount {
-      from { opacity: 0; transform: scale(0.7); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    .rsb-score.counting {
-      animation: scoreCount 0.3s ease;
-    }
-
-    @keyframes countPulse {
-      0% { transform: scale(1); opacity: 1; }
-      45% { transform: scale(1.15); opacity: 0.9; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-
-    /* UTILS */
-    .hidden { display: none !important; }
-    .text-white { color: white; }
-
-    .err-msg {
-      color: #ef4444;
-      font-size: 0.9rem;
-      font-weight: 700;
-      margin-top: 8px;
-      display: none;
-    }
-
-    .err-msg.show { display: block; }
-
-    .hint-text {
-      color: rgba(255, 255, 255, 0.45);
-      font-size: 0.9rem;
-      font-weight: 600;
-      margin-top: 12px;
-    }
-
-    .toast {
-      position: fixed;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: linear-gradient(135deg, #3b82f6, #2563eb);
-      color: white;
-      padding: 14px 32px;
-      border-radius: 35px;
-      font-weight: 800;
-      font-size: 1rem;
-      box-shadow: 0 12px 40px rgba(37, 99, 235, 0.4);
-      z-index: 999;
-      opacity: 0;
-      transition: opacity 0.3s, transform 0.3s;
-      pointer-events: none;
-    }
-
-    .toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-
-    .no-saved {
-      color: #94a3b8;
-      font-size: 1rem;
-      font-weight: 600;
-      padding: 16px 0;
-    }
-
-    /* COUNTDOWN */
-    #screen-countdown {
-      background: 
-        radial-gradient(ellipse at 50% 50%, rgba(251, 191, 36, 0.2) 0%, transparent 60%),
-        linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
-    }
-
-    #screen-countdown #countdown-number {
-      font-size: clamp(8rem, 30vw, 14rem);
-      font-weight: 900;
-      color: #fbbf24;
-      text-shadow: 0 0 80px rgba(251, 191, 36, 0.6);
-      line-height: 1;
-      animation: countPulse 0.9s ease-in-out infinite;
-    }
-
-    @keyframes countPulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.08); }
-    }
-    
-    #skip-btn:hover {
-      opacity: 1 !important;
-      border-color: rgba(255, 255, 255, 0.5) !important;
-      background: rgba(255, 255, 255, 0.05);
-    }
-
-    /* ═══════════════════════════════════════════════════════════════════════════
-       PLAYER FEEDBACK (CORRECT/RANK/POSITION)
-       ═══════════════════════════════════════════════════════════════════════════ */
-    
-    .feedback-banner {
-      font-size: clamp(2.5rem, 8vw, 4.5rem);
-      font-weight: 900;
-      color: white;
-      text-transform: uppercase;
-      letter-spacing: 4px;
-      margin-bottom: 10px;
-      animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-      text-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    }
-
-    .feedback-correct { color: #4ade80; text-shadow: 0 0 40px rgba(74, 222, 128, 0.4); }
-    .feedback-incorrect { color: #f87171; text-shadow: 0 0 40px rgba(248, 113, 113, 0.4); }
-
-    .rank-container {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(15px);
-      border: 2px solid rgba(255, 255, 255, 0.2);
-      border-radius: 30px;
-      padding: 30px 50px;
-      margin: 20px 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 5px;
-      animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
-    }
-
-    .rank-number {
-      font-size: clamp(4rem, 12vw, 7rem);
-      font-weight: 900;
-      line-height: 1;
-      background: linear-gradient(135deg, #fff, #cbd5e1);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));
-    }
-
-    .rank-label {
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: rgba(255, 255, 255, 0.6);
-      text-transform: uppercase;
-      letter-spacing: 2px;
-    }
-
-    .position-info {
-      background: rgba(0, 0, 0, 0.3);
-      padding: 12px 24px;
-      border-radius: 50px;
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: white;
-      margin-top: 15px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
-    }
-
-    .position-info span {
-      color: #fbbf24;
-      font-weight: 800;
-    }
-
-    @keyframes slideUpFade {
-      from { opacity: 0; transform: translateY(30px); filter: blur(10px); }
-      to { opacity: 1; transform: translateY(0); filter: blur(0); }
-    }
-
-    /* ADMIN LOGIN */
-    #screen-admin-login {
-      background: 
-        radial-gradient(ellipse at 30% 70%, rgba(124, 58, 237, 0.25) 0%, transparent 50%),
-        linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-    }
-
-    #screen-admin-login .card {
-      background: var(--white);
-    }
-
-    /* JOIN SCREENS */
-    #screen-join-code,
-    #screen-join-name {
-      background: 
-        radial-gradient(ellipse at 30% 70%, rgba(99, 102, 241, 0.2) 0%, transparent 50%),
-        linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-    }
-
-    #screen-join-code input,
-    #screen-join-name input {
-      font-size: 2rem;
-      letter-spacing: 8px;
-    }
-
-    /* CREATE GAME */
-    #screen-create-game {
-      background: 
-        radial-gradient(ellipse at 20% 80%, rgba(139, 92, 246, 0.2) 0%, transparent 50%),
-        linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-    }
-
-    #screen-create-game input[type="text"] {
-      text-align: left;
-      padding: 16px 20px;
-    }
-
-    #screen-create-game .admin-scroll {
-      background: var(--white);
-    }
-
-    /* ADMIN DASH - HEADER */
-    #screen-admin-dash {
-      background: 
-        radial-gradient(ellipse at 30% 70%, rgba(139, 92, 246, 0.2) 0%, transparent 50%),
-        linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-    }
-
-    #screen-admin-dash h1 {
-      font-size: 2.2rem;
-      margin-bottom: 16px;
+    .back-link:hover { color: #fff; }
+    .full-width-screen {
+      width: 100%; min-height: 100vh; padding: 24px 16px;
+      display: flex; flex-direction: column; align-items: center;
     }
   </style>
 </head>
-
 <body>
 
-  <!-- TOAST -->
-  <div id="toast" class="toast"></div>
-
-  <!-- ══════════════ SCREEN 1: HOME ══════════════ -->
-  <div id="screen-home" class="screen active">
-    <div class="home-logo">Kahoot<span>!</span></div>
-    <p class="home-subtitle">By : Waleed</p>
-    <div class="home-btns">
-      <button class="btn btn-yellow" onclick="goTo('screen-join-code')"
-        style="color:#0f172a;font-size:1.2rem;padding:20px;">
-        🎮 Join Game
-      </button>
-      <button class="btn btn-outline" onclick="goTo('screen-admin-login')" style="padding:14px;">
-        🔐 Admin / Host
-      </button>
+<!-- ══════════════════════════════════════════════════════════════
+     SUPABASE CONFIG MODAL (shown once on first visit)
+═══════════════════════════════════════════════════════════════ -->
+<div id="supabaseModal" class="modal-overlay">
+  <div class="modal-box">
+    <div style="font-size:2.5rem;text-align:center;margin-bottom:10px">⚡</div>
+    <h2 class="card-title" style="margin-bottom:8px">Connect to Supabase</h2>
+    <p class="text-muted center mb-4">Enter your Supabase project credentials to enable real-time multiplayer.</p>
+    <div class="form-group">
+      <label>Project URL</label>
+      <input type="text" id="cfgUrl" placeholder="https://xxxx.supabase.co" />
     </div>
-  </div>
-
-  <!-- ══════════════ SCREEN 2: ADMIN LOGIN ══════════════ -->
-  <div id="screen-admin-login" class="screen">
-    <h1>🔐 Admin Login</h1>
-    <div class="card">
-      <p style="color:#64748b;margin-bottom:16px;font-weight:600;">Password required to manage games</p>
-      <input type="password" id="admin-pwd" placeholder="Enter password" />
-      <p class="err-msg" id="admin-err">❌ Wrong password."</p>
-      <button class="btn btn-purple" onclick="checkAdmin()" style="margin-top:12px;">Login →</button>
-      <button class="btn btn-dark" onclick="goTo('screen-home')" style="margin-top:6px;">← Back</button>
+    <div class="form-group">
+      <label>Anon / Public Key</label>
+      <input type="text" id="cfgKey" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6..." />
     </div>
+    <p class="text-muted mb-4" style="font-size:.82rem">
+      ℹ️ You can find these in <strong>Supabase → Project Settings → API</strong>.
+      The SQL schema will be created automatically.
+    </p>
+    <button class="btn btn-primary" onclick="initSupabase()">Connect &amp; Start</button>
+    <button class="btn btn-ghost mt-4" onclick="useDemoMode()">Use Demo Mode (local only)</button>
   </div>
+</div>
 
-  <!-- ══════════════ SCREEN 3: ADMIN DASHBOARD ══════════════ -->
-  <div id="screen-admin-dash" class="screen">
-    <h1 style="font-size:2.2rem;margin-bottom:16px;">📋 Admin Dashboard</h1>
-    <div class="admin-scroll">
-      <p class="section-title">Saved Games</p>
-      <div id="saved-games-list"></div>
-      <div class="row-btns" style="margin-top:20px;">
-        <button class="btn btn-dark btn-sm" onclick="goTo('screen-home')" style="flex:1;">← Home</button>
-        <button class="btn btn-green btn-sm" onclick="startNewGame()" style="flex:2;">➕ Create New Game</button>
-      </div>
-    </div>
+<!-- ══════════════════════════════════════════════════════════════
+     SCREEN 1 — HOME
+═══════════════════════════════════════════════════════════════ -->
+<div id="screen-home" class="screen active">
+  <div style="text-align:center;margin-bottom:8px">
+    <div class="logo">Kah<span>oo</span>t!</div>
+    <div class="tagline">Make learning awesome 🎉</div>
   </div>
-
-  <!-- ══════════════ SCREEN 4: CREATE / EDIT GAME ══════════════ -->
-  <div id="screen-create-game" class="screen">
-    <h1 style="font-size:2rem;margin-bottom:14px;" id="create-game-title">✏️ Create Game</h1>
-    <div class="admin-scroll">
-      <input type="text" id="game-title" placeholder="Game title (e.g. Science Quiz)"
-        style="font-size:1.15rem;text-align:left;padding:16px 20px;" />
-
-      <!-- Question list -->
-      <p class="section-title">Questions Added: <span id="q-count">0</span></p>
-      <p style="font-size:0.85rem;color:#94a3b8;font-weight:600;margin-bottom:6px;">💡 Click a question to edit it</p>
-      <div id="q-list"></div>
-
-      <!-- Builder -->
-      <p class="section-title" style="margin-top:24px;" id="builder-title">➕ Add a Question</p>
-      <div class="edit-banner" id="edit-banner">✏️ Editing question <span id="edit-banner-num"></span> — save changes below</div>
-      <input type="text" id="qb-q" placeholder="Question text" style="text-align:left;" />
-      <div class="answers-row">
-        <input type="text" id="qb-a1" placeholder="🔴 Answer 1" style="text-align:left;" />
-        <input type="text" id="qb-a2" placeholder="🔵 Answer 2" style="text-align:left;" />
-        <input type="text" id="qb-a3" placeholder="🟡 Answer 3 (opt)" style="text-align:left;" />
-        <input type="text" id="qb-a4" placeholder="🟢 Answer 4 (opt)" style="text-align:left;" />
-      </div>
-      <select id="qb-correct">
-        <option value="1">✅ Correct: Answer 1 (Red)</option>
-        <option value="2">✅ Correct: Answer 2 (Blue)</option>
-        <option value="3">✅ Correct: Answer 3 (Yellow)</option>
-        <option value="4">✅ Correct: Answer 4 (Green)</option>
-      </select>
-      <input type="number" id="qb-time" placeholder="Time limit (seconds, default 20)" min="5" max="120"
-        style="text-align:left;" />
-
-      <div style="display:flex;gap:10px;margin-top:12px;">
-        <button class="btn btn-green" id="add-q-btn" onclick="addOrUpdateQuestion()" style="flex:2;">+ Add Question</button>
-        <button class="btn btn-dark btn-sm" id="cancel-edit-btn" onclick="cancelEdit()" style="display:none;flex:1;">✕ Cancel</button>
-      </div>
-
-      <div class="row-btns" style="margin-top:20px;">
-        <button class="btn btn-dark btn-sm" onclick="goTo('screen-admin-dash')" style="flex:1;">← Dashboard</button>
-        <button class="btn btn-blue btn-sm" onclick="saveGameOnly()" style="flex:1.5;">💾 Save Game</button>
-        <button class="btn btn-green btn-sm" onclick="saveAndHost()" style="flex:1.5;">🚀 Host Game</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══════════════ SCREEN 5: JOIN — ENTER PIN ══════════════ -->
-  <div id="screen-join-code" class="screen">
-    <h1>Enter Game PIN</h1>
-    <div class="card">
-      <input type="text" id="join-pin" placeholder="6-digit PIN" maxlength="6"
-        style="font-size:2.5rem;letter-spacing:10px;" onkeyup="if(event.key==='Enter')checkPin()" />
-      <p class="err-msg" id="pin-err">❌ Game not found. Check the PIN.</p>
-      <button class="btn btn-blue" onclick="checkPin()" style="margin-top:12px;">Join →</button>
-      <button class="btn btn-dark" onclick="goTo('screen-home')" style="margin-top:6px;">← Back</button>
-    </div>
-  </div>
-
-  <!-- ══════════════ SCREEN 6: JOIN — ENTER NAME ══════════════ -->
-  <div id="screen-join-name" class="screen">
-    <h1>What's your name?</h1>
-    <div class="card">
-      <input type="text" id="join-name" placeholder="Nickname (max 15 chars)" maxlength="15"
-        onkeyup="if(event.key==='Enter')joinGame()" />
-      <button class="btn btn-green" id="join-go-btn" onclick="this.disabled=true;this.textContent='Joining…';joinGame()"
-        style="margin-top:12px;">Let's Go! 🎉</button>
-    </div>
-  </div>
-
-  <!-- ══════════════ SCREEN 7: LOBBY — HOST ══════════════ -->
-  <div id="screen-lobby-host" class="screen">
-    <h2 style="color:rgba(255,255,255,0.6)">Join at this game PIN:</h2>
-    <div class="pin-display" id="host-pin-display">000000</div>
-    <div class="lobby-box">
-      <div class="lobby-top">
+  <div class="card">
+    <div class="home-grid">
+      <button class="home-btn home-btn-join" onclick="goTo('screen-join')">
+        <span class="icon">🎮</span>
         <div>
-          <h3 style="color:white;font-size:1.1rem;">Players Joined</h3>
-          <div class="player-count-badge" id="player-count-badge">0 players</div>
+          <div>Join a Game</div>
+          <div style="font-size:.8rem;font-weight:400;opacity:.85">Enter a code to play</div>
         </div>
-        <button class="btn btn-green btn-sm" onclick="hostStartGame()">▶ Start Game</button>
-      </div>
-      <div class="players-grid" id="host-players-list"></div>
-    </div>
-    <p class="hint-text" style="margin-top:20px;">Share the PIN — players open this page and click "Join Game"</p>
-  </div>
-
-  <!-- ══════════════ SCREEN 8: LOBBY — PLAYER WAITING ══════════════ -->
-  <div id="screen-lobby-player" class="screen">
-    <div style="display:flex;flex-direction:column;align-items:center;gap:20px;">
-      <div style="font-size:5rem;">✅</div>
-      <h1>You're in!</h1>
-      <div style="background:linear-gradient(135deg,rgba(255,255,255,0.1),rgba(255,255,255,0.02));border:2px solid rgba(255,255,255,0.2);border-radius:20px;padding:18px 42px;">
-        <h2 id="player-lobby-name" style="font-size:2.2rem;color:white;"></h2>
-      </div>
-      <p style="color:rgba(255,255,255,0.5);font-weight:700;">Waiting for host to start…</p>
-      <div style="font-size:2.8rem;animation:pulse 1.2s infinite;">⏳</div>
-    </div>
-  </div>
-
-  <!-- ══════════════ SCREEN 8b: PRE-GAME COUNTDOWN ══════════════ -->
-  <div id="screen-countdown" class="screen">
-    <div style="display:flex;flex-direction:column;align-items:center;gap:28px;">
-      <h2 style="color:rgba(255,255,255,0.5);letter-spacing:3px;text-transform:uppercase;font-size:1rem;">Get Ready!</h2>
-      <div id="countdown-number">10</div>
-      <p style="color:rgba(255,255,255,0.4);font-weight:700;font-size:1.15rem;">Game starts in…</p>
-    </div>
-  </div>
-
-  <!-- ══════════════ SCREEN 9: HOST GAME VIEW ══════════════ -->
-  <div id="screen-host-game" class="screen">
-    <div id="reveal-timer" style="display:none;position:absolute;top:40px;right:40px;font-size:2.5rem;font-weight:900;color:white;background:linear-gradient(135deg,#f59e0b,#fbbf24);border:4px solid white;width:100px;height:100px;border-radius:50%;align-items:center;justify-content:center;z-index:30;box-shadow:0 0 30px rgba(251,191,36,0.6),0 10px 30px rgba(0,0,0,0.4);animation:popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;">7</div>
-    <div id="reveal-text" style="display:none;position:absolute;top:50px;left:50%;transform:translateX(-50%);font-size:3.5rem;font-weight:900;color:white;text-shadow:0 0 40px rgba(34,197,94,0.8);z-index:30;animation:popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;letter-spacing:4px;">CORRECT!</div>
-    <p class="host-meta" id="host-q-meta">Question 1 of 1</p>
-    <div class="host-question-box" id="host-question-text">…</div>
-    <!-- vote progress bar -->
-    <div style="display:flex;align-items:center;gap:14px;width:100%;max-width:850px;margin-bottom:16px;">
-      <span style="color:rgba(255,255,255,0.5);font-size:0.95rem;font-weight:700;white-space:nowrap;">Votes:</span>
-      <div style="flex:1;height:12px;background:rgba(255,255,255,0.1);border-radius:12px;overflow:hidden;">
-        <div id="vote-bar"
-          style="height:100%;background:linear-gradient(90deg,#22c55e,#16a34a);border-radius:12px;width:0%;transition:width 0.4s ease;">
+      </button>
+      <button class="home-btn" style="background:linear-gradient(135deg,#46178f,#6a0dad);" onclick="goTo('screen-admin-login')">
+        <span class="icon">🔐</span>
+        <div>
+          <div>Admin Panel</div>
+          <div style="font-size:.8rem;font-weight:400;opacity:.85">Create &amp; manage games</div>
         </div>
-      </div>
-      <span id="vote-count-label"
-        style="color:rgba(255,255,255,0.7);font-size:0.95rem;font-weight:800;white-space:nowrap;">0/0</span>
-    </div>
-    <div class="answers-grid" id="host-answers">
-      <div class="ans-btn btn-red" id="ha-1">
-        <div class="shape">▲</div><span id="hat-1"></span>
-      </div>
-      <div class="ans-btn btn-blue" id="ha-2">
-        <div class="shape">◆</div><span id="hat-2"></span>
-      </div>
-      <div class="ans-btn btn-yellow" id="ha-3">
-        <div class="shape">●</div><span id="hat-3"></span>
-      </div>
-      <div class="ans-btn btn-green" id="ha-4">
-        <div class="shape">■</div><span id="hat-4"></span>
-      </div>
-    </div>
-    <p style="color:rgba(255,255,255,0.35);font-size:0.9rem;font-weight:700;margin-top:20px;">⏳ Round ends automatically when everyone has voted</p>
-    <button class="btn btn-outline" id="skip-btn" onclick="hostSkipQuestion()" style="margin-top:15px; width:auto; padding:10px 40px; border-color:rgba(255,255,255,0.2); font-size:0.9rem; opacity:0.6; transition:opacity 0.3s;">⏭ Skip Question</button>
-  </div>
-
-  <!-- ══════════════ SCREEN 11b: ROUND SCOREBOARD ══════════════ -->
-  <div id="screen-round-scores" class="screen">
-    <div style="font-size:3.5rem;margin-bottom:8px;">📊</div>
-    <h1 style="font-size:2.2rem;margin-bottom:6px;" id="rsb-header">Round 1 Results</h1>
-    <p style="color:rgba(255,255,255,0.4);font-weight:700;margin-bottom:24px;" id="rsb-subheader">Top Players</p>
-    <div class="round-sb-card">
-      <div class="round-sb-title">Leaderboard</div>
-      <div id="rsb-list"></div>
-    </div>
-    <p style="color:rgba(255,255,255,0.3);font-size:0.85rem;font-weight:700;margin-top:20px;" id="rsb-next-hint">Moving to next question…</p>
-    <div id="rsb-countdown" style="display:none;margin-top:12px;font-size:3.5rem;font-weight:900;color:white;text-shadow:0 0 30px rgba(255,255,255,0.5);"></div>
-  </div>
-
-  <!-- ══════════════ SCREEN 10: PLAYER GAME VIEW ══════════════ -->
-  <div id="screen-player-game" class="screen">
-    <div class="player-waiting" id="player-waiting">
-      <div class="wait-icon" id="wait-icon">⏳</div>
-      <h2 id="player-status-msg" style="color:white;font-size:1.7rem;"></h2>
-      <div class="score-badge" id="player-score-badge" style="display:none"></div>
-    </div>
-    
-    <!-- RANK FEEDBACK SECTION -->
-    <div id="player-rank-feedback" style="display:none;flex-direction:column;align-items:center;justify-content:center;width:100%;max-width:500px;animation:fadeIn 0.5s ease;">
-      <div id="feedback-banner" class="feedback-banner">CORRECT</div>
-      <div class="rank-container">
-        <div class="rank-label">You are in</div>
-        <div id="feedback-rank" class="rank-number">1st</div>
-        <div class="rank-label">Place</div>
-      </div>
-      <div id="feedback-position" class="position-info">
-        Tied with <span>Alice</span>
-      </div>
-      <div class="score-badge" id="feedback-total-score" style="margin-top:25px;font-size:1.2rem;padding:10px 24px;">
-        1,250 pts
-      </div>
-    </div>
-
-    <div class="player-answer-grid" id="player-buttons">
-      <button class="player-ans-btn btn-red" onclick="playerAnswer(1)">
-        <div class="sym sym-triangle"></div>
-      </button>
-      <button class="player-ans-btn btn-blue" onclick="playerAnswer(2)">
-        <div class="sym sym-diamond"></div>
-      </button>
-      <button class="player-ans-btn btn-yellow" onclick="playerAnswer(3)">
-        <div class="sym sym-circle"></div>
-      </button>
-      <button class="player-ans-btn btn-green" onclick="playerAnswer(4)">
-        <div class="sym sym-square"></div>
       </button>
     </div>
+    <div class="mt-6 center">
+      <button class="btn btn-ghost btn-sm" onclick="openConfig()">⚙️ Supabase Settings</button>
+    </div>
   </div>
+</div>
 
-  <!-- ══════════════ SCREEN 11c: GAME ENDED ══════════════ -->
-  <div id="screen-game-ended" class="screen">
-    <div id="game-ended-content" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;text-align:center;">
-      <div style="font-size:5.5rem;animation:gameEndedIcon 1s cubic-bezier(0.34,1.8,0.64,1) both;">🏁</div>
-      <h1 style="font-size:clamp(2.5rem,9vw,5rem);font-weight:900;color:white;letter-spacing:4px;text-shadow:0 0 50px rgba(255,255,255,0.4);animation:gameEndedTitle 1.2s cubic-bezier(0.16,1,0.3,1) 0.3s both;">GAME ENDED</h1>
-      <p style="color:rgba(255,255,255,0.45);font-size:1.15rem;font-weight:600;animation:gameEndedSub 0.8s ease 0.8s both;">The final scores are in…</p>
-      <button id="btn-show-results" onclick="hostRevealPodium()" style="margin-top:20px;padding:20px 52px;font-size:1.5rem;font-weight:900;border:none;border-radius:50px;cursor:pointer;background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#0f172a;letter-spacing:2px;box-shadow:0 0 50px rgba(251,191,36,0.5),0 10px 40px rgba(0,0,0,0.4);animation:gameEndedBtn 0.8s cubic-bezier(0.34,1.8,0.64,1) 1.2s both;transition:transform 0.2s,box-shadow 0.2s;" onmouseover="this.style.transform='scale(1.05)';this.style.boxShadow='0 0 70px rgba(251,191,36,0.8),0 14px 45px rgba(0,0,0,0.5)'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 0 50px rgba(251,191,36,0.5),0 10px 40px rgba(0,0,0,0.4)'">
-        🏆 Show Results
+<!-- ══════════════════════════════════════════════════════════════
+     SCREEN 2 — ADMIN LOGIN
+═══════════════════════════════════════════════════════════════ -->
+<div id="screen-admin-login" class="screen">
+  <button class="back-link" onclick="goTo('screen-home')">← Back</button>
+  <div class="card">
+    <div style="font-size:2.5rem;text-align:center;margin-bottom:8px">🔐</div>
+    <h2 class="card-title">Admin Login</h2>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="adminPass" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')adminLogin()" />
+    </div>
+    <button class="btn btn-primary" onclick="adminLogin()">Unlock Admin</button>
+    <p class="text-muted center mt-4" style="font-size:.8rem">Default password: <code>admin</code></p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SCREEN 3 — ADMIN DASHBOARD
+═══════════════════════════════════════════════════════════════ -->
+<div id="screen-admin-dash" class="screen">
+  <div style="width:100%;max-width:780px">
+    <div class="flex-between mb-4">
+      <button class="back-link" onclick="goTo('screen-home')">← Home</button>
+      <span class="badge">Admin</span>
+    </div>
+    <div class="card card-wide">
+      <div class="flex-between mb-4">
+        <h2 class="card-title" style="margin:0">My Games</h2>
+        <button class="btn btn-primary btn-sm" onclick="goTo('screen-create-game')">＋ New Game</button>
+      </div>
+      <div id="adminGameList">
+        <p class="text-muted center" id="noGamesMsg">No games yet. Create your first one!</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SCREEN 4 — CREATE / EDIT GAME
+═══════════════════════════════════════════════════════════════ -->
+<div id="screen-create-game" class="screen" style="justify-content:flex-start;padding-top:32px">
+  <div style="width:100%;max-width:760px">
+    <button class="back-link" onclick="goTo('screen-admin-dash')">← Dashboard</button>
+    <div class="card card-wide" style="margin-top:8px">
+      <h2 class="card-title">Create New Game</h2>
+      <div class="form-group">
+        <label>Game Title</label>
+        <input type="text" id="gameTitle" placeholder="e.g. Science Quiz – Chapter 4" />
+      </div>
+      <hr class="divider" />
+      <div id="questionsContainer"></div>
+      <button class="btn btn-ghost mt-4" onclick="addQuestion()" style="border-style:dashed">
+        ＋ Add Question
       </button>
-    </div>
-  </div>
-
-
-  <div id="screen-podium" class="screen">
-    <div class="podium-title">FINAL WINNERS</div>
-    <div class="podium-container" id="podium-container">
-      <!-- Orbit rings -->
-      <div class="orbit-ring orbit-ring-1"></div>
-      <div class="orbit-ring orbit-ring-2"></div>
-      
-      <!-- 3rd Place - Mars -->
-      <div class="podium-block podium-3rd" id="podium-3rd">
-        <div class="winner-card" id="winner-3rd">
-          <div class="winner-rank">🥉</div>
-          <div class="winner-name" id="name-3rd">-</div>
-          <div class="winner-score" id="score-3rd">0</div>
-        </div>
-        <div class="planet-3rd"></div>
-      </div>
-      <!-- 1st Place - Golden Sun (Center) -->
-      <div class="podium-block podium-1st" id="podium-1st">
-        <div class="winner-card" id="winner-1st">
-          <div class="winner-rank">🥇</div>
-          <div class="winner-name" id="name-1st">-</div>
-          <div class="winner-score" id="score-1st">0</div>
-        </div>
-        <div class="planet-1st"></div>
-      </div>
-      <!-- 2nd Place - Ice Planet -->
-      <div class="podium-block podium-2nd" id="podium-2nd">
-        <div class="winner-card" id="winner-2nd">
-          <div class="winner-rank">🥈</div>
-          <div class="winner-name" id="name-2nd">-</div>
-          <div class="winner-score" id="score-2nd">0</div>
-        </div>
-        <div class="planet-2nd"></div>
+      <hr class="divider" />
+      <div class="btn-row">
+        <button class="btn btn-success" onclick="saveGame()">💾 Save Game</button>
+        <button class="btn btn-ghost" onclick="goTo('screen-admin-dash')">Cancel</button>
       </div>
     </div>
-    <button class="btn btn-outline btn-sm" onclick="location.reload()" style="margin-top: 40px; z-index: 10; position: relative;">Play Again 🔄</button>
-    <!-- Legacy list for compatibility -->
-    <ul class="podium-list" id="podium-list"></ul>
   </div>
+</div>
 
-  <script>
-    // ── SUPABASE CONFIG ──────────────────────────────────────────────────────
-    const SB_URL = 'https://afwtmvturyetaqruihsr.supabase.co';
-    const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFmd3RtdnR1cnlldGFxcnVpaHNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxMzM3MjUsImV4cCI6MjA5MDcwOTcyNX0.MmBoHJSe5uH_sOhe1WK5egr1znH-4hlm3eBzwgRwL10';
+<!-- ══════════════════════════════════════════════════════════════
+     SCREEN 5 — LOBBY (Admin view — waiting for players)
+═══════════════════════════════════════════════════════════════ -->
+<div id="screen-lobby-admin" class="screen">
+  <div style="width:100%;max-width:640px">
+    <button class="back-link" onclick="stopSession()">✕ End Session</button>
+    <div class="card card-wide">
+      <h2 class="card-title">Game Lobby</h2>
+      <p class="text-muted center">Share this code with your students:</p>
+      <div class="lobby-code" id="lobbyCode">——</div>
+      <p class="text-muted center mb-4" id="lobbyGameName"></p>
+      <div class="players-grid" id="lobbyPlayers">
+        <span class="text-muted" style="font-size:.9rem">Waiting for players…</span>
+      </div>
+      <hr class="divider" />
+      <button class="btn btn-accent" id="startGameBtn" onclick="startGame()" disabled>
+        🚀 Start Game
+      </button>
+      <p class="text-muted center mt-4" style="font-size:.82rem" id="lobbyStatus">Need at least 1 player</p>
+    </div>
+  </div>
+</div>
 
-    let sb = null;
-    let useSB = false;
-    if (SB_URL.startsWith('https')) {
-      try { sb = window.supabase.createClient(SB_URL, SB_KEY); useSB = true; } catch (e) { console.error('Supabase init error', e); }
+<!-- ══════════════════════════════════════════════════════════════
+     SCREEN 6 — JOIN GAME (Player)
+═══════════════════════════════════════════════════════════════ -->
+<div id="screen-join" class="screen">
+  <button class="back-link" onclick="goTo('screen-home')">← Back</button>
+  <div class="card">
+    <div style="font-size:2.5rem;text-align:center;margin-bottom:8px">🎮</div>
+    <h2 class="card-title">Join a Game</h2>
+    <div class="form-group">
+      <label>Game Code</label>
+      <input type="text" id="joinCode" placeholder="e.g. 483920" maxlength="6"
+             style="text-align:center;font-size:1.8rem;font-weight:900;letter-spacing:8px"
+             oninput="this.value=this.value.toUpperCase()"
+             onkeydown="if(event.key==='Enter')joinStep2()" />
+    </div>
+    <button class="btn btn-secondary" onclick="joinStep2()">Find Game →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SCREEN 7 — JOIN — Enter Name
+═══════════════════════════════════════════════════════════════ -->
+<div id="screen-join-name" class="screen">
+  <button class="back-link" onclick="goTo('screen-join')">← Back</button>
+  <div class="card">
+    <div style="font-size:2.5rem;text-align:center;margin-bottom:8px">✏️</div>
+    <h2 class="card-title">Enter Your Name</h2>
+    <p class="text-muted center mb-4" id="joinGameFoundName"></p>
+    <div class="form-group">
+      <label>Your Nickname</label>
+      <input type="text" id="playerName" placeholder="e.g. SuperBrain99" maxlength="20"
+             onkeydown="if(event.key==='Enter')joinGame()" />
+    </div>
+    <button class="btn btn-success" onclick="joinGame()">Join Game 🚀</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SCREEN 8 — PLAYER WAITING ROOM
+═══════════════════════════════════════════════════════════════ -->
+<div id="screen-player-waiting" class="screen">
+  <div class="card" style="text-align:center">
+    <div class="wait-icon">⏳</div>
+    <h2 class="card-title" style="margin-bottom:8px">You're In!</h2>
+    <p class="text-muted mb-4">Waiting for the host to start the game…</p>
+    <p style="font-weight:800;font-size:1.3rem;color:var(--primary)" id="playerWaitName"></p>
+    <div class="mt-6">
+      <span class="badge" id="playerWaitCode"></span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SCREEN 9 — GAME IN PROGRESS (Admin — question controller)
+═══════════════════════════════════════════════════════════════ -->
+<div id="screen-game-admin" class="screen" style="justify-content:flex-start;padding-top:28px">
+  <div style="width:100%;max-width:700px">
+    <div class="flex-between mb-4">
+      <span class="badge" id="adminQProgress">Q 1 / 1</span>
+      <span class="badge" id="adminAnswerCount">0 answered</span>
+    </div>
+    <!-- Question display -->
+    <div class="question-display" id="adminCurrentQ">Loading…</div>
+    <!-- Timer -->
+    <div class="timer-num" id="adminTimer">20</div>
+    <div class="timer-bar-wrap"><div class="timer-bar" id="adminTimerBar" style="width:100%"></div></div>
+    <!-- Answers shown for host reference -->
+    <div class="answers-play-grid" id="adminAnswerDisplay"></div>
+    <!-- Next / End -->
+    <div class="btn-row mt-6">
+      <button class="btn btn-accent" id="nextQBtn" onclick="adminNextQuestion()">Next Question →</button>
+      <button class="btn btn-danger btn-sm" onclick="endGame()">End Game</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SCREEN 10 — GAME IN PROGRESS (Player — answer view)
+═══════════════════════════════════════════════════════════════ -->
+<div id="screen-game-player" class="screen" style="justify-content:flex-start;padding-top:28px">
+  <div style="width:100%;max-width:600px">
+    <div class="flex-between mb-4">
+      <span class="badge" id="playerQProgress">Q 1 / 1</span>
+      <span class="badge" id="playerScoreBadge">Score: 0</span>
+    </div>
+    <div class="question-display" id="playerCurrentQ">Get ready…</div>
+    <div class="timer-num" id="playerTimer">20</div>
+    <div class="timer-bar-wrap"><div class="timer-bar" id="playerTimerBar" style="width:100%"></div></div>
+    <div class="answers-play-grid" id="playerAnswerButtons"></div>
+    <div id="playerResultArea" style="display:none;text-align:center">
+      <div class="result-icon" id="playerResultIcon"></div>
+      <p style="font-size:1.2rem;font-weight:800;color:#fff" id="playerResultText"></p>
+      <p style="color:rgba(255,255,255,.75);margin-top:6px" id="playerResultPts"></p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SCREEN 11 — SCOREBOARD (after each question + final)
+═══════════════════════════════════════════════════════════════ -->
+<div id="screen-scoreboard" class="screen">
+  <div style="width:100%;max-width:600px">
+    <div class="card card-wide">
+      <h2 class="card-title" id="scoreboardTitle">🏆 Scoreboard</h2>
+      <div id="scoreboardList"></div>
+      <hr class="divider" />
+      <div id="scoreboardActions" class="btn-row"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SCREEN 12 — PLAYER FINAL SCREEN
+═══════════════════════════════════════════════════════════════ -->
+<div id="screen-player-final" class="screen">
+  <div class="card" style="text-align:center">
+    <div style="font-size:3.5rem;margin-bottom:10px" id="playerFinalEmoji">🎉</div>
+    <h2 class="card-title" id="playerFinalTitle">Game Over!</h2>
+    <p class="text-muted mb-4" id="playerFinalSub"></p>
+    <div style="font-size:2.5rem;font-weight:900;color:var(--primary);margin:16px 0" id="playerFinalScore"></div>
+    <button class="btn btn-primary mt-4" onclick="goTo('screen-home')">Back to Home</button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════════════════════════════ -->
+<script>
+/* ══════════════════════════════════════════════════════
+   GLOBALS & STATE
+══════════════════════════════════════════════════════ */
+let supabase = null;
+let DEMO_MODE = false;
+let demoStorage = { games: [], sessions: [], players: [], answers: [] };
+let demoIdCounter = 1;
+
+// Active state
+let currentRole = null;        // 'admin' | 'player'
+let currentGame = null;        // game object
+let currentSession = null;     // session object
+let currentPlayer = null;      // player object (player mode)
+let currentQuestionIdx = 0;    // admin: which question we're on
+let questionTimer = null;
+let QUESTION_TIME = 20;        // seconds per question
+let sessionChannel = null;     // realtime channel
+let playerAnsweredThisQ = false;
+let playerScore = 0;
+let adminAnswerCount = 0;
+
+/* ══════════════════════════════════════════════════════
+   SUPABASE INIT & SCHEMA
+══════════════════════════════════════════════════════ */
+async function initSupabase() {
+  const url = document.getElementById('cfgUrl').value.trim();
+  const key = document.getElementById('cfgKey').value.trim();
+  if (!url || !key) { showToast('Please fill in both fields.'); return; }
+  try {
+    supabase = window.supabase.createClient(url, key);
+    await ensureSchema();
+    localStorage.setItem('sb_url', url);
+    localStorage.setItem('sb_key', key);
+    hideModal();
+    showToast('Connected to Supabase! ✅');
+    refreshAdminDash();
+  } catch(e) {
+    showToast('Connection failed: ' + e.message);
+    console.error(e);
+  }
+}
+
+async function ensureSchema() {
+  // We check by trying to select; if tables missing, Supabase will error.
+  // The proper way is to run this SQL once in the Supabase SQL editor.
+  // We'll just test connectivity here.
+  const { error } = await supabase.from('kahoot_games').select('id').limit(1);
+  if (error && error.code === '42P01') {
+    showToast('⚠️ Tables missing! Run the SQL schema in Supabase.', 6000);
+  }
+}
+
+function openConfig() {
+  document.getElementById('supabaseModal').classList.remove('hidden');
+}
+
+function hideModal() {
+  document.getElementById('supabaseModal').classList.add('hidden');
+}
+
+function useDemoMode() {
+  DEMO_MODE = true;
+  supabase = null;
+  hideModal();
+  showToast('Demo mode active – data stored in memory only.');
+  refreshAdminDash();
+}
+
+// Auto-connect if credentials saved
+window.addEventListener('DOMContentLoaded', () => {
+  const url = localStorage.getItem('sb_url');
+  const key = localStorage.getItem('sb_key');
+  if (url && key) {
+    document.getElementById('cfgUrl').value = url;
+    document.getElementById('cfgKey').value = key;
+    initSupabase().catch(()=>{});
+  } else if (DEMO_MODE) {
+    hideModal();
+  }
+  addQuestion(); // Start with one question in creator
+});
+
+/* ══════════════════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════════════════ */
+function goTo(screenId) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const target = document.getElementById(screenId);
+  if (target) target.classList.add('active');
+}
+
+/* ══════════════════════════════════════════════════════
+   ADMIN AUTH
+══════════════════════════════════════════════════════ */
+function adminLogin() {
+  const pass = document.getElementById('adminPass').value;
+  if (pass === 'admin') {
+    currentRole = 'admin';
+    document.getElementById('adminPass').value = '';
+    refreshAdminDash();
+    goTo('screen-admin-dash');
+  } else {
+    showToast('Incorrect password!');
+  }
+}
+
+/* ══════════════════════════════════════════════════════
+   ADMIN DASHBOARD — GAME LIST
+══════════════════════════════════════════════════════ */
+async function refreshAdminDash() {
+  const list = document.getElementById('adminGameList');
+  let games = [];
+  if (DEMO_MODE) {
+    games = demoStorage.games;
+  } else if (supabase) {
+    const { data, error } = await supabase.from('kahoot_games').select('*').order('created_at', { ascending: false });
+    if (!error) games = data;
+  }
+  if (!games || games.length === 0) {
+    list.innerHTML = '<p class="text-muted center" id="noGamesMsg">No games yet. Create your first one!</p>';
+    return;
+  }
+  list.innerHTML = games.map(g => `
+    <div class="game-list-item">
+      <div>
+        <div class="game-name">${escHtml(g.title)}</div>
+        <div class="game-meta">${(g.questions||[]).length} questions</div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-accent btn-sm" onclick="generateCode('${g.id}')">🎲 Generate Code</button>
+        <button class="btn btn-ghost btn-sm" onclick="deleteGame('${g.id}')">🗑</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ══════════════════════════════════════════════════════
+   QUESTION BUILDER
+══════════════════════════════════════════════════════ */
+const ANSWER_COLORS = ['#e21b3c','#1368ce','#e05c00','#26890c'];
+const ANSWER_ICONS  = ['▲','◆','●','★'];
+let editingGameId = null;
+
+function addQuestion() {
+  const container = document.getElementById('questionsContainer');
+  const idx = container.children.length;
+  const div = document.createElement('div');
+  div.className = 'question-card';
+  div.dataset.idx = idx;
+  div.innerHTML = `
+    <div class="question-header">
+      <span class="q-number">Q${idx + 1}</span>
+      <div style="display:flex;gap:8px;align-items:center">
+        <label style="margin:0;font-size:.8rem;color:var(--muted)">Time (s):</label>
+        <input type="text" class="q-time" value="20" style="width:56px;text-align:center;padding:6px 8px;font-size:.85rem;" />
+        <button class="btn btn-danger btn-sm" onclick="removeQuestion(this)" style="width:auto;padding:6px 12px">✕ Remove</button>
+      </div>
+    </div>
+    <div class="form-group" style="margin-bottom:10px">
+      <label>Question</label>
+      <textarea class="q-text" rows="2" placeholder="Type your question here…"></textarea>
+    </div>
+    <div class="answers-grid">
+      ${[0,1,2,3].map(i => `
+        <div class="answer-box" id="ans-box-${idx}-${i}">
+          <span class="color-dot" style="background:${ANSWER_COLORS[i]}"></span>
+          <input type="text" class="ans-text" placeholder="Answer ${i+1}" data-qidx="${idx}" data-aidx="${i}" />
+          <button class="correct-toggle" title="Mark as correct" onclick="toggleCorrect(${idx},${i})" data-qidx="${idx}" data-aidx="${i}">☆</button>
+        </div>
+      `).join('')}
+    </div>
+    <p class="text-muted" style="font-size:.78rem;margin-top:10px">☆ = mark correct answer</p>
+  `;
+  container.appendChild(div);
+  renumberQuestions();
+}
+
+function removeQuestion(btn) {
+  const card = btn.closest('.question-card');
+  card.remove();
+  renumberQuestions();
+}
+
+function renumberQuestions() {
+  document.querySelectorAll('.question-card').forEach((card, i) => {
+    card.dataset.idx = i;
+    card.querySelector('.q-number').textContent = `Q${i + 1}`;
+    card.querySelectorAll('.ans-text').forEach(inp => inp.dataset.qidx = i);
+    card.querySelectorAll('.correct-toggle').forEach(btn => btn.dataset.qidx = i);
+    card.querySelectorAll('.answer-box').forEach((box, j) => box.id = `ans-box-${i}-${j}`);
+  });
+}
+
+function toggleCorrect(qIdx, aIdx) {
+  // Allow multiple correct answers or just one — we'll do single correct
+  const box = document.getElementById(`ans-box-${qIdx}-${aIdx}`);
+  if (!box) return;
+  const wasCorrect = box.classList.contains('correct-ans');
+  // Clear all for this question
+  for (let i = 0; i < 4; i++) {
+    const b = document.getElementById(`ans-box-${qIdx}-${i}`);
+    if (b) {
+      b.classList.remove('correct-ans');
+      const toggle = b.querySelector('.correct-toggle');
+      if (toggle) toggle.textContent = '☆';
     }
+  }
+  if (!wasCorrect) {
+    box.classList.add('correct-ans');
+    box.querySelector('.correct-toggle').textContent = '★';
+  }
+}
 
-    // ── SAVED GAMES (Supabase table: saved_games) ────────────────────────────
-    async function getSavedGames() {
-      if (useSB) {
-        const { data, error } = await sb.from('saved_games').select('*');
-        if (error) { console.error(error); return {}; }
-        const obj = {};
-        (data || []).forEach(row => { obj[row.id] = row.game_data; });
-        return obj;
-      }
-      try { return JSON.parse(localStorage.getItem('kahoot_saved') || '{}'); } catch(e) { return {}; }
-    }
-
-    async function saveGameToStorage(id, gameObj) {
-      if (useSB) {
-        const { error } = await sb.from('saved_games').upsert({ id, game_data: gameObj, updated_at: new Date().toISOString() }, { onConflict: 'id' });
-        if (error) console.error(error);
-        return;
-      }
-      const all = await getSavedGames();
-      all[id] = gameObj;
-      localStorage.setItem('kahoot_saved', JSON.stringify(all));
-    }
-
-    async function deleteGameFromStorage(id) {
-      if (useSB) {
-        const { error } = await sb.from('saved_games').delete().eq('id', id);
-        if (error) console.error(error);
-        return;
-      }
-      const all = await getSavedGames();
-      delete all[id];
-      localStorage.setItem('kahoot_saved', JSON.stringify(all));
-    }
-
-    // ── REALTIME CHANNEL ─────────────────────────────────────────────────────
-    // Uses Supabase Realtime broadcast — works across ALL devices on any network.
-    // Host sends events; players subscribe and react.
-    // ─────────────────────────────────────────────────────────────────────────
-    let realtimeChannel = null;
-    let isHost = false;
-
-    // In-memory store (authoritative on the HOST side only)
-    const store = {
-      games:   {},   // code → { code, title, questions }
-      state:   {},   // code → { status, qIndex, correct }
-      players: {},   // code → { playerId → { name, score, answered } }
-    };
-
-    // Broadcast an event to everyone in the game room (including self)
-    function sendEvent(eventName, payload) {
-      if (realtimeChannel) {
-        realtimeChannel.send({ type: 'broadcast', event: eventName, payload });
-      }
-      // Always fire locally too so the sender reacts
-      onEvent(eventName, payload);
-    }
-
-    // Subscribe to a game room and set up listener
-    function subscribeToGame(code, onReady) {
-      if (realtimeChannel) {
-        try { sb && sb.removeChannel(realtimeChannel); } catch(_) {}
-        realtimeChannel = null;
-      }
-
-      if (!useSB) {
-        // No Supabase — fall back to BroadcastChannel (same browser only)
-        if (!window._localBC) {
-          window._localBC = new BroadcastChannel('kahoot_local_' + code);
-          window._localBC.onmessage = e => onEvent(e.data.event, e.data.payload);
-        }
-        if (onReady) onReady();
-        return;
-      }
-
-      realtimeChannel = sb.channel('game_room_' + code, {
-        config: { broadcast: { self: false } }
-      });
-
-      realtimeChannel
-        .on('broadcast', { event: '*' }, ({ event, payload }) => {
-          onEvent(event, payload);
-        })
-        .subscribe(status => {
-          console.log('Channel status:', status);
-          if (status === 'SUBSCRIBED' && onReady) onReady();
-        });
-    }
-
-    // ── EVENT DISPATCHER ─────────────────────────────────────────────────────
-    // Runs on every connected device whenever an event arrives.
-    function onEvent(event, payload) {
-      if (event === 'game_state')   handleGameState(payload);
-      if (event === 'player_join')  { if (isHost) hostOnPlayerJoin(payload); }
-      if (event === 'player_vote')  { if (isHost) hostOnPlayerVote(payload); }
-      if (event === 'request_state'){ if (isHost) hostResendState(); }
-    }
-
-    function serializePlayers(code) {
-      return Object.entries(store.players[code] || {}).map(([id, p]) => ({ id, ...p }));
-    }
-
-    // ── APP STATE ────────────────────────────────────────────────────────────
-    let QUESTIONS = [];
-    let editingIndex = -1;
-    let editingGameId = null;
-    let curCode = '';
-    let curPlayerId = '';
-    let curName = '';
-    let myScore = 0;
-    let myAnswered = false;
-    let myLastAnswer = null;
-    let questionStartTime = 0;
-    let lastQIndex = -1;
-    let hostQIndex = 0;
-    let hostPhase = 'question';
-    let prevScores = {};
-    let joiningInProgress = false;
-    let playerCountdownInterval = null;
-
-    // ── TOAST ────────────────────────────────────────────────────────────────
-    function showToast(msg, color) {
-      const t = document.getElementById('toast');
-      t.textContent = msg;
-      t.style.background = color || 'linear-gradient(135deg, #3b82f6, #2563eb)';
-      t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 2800);
-    }
-
-    // ── NAVIGATION ───────────────────────────────────────────────────────────
-    function goTo(id) {
-      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-      const el = document.getElementById(id);
-      if (el) el.classList.add('active');
-      if (id === 'screen-join-name') {
-        joiningInProgress = false;
-        const btn = document.getElementById('join-go-btn');
-        if (btn) { btn.disabled = false; btn.textContent = "Let's Go! 🎉"; }
-      }
-    }
-
-    // ── ADMIN LOGIN ──────────────────────────────────────────────────────────
-    function checkAdmin() {
-      const pwd = document.getElementById('admin-pwd').value;
-      if (pwd === 'waleedgoat') {
-        document.getElementById('admin-err').classList.remove('show');
-        document.getElementById('admin-pwd').value = '';
-        openAdminDash();
-      } else {
-        document.getElementById('admin-err').classList.add('show');
-      }
-    }
-
-    // ── ADMIN DASHBOARD ──────────────────────────────────────────────────────
-    async function openAdminDash() {
-      await renderSavedGames();
-      goTo('screen-admin-dash');
-    }
-
-    async function renderSavedGames() {
-      const all = await getSavedGames();
-      const container = document.getElementById('saved-games-list');
-      const ids = Object.keys(all);
-      if (!ids.length) { container.innerHTML = '<p class="no-saved">No saved games yet. Create one!</p>'; return; }
-      container.innerHTML = '';
-      ids.forEach(id => {
-        const g = all[id];
-        const div = document.createElement('div');
-        div.className = 'saved-game-card';
-        div.innerHTML = `
-          <div style="flex:1">
-            <div class="sg-title">${escHtml(g.title)}</div>
-            <div class="sg-meta">${g.questions.length} question${g.questions.length !== 1 ? 's' : ''} · ${g.savedAt || ''}</div>
-          </div>
-          <div class="sg-actions">
-            <button class="sg-btn sg-edit" onclick="event.stopPropagation();loadGameForEdit('${id}')">✏️ Edit</button>
-            <button class="sg-btn sg-host" onclick="event.stopPropagation();loadGameAndHost('${id}')">🚀 Host</button>
-            <button class="sg-btn sg-del"  onclick="event.stopPropagation();deleteSavedGame('${id}')">🗑</button>
-          </div>`;
-        container.appendChild(div);
-      });
-    }
-
-    async function deleteSavedGame(id) {
-      if (!confirm('Delete this game?')) return;
-      await deleteGameFromStorage(id);
-      await renderSavedGames();
-      showToast('Game deleted', '#e21b3c');
-    }
-
-    // ── CREATE / EDIT GAME ───────────────────────────────────────────────────
-    function startNewGame() {
-      QUESTIONS = []; editingGameId = null; editingIndex = -1;
-      document.getElementById('game-title').value = '';
-      document.getElementById('create-game-title').textContent = '✏️ Create Game';
-      clearBuilder(); renderQuestionList(); goTo('screen-create-game');
-    }
-
-    async function loadGameForEdit(id) {
-      const all = await getSavedGames();
-      const g = all[id]; if (!g) return;
-      QUESTIONS = [...g.questions]; editingGameId = id; editingIndex = -1;
-      document.getElementById('game-title').value = g.title;
-      document.getElementById('create-game-title').textContent = '✏️ Edit Game';
-      clearBuilder(); renderQuestionList(); goTo('screen-create-game');
-    }
-
-    // ── QUESTION BUILDER ─────────────────────────────────────────────────────
-    function addOrUpdateQuestion() {
-      const q  = document.getElementById('qb-q').value.trim();
-      const a1 = document.getElementById('qb-a1').value.trim();
-      const a2 = document.getElementById('qb-a2').value.trim();
-      const a3 = document.getElementById('qb-a3').value.trim();
-      const a4 = document.getElementById('qb-a4').value.trim();
-      const c  = parseInt(document.getElementById('qb-correct').value);
-      const t  = parseInt(document.getElementById('qb-time').value) || 20;
-      if (!q)  { alert('Enter a question!'); return; }
-      if (!a1) { alert('Enter Answer 1!'); return; }
-      if (!a2) { alert('Enter Answer 2!'); return; }
-      const qObj = { q, a1, a2, a3, a4, c, t };
-      if (editingIndex >= 0) { QUESTIONS[editingIndex] = qObj; showToast('Question updated ✅', '#26890c'); }
-      else { QUESTIONS.push(qObj); showToast('Question added ✅', '#26890c'); }
-      cancelEdit(); renderQuestionList();
-    }
-
-    function editQuestion(i) {
-      editingIndex = i;
-      const q = QUESTIONS[i];
-      document.getElementById('qb-q').value  = q.q;
-      document.getElementById('qb-a1').value = q.a1;
-      document.getElementById('qb-a2').value = q.a2;
-      document.getElementById('qb-a3').value = q.a3 || '';
-      document.getElementById('qb-a4').value = q.a4 || '';
-      document.getElementById('qb-correct').value = String(q.c);
-      document.getElementById('qb-time').value = q.t;
-      document.getElementById('builder-title').textContent = '✏️ Edit Question';
-      document.getElementById('add-q-btn').textContent = '💾 Save Changes';
-      document.getElementById('add-q-btn').className = 'btn btn-orange';
-      document.getElementById('cancel-edit-btn').style.display = 'block';
-      document.getElementById('edit-banner').classList.add('show');
-      document.getElementById('edit-banner-num').textContent = i + 1;
-      renderQuestionList();
-      document.getElementById('builder-title').scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-
-    function cancelEdit() {
-      editingIndex = -1; clearBuilder(); renderQuestionList();
-    }
-
-    function clearBuilder() {
-      ['qb-q','qb-a1','qb-a2','qb-a3','qb-a4','qb-time'].forEach(id => document.getElementById(id).value = '');
-      document.getElementById('qb-correct').value = '1';
-      document.getElementById('builder-title').textContent = '➕ Add a Question';
-      document.getElementById('add-q-btn').textContent = '+ Add Question';
-      document.getElementById('add-q-btn').className = 'btn btn-green';
-      document.getElementById('cancel-edit-btn').style.display = 'none';
-      document.getElementById('edit-banner').classList.remove('show');
-    }
-
-    function deleteQuestion(i) {
-      if (editingIndex === i) cancelEdit();
-      QUESTIONS.splice(i, 1);
-      if (editingIndex > i) editingIndex--;
-      renderQuestionList();
-    }
-
-    function renderQuestionList() {
-      const list = document.getElementById('q-list');
-      document.getElementById('q-count').textContent = QUESTIONS.length;
-      list.innerHTML = '';
-      QUESTIONS.forEach((q, i) => {
-        const d = document.createElement('div');
-        d.className = 'q-item' + (editingIndex === i ? ' editing' : '');
-        d.onclick = () => editQuestion(i);
-        d.innerHTML = `<div class="q-num">${i+1}</div><span style="flex:1;text-align:left">${escHtml(q.q)}</span><span style="font-size:.8rem;color:#888;margin-right:6px">${q.t}s</span><button class="q-del" onclick="event.stopPropagation();deleteQuestion(${i})">✕</button>`;
-        list.appendChild(d);
-      });
-    }
-
-    // ── SAVE GAME ────────────────────────────────────────────────────────────
-    function saveGameOnly() {
-      const title = document.getElementById('game-title').value.trim() || 'Kahoot Game';
-      if (!QUESTIONS.length) { alert('Add at least one question!'); return; }
-      const id = editingGameId || ('game_' + Date.now());
-      const gameObj = { id, title, questions: [...QUESTIONS], savedAt: new Date().toLocaleString() };
-      saveGameToStorage(id, gameObj);
-      editingGameId = id;
-      showToast('💾 Game saved!', '#1368ce');
-    }
-
-    // ── HOST GAME ────────────────────────────────────────────────────────────
-    async function saveAndHost() {
-      const title = document.getElementById('game-title').value.trim() || 'Kahoot Game';
-      if (!QUESTIONS.length) { alert('Add at least one question!'); return; }
-      saveGameOnly();
-      await startHosting(title, QUESTIONS);
-    }
-
-    async function loadGameAndHost(id) {
-      const all = await getSavedGames();
-      const g = all[id]; if (!g) return;
-      await startHosting(g.title, g.questions);
-    }
-
-    async function startHosting(title, questions) {
-      isHost = true;
-      const code = String(Math.floor(100000 + Math.random() * 900000));
-      curCode = code;
-      store.games[code]   = { code, title, questions: [...questions] };
-      store.players[code] = {};
-      store.state[code]   = { status: 'lobby', qIndex: 0 };
-
-      document.getElementById('host-pin-display').textContent = code;
-      updateHostLobbyUI();
-      goTo('screen-lobby-host');
-
-      subscribeToGame(code, () => {
-        console.log('✅ Host subscribed to game_room_' + code);
-        showToast('Game ready! PIN: ' + code, '#26890c');
-      });
-    }
-
-    function hostResendState() {
-      const st = store.state[curCode];
-      if (!st) return;
-      sendEvent('game_state', { ...st, code: curCode, players: serializePlayers(curCode) });
-    }
-
-    function hostOnPlayerJoin(payload) {
-      const { id, name, code } = payload;
-      if (code !== curCode) return;
-      if (!store.players[curCode][id]) {
-        store.players[curCode][id] = { name, score: 0, answered: false };
-        updateHostLobbyUI();
-        showToast('👋 ' + name + ' joined!', '#26890c');
-      }
-      // Always re-send state so player gets synced even if they joined late
-      hostResendState();
-    }
-
-    function hostOnPlayerVote(payload) {
-      const { id, answer, code } = payload;
-      if (code !== curCode) return;
-      const player = store.players[curCode] && store.players[curCode][id];
-      if (!player || player.answered) return;
-      const st = store.state[curCode];
-      const game = store.games[curCode];
-      if (!st || !game || st.status !== 'question') return;
-      const q = game.questions[st.qIndex];
-      player.answered = true;
-      
-      // Kahoot Point Formula: Points = MaxPoints * (1 - ((TimeTaken / QuestionTime) / 2))
-      // MaxPoints = 1000, TimeTaken from payload (ms), QuestionTime from q.t (seconds)
-      let points = 0;
-      if (q && q.c === answer) {
-        const timeTakenMs = payload.timeTaken || 0;
-        const totalTimeMs = (q.t || 20) * 1000;
-        points = Math.round(1000 * (1 - ((timeTakenMs / totalTimeMs) / 2)));
-        points = Math.max(500, Math.min(1000, points)); // Correct gets 500-1000
-      } else {
-        points = 0; // 0 for incorrect to match real Kahoot
-      }
-      
-      player.score += points;
-      // Broadcast updated state (triggers vote bar update on all screens)
-      sendEvent('game_state', { ...store.state[curCode], code: curCode, players: serializePlayers(curCode) });
-      updateVoteBar();
-      // Auto-end round if everyone voted
-      const all = Object.values(store.players[curCode]);
-      if (all.length > 0 && all.every(p => p.answered) && hostPhase === 'question') {
-        hostRevealAnswer();
-      }
-    }
-
-    function updateHostLobbyUI() {
-      const players = Object.values(store.players[curCode] || {});
-      const count = players.length;
-      document.getElementById('player-count-badge').textContent = count + ' player' + (count !== 1 ? 's' : '');
-      const list = document.getElementById('host-players-list');
-      list.innerHTML = '';
-      players.forEach(p => {
-        const el = document.createElement('div');
-        el.className = 'player-pill';
-        el.textContent = p.name;
-        list.appendChild(el);
-      });
-    }
-
-    // ── HOST GAME FLOW ───────────────────────────────────────────────────────
-    function hostStartGame() {
-      const players = Object.values(store.players[curCode] || {});
-      if (!players.length && !confirm('No players yet — start anyway for a demo?')) return;
-      hostQIndex = 0;
-      hostPhase  = 'question';
-      store.state[curCode] = { status: 'countdown', qIndex: 0 };
-      // Tell everyone to show countdown
-      sendEvent('game_state', { status: 'countdown', code: curCode, players: serializePlayers(curCode) });
-      goTo('screen-countdown');
-      let count = 10;
-      document.getElementById('countdown-number').textContent = count;
-      const tick = setInterval(() => {
-        count--;
-        document.getElementById('countdown-number').textContent = count;
-        if (count <= 0) {
-          clearInterval(tick);
-          store.state[curCode] = { status: 'question', qIndex: hostQIndex };
-          showHostQuestion();
-        }
-      }, 1000);
-    }
-
-    function showHostQuestion() {
-      const game = store.games[curCode];
-      const q    = game.questions[hostQIndex];
-      // Snapshot scores pre-round
-      prevScores = {};
-      Object.entries(store.players[curCode] || {}).forEach(([id, p]) => prevScores[id] = p.score);
-      // Reset answered flags
-      Object.values(store.players[curCode] || {}).forEach(p => p.answered = false);
-      store.state[curCode] = { status: 'question', qIndex: hostQIndex };
-      // ★ Send full question data so players can identify answers
-      sendEvent('game_state', { status: 'question', qIndex: hostQIndex, question: q, code: curCode, players: serializePlayers(curCode) });
-      goTo('screen-host-game');
-      document.getElementById('host-q-meta').textContent = `Question ${hostQIndex + 1} of ${game.questions.length}`;
-      document.getElementById('host-question-text').textContent = q.q;
-      [q.a1, q.a2, q.a3, q.a4].forEach((label, i) => {
-        document.getElementById('hat-' + (i+1)).textContent = label || '';
-        const ha = document.getElementById('ha-' + (i+1));
-        ha.style.opacity = label ? '1' : '0.15';
-        ha.classList.remove('dim', 'correct');
-      });
-      hostPhase = 'question';
-      updateVoteBar();
-      // Ensure reveal elements are hidden
-      const rt = document.getElementById('reveal-timer');
-      const rtxt = document.getElementById('reveal-text');
-      if (rt) rt.style.display = 'none';
-      if (rtxt) rtxt.style.display = 'none';
-      document.getElementById('screen-host-game').style.background = ''; // reset to default
-    }
-
-    function updateVoteBar() {
-      const players = Object.values(store.players[curCode] || {});
-      const total = players.length;
-      const voted = players.filter(p => p.answered).length;
-      const pct   = total > 0 ? Math.round((voted / total) * 100) : 0;
-      const bar   = document.getElementById('vote-bar');
-      const label = document.getElementById('vote-count-label');
-      if (bar)   bar.style.width = pct + '%';
-      if (label) label.textContent = voted + '/' + total;
-    }
-
-    function hostRevealAnswer() {
-      if (hostPhase !== 'question') return;
-      hostPhase = 'reveal';
-      const correct = store.games[curCode].questions[hostQIndex].c;
-      for (let i = 1; i <= 4; i++) {
-        const el = document.getElementById('ha-' + i);
-        if (i === correct) el.classList.add('correct'); else el.classList.add('dim');
-      }
-      // Success background shift
-      document.getElementById('screen-host-game').style.background = 'radial-gradient(circle at center, #064e3b 0%, #0f172a 100%)';
-      
-      store.state[curCode] = { status: 'reveal', qIndex: hostQIndex, correct };
-      sendEvent('game_state', { status: 'reveal', qIndex: hostQIndex, correct, code: curCode, players: serializePlayers(curCode) });
-      
-      const rt = document.getElementById('reveal-timer');
-      const rtxt = document.getElementById('reveal-text');
-      if (rt) {
-        rt.style.display = 'flex';
-        if (rtxt) rtxt.style.display = 'block';
-        let left = 7;
-        rt.textContent = left;
-        const iv = setInterval(() => {
-          left--;
-          rt.textContent = left;
-          if (left <= 0) {
-            clearInterval(iv);
-            rt.style.display = 'none';
-            if (rtxt) rtxt.style.display = 'none';
-            showRoundScoreboard();
-          }
-        }, 1000);
-      } else {
-        setTimeout(() => showRoundScoreboard(), 7000);
+function collectQuestions() {
+  const cards = document.querySelectorAll('.question-card');
+  const questions = [];
+  for (const card of cards) {
+    const qText = card.querySelector('.q-text').value.trim();
+    const qTime = parseInt(card.querySelector('.q-time').value) || 20;
+    if (!qText) { showToast('Please fill in all question texts.'); return null; }
+    const answers = [];
+    let correctIdx = -1;
+    for (let i = 0; i < 4; i++) {
+      const inp = card.querySelector(`.ans-text[data-aidx="${i}"]`);
+      const text = inp ? inp.value.trim() : '';
+      if (!text) { showToast(`Please fill in all answer options.`); return null; }
+      answers.push(text);
+      if (card.querySelector(`#ans-box-${card.dataset.idx}-${i}`)?.classList.contains('correct-ans')) {
+        correctIdx = i;
       }
     }
+    if (correctIdx === -1) { showToast('Mark a correct answer for each question.'); return null; }
+    questions.push({ question: qText, answers, correct: correctIdx, time: qTime });
+  }
+  return questions;
+}
 
-    function hostSkipQuestion() {
-      if (!isHost || hostPhase !== 'question') return;
-      
-      // 1. Add 50 points to ALL players
-      const players = store.players[curCode] || {};
-      Object.values(players).forEach(p => {
-        p.score += 50;
-        p.answered = true; // Mark as answered
-      });
+/* ══════════════════════════════════════════════════════
+   SAVE GAME
+══════════════════════════════════════════════════════ */
+async function saveGame() {
+  const title = document.getElementById('gameTitle').value.trim();
+  if (!title) { showToast('Enter a game title.'); return; }
+  const questions = collectQuestions();
+  if (!questions) return;
+  if (questions.length === 0) { showToast('Add at least one question.'); return; }
 
-      showToast('⏭ Question Skipped! +50 points for everyone', '#f59e0b');
-      hostPhase = 'reveal'; // prevent multiple clicks/votes
+  const gameData = { title, questions, created_at: new Date().toISOString() };
 
-      // 2. Broadcast updated state so players see they answered the round (and see their score update later)
-      sendEvent('game_state', { status: 'reveal', qIndex: hostQIndex, code: curCode, players: serializePlayers(curCode), skipped: true });
+  if (DEMO_MODE) {
+    const id = 'demo_' + (demoIdCounter++);
+    demoStorage.games.push({ id, ...gameData });
+    showToast('Game saved! 🎉');
+    resetCreator();
+    goTo('screen-admin-dash');
+    refreshAdminDash();
+    return;
+  }
 
-      // 3. Move to scoreboard immediately (or after a very small delay for feedback)
-      setTimeout(() => {
-        showRoundScoreboard(true);
-      }, 800);
+  if (!supabase) { showToast('Connect to Supabase first.'); return; }
+
+  const { error } = await supabase.from('kahoot_games').insert([gameData]);
+  if (error) { showToast('Save failed: ' + error.message); return; }
+  showToast('Game saved! 🎉');
+  resetCreator();
+  goTo('screen-admin-dash');
+  refreshAdminDash();
+}
+
+function resetCreator() {
+  document.getElementById('gameTitle').value = '';
+  document.getElementById('questionsContainer').innerHTML = '';
+  editingGameId = null;
+  addQuestion();
+}
+
+/* ══════════════════════════════════════════════════════
+   DELETE GAME
+══════════════════════════════════════════════════════ */
+async function deleteGame(id) {
+  if (!confirm('Delete this game?')) return;
+  if (DEMO_MODE) {
+    demoStorage.games = demoStorage.games.filter(g => g.id !== id);
+    refreshAdminDash();
+    return;
+  }
+  await supabase.from('kahoot_games').delete().eq('id', id);
+  refreshAdminDash();
+}
+
+/* ══════════════════════════════════════════════════════
+   GENERATE CODE & START LOBBY (Admin)
+══════════════════════════════════════════════════════ */
+async function generateCode(gameId) {
+  let game;
+  if (DEMO_MODE) {
+    game = demoStorage.games.find(g => g.id === gameId);
+  } else {
+    const { data } = await supabase.from('kahoot_games').select('*').eq('id', gameId).single();
+    game = data;
+  }
+  if (!game) { showToast('Game not found.'); return; }
+
+  const code = Math.floor(100000 + Math.random() * 900000).toString();
+  const sessionData = {
+    code,
+    game_id: gameId,
+    game_title: game.title,
+    questions: game.questions,
+    status: 'lobby',       // lobby | playing | finished
+    current_question: 0,
+    created_at: new Date().toISOString()
+  };
+
+  if (DEMO_MODE) {
+    const id = 'sess_' + (demoIdCounter++);
+    currentSession = { id, ...sessionData };
+    demoStorage.sessions.push(currentSession);
+  } else {
+    const { data, error } = await supabase.from('kahoot_sessions').insert([sessionData]).select().single();
+    if (error) { showToast('Error creating session: ' + error.message); return; }
+    currentSession = data;
+  }
+
+  currentGame = game;
+  currentQuestionIdx = 0;
+  currentRole = 'admin';
+
+  document.getElementById('lobbyCode').textContent = code;
+  document.getElementById('lobbyGameName').textContent = game.title;
+  document.getElementById('lobbyPlayers').innerHTML = '<span class="text-muted" style="font-size:.9rem">Waiting for players…</span>';
+  document.getElementById('startGameBtn').disabled = true;
+  document.getElementById('lobbyStatus').textContent = 'Need at least 1 player';
+
+  goTo('screen-lobby-admin');
+  subscribeToSession(currentSession.id, 'admin');
+}
+
+/* ══════════════════════════════════════════════════════
+   JOIN GAME — Step 1 (find game by code)
+══════════════════════════════════════════════════════ */
+async function joinStep2() {
+  const code = document.getElementById('joinCode').value.trim();
+  if (!code) { showToast('Enter a game code.'); return; }
+
+  let session = null;
+  if (DEMO_MODE) {
+    session = demoStorage.sessions.find(s => s.code === code && s.status !== 'finished');
+  } else if (supabase) {
+    const { data } = await supabase.from('kahoot_sessions').select('*').eq('code', code).neq('status','finished').single();
+    session = data;
+  } else {
+    showToast('Not connected. Use Demo Mode or connect to Supabase.');
+    return;
+  }
+
+  if (!session) { showToast('Game not found or already finished.'); return; }
+
+  currentSession = session;
+  document.getElementById('joinGameFoundName').textContent = `Found: "${session.game_title}"`;
+  goTo('screen-join-name');
+}
+
+/* ══════════════════════════════════════════════════════
+   JOIN GAME — Step 2 (enter name)
+══════════════════════════════════════════════════════ */
+async function joinGame() {
+  const name = document.getElementById('playerName').value.trim();
+  if (!name) { showToast('Enter your nickname.'); return; }
+
+  const playerData = {
+    session_id: currentSession.id,
+    name,
+    score: 0,
+    joined_at: new Date().toISOString()
+  };
+
+  if (DEMO_MODE) {
+    const id = 'pl_' + (demoIdCounter++);
+    currentPlayer = { id, ...playerData };
+    demoStorage.players.push(currentPlayer);
+  } else {
+    const { data, error } = await supabase.from('kahoot_players').insert([playerData]).select().single();
+    if (error) { showToast('Error joining: ' + error.message); return; }
+    currentPlayer = data;
+  }
+
+  currentRole = 'player';
+  playerScore = 0;
+  playerAnsweredThisQ = false;
+
+  document.getElementById('playerWaitName').textContent = name;
+  document.getElementById('playerWaitCode').textContent = 'Code: ' + currentSession.code;
+
+  goTo('screen-player-waiting');
+  subscribeToSession(currentSession.id, 'player');
+  broadcastPlayerJoined(name);
+}
+
+/* ══════════════════════════════════════════════════════
+   REALTIME — SUBSCRIBE
+══════════════════════════════════════════════════════ */
+function subscribeToSession(sessionId, role) {
+  if (DEMO_MODE) {
+    // In demo mode, admin and player are on same page — simulate events
+    if (role === 'admin') {
+      window._demoAdminSessionId = sessionId;
+    } else {
+      window._demoPlayerSessionId = sessionId;
     }
+    return;
+  }
 
-    function showRoundScoreboard(wasSkipped = false) {
-      const game  = store.games[curCode];
-      const isLast = hostQIndex >= game.questions.length - 1;
-      
-      if (isLast) {
-        // Show "Game Ended" screen — admin clicks to reveal podium
-        store.state[curCode] = { status: 'game_ended' };
-        sendEvent('game_state', { status: 'game_ended', code: curCode, players: serializePlayers(curCode) });
-        goTo('screen-game-ended');
-        return;
+  if (sessionChannel) {
+    supabase.removeChannel(sessionChannel);
+    sessionChannel = null;
+  }
+
+  sessionChannel = supabase.channel('session_' + sessionId);
+
+  if (role === 'admin') {
+    // Listen for player joins
+    sessionChannel.on('broadcast', { event: 'player_joined' }, ({ payload }) => {
+      updateLobbyPlayers(payload.name);
+    });
+    // Listen for player answers
+    sessionChannel.on('broadcast', { event: 'player_answered' }, ({ payload }) => {
+      adminAnswerCount++;
+      const total = currentSession?.questions?.length > 0
+        ? (window._lobbyPlayerNames?.length || 1) : 1;
+      document.getElementById('adminAnswerCount').textContent = adminAnswerCount + ' answered';
+    });
+  }
+
+  if (role === 'player') {
+    // Listen for game state changes from admin
+    sessionChannel.on('broadcast', { event: 'game_started' }, ({ payload }) => {
+      currentSession.questions = payload.questions;
+      currentSession.status = 'playing';
+      showPlayerQuestion(payload.question_idx || 0);
+    });
+    sessionChannel.on('broadcast', { event: 'next_question' }, ({ payload }) => {
+      playerAnsweredThisQ = false;
+      showPlayerQuestion(payload.question_idx);
+    });
+    sessionChannel.on('broadcast', { event: 'game_ended' }, ({ payload }) => {
+      showPlayerFinal(payload.scores || []);
+    });
+    sessionChannel.on('broadcast', { event: 'show_scoreboard' }, ({ payload }) => {
+      if (currentRole === 'player') {
+        // Player just waits (they see their result screen)
       }
-      
-      const players = Object.entries(store.players[curCode] || {}).map(([id, p]) => ({ id, ...p })).sort((a, b) => b.score - a.score);
-      const top5  = players.slice(0, 5);
-      const medals = ['🥇','🥈','🥉','4️⃣','5️⃣'];
-      document.getElementById('rsb-header').textContent  = wasSkipped ? '⏭ Question Skipped!' : `Round ${hostQIndex + 1} Results`;
-      document.getElementById('rsb-subheader').textContent = wasSkipped ? 'Everyone received 50 points!' : `Question ${hostQIndex + 1} of ${game.questions.length}`;
-      document.getElementById('rsb-next-hint').textContent = isLast ? '🏆 Final scores coming up…' : '⏭ Next question coming up…';
-      const list = document.getElementById('rsb-list');
-      list.innerHTML = '';
-      top5.forEach((p, i) => {
-        const delta = p.score - (prevScores[p.id] || 0);
-        const div = document.createElement('div');
-        div.className = 'rsb-item';
-        div.innerHTML = `<span class="rsb-rank">${medals[i]||i+1}</span><span class="rsb-name">${escHtml(p.name)}</span><span class="rsb-score" id="rsb-score-${i}">0</span>`;
-        list.appendChild(div);
-      });
-      goTo('screen-round-scores');
-      top5.forEach((p, i) => {
-        setTimeout(() => {
-          if (list.children[i]) list.children[i].classList.add('show');
-          const el = document.getElementById('rsb-score-' + i);
-          if (!el) return;
-          let step = 0; const steps = 30; const duration = 900;
-          const iv = setInterval(() => {
-            step++;
-            el.textContent = Math.round((step / steps) * p.score).toLocaleString();
-            if (step >= steps) { el.textContent = p.score.toLocaleString(); clearInterval(iv); }
-          }, duration / steps);
-        }, i * 220);
-      });
-      setTimeout(() => {
-        // 10-second countdown before next question
-        let remaining = 10;
-        const countdownEl = document.getElementById('rsb-countdown');
-        const hintEl = document.getElementById('rsb-next-hint');
-        countdownEl.style.display = 'block';
-        countdownEl.textContent = remaining;
-        hintEl.textContent = '⏭ Next question in…';
+    });
+  }
 
-        const tick = setInterval(() => {
-          remaining--;
-          countdownEl.textContent = remaining;
-          // Color shift as countdown nears zero
-          if (remaining <= 3) {
-            countdownEl.style.color = '#ff4444';
-            countdownEl.style.textShadow = '0 0 20px rgba(255,68,68,0.8)';
-          } else if (remaining <= 5) {
-            countdownEl.style.color = '#ffaa00';
-            countdownEl.style.textShadow = '0 0 20px rgba(255,170,0,0.8)';
-          }
-          if (remaining <= 0) {
-            clearInterval(tick);
-            countdownEl.style.display = 'none';
-            countdownEl.style.color = 'white';
-            countdownEl.style.textShadow = '0 0 20px rgba(255,255,255,0.5)';
-            hostQIndex++;
-            hostPhase = 'question';
-            store.state[curCode] = { status: 'question', qIndex: hostQIndex };
-            showHostQuestion();
-          }
-        }, 1000);
-      }, wasSkipped ? 800 : 2500);
+  sessionChannel.subscribe();
+}
+
+function broadcastPlayerJoined(name) {
+  if (DEMO_MODE) {
+    updateLobbyPlayers(name);
+    return;
+  }
+  if (!sessionChannel) return;
+  sessionChannel.send({ type: 'broadcast', event: 'player_joined', payload: { name } });
+}
+
+/* ══════════════════════════════════════════════════════
+   LOBBY — UPDATE PLAYER LIST
+══════════════════════════════════════════════════════ */
+window._lobbyPlayerNames = [];
+function updateLobbyPlayers(name) {
+  if (!window._lobbyPlayerNames) window._lobbyPlayerNames = [];
+  window._lobbyPlayerNames.push(name);
+  const container = document.getElementById('lobbyPlayers');
+  if (!container) return;
+  container.innerHTML = window._lobbyPlayerNames.map(n =>
+    `<div class="player-chip">${escHtml(n)}</div>`
+  ).join('');
+  const count = window._lobbyPlayerNames.length;
+  document.getElementById('startGameBtn').disabled = count < 1;
+  document.getElementById('lobbyStatus').textContent =
+    count === 0 ? 'Need at least 1 player' : `${count} player${count>1?'s':''} ready`;
+}
+
+/* ══════════════════════════════════════════════════════
+   START GAME (Admin)
+══════════════════════════════════════════════════════ */
+async function startGame() {
+  if (!currentSession) return;
+
+  // Update session status
+  await updateSessionStatus('playing');
+
+  currentQuestionIdx = 0;
+  adminAnswerCount = 0;
+
+  if (!DEMO_MODE && sessionChannel) {
+    sessionChannel.send({
+      type: 'broadcast', event: 'game_started',
+      payload: { questions: currentSession.questions, question_idx: 0 }
+    });
+  }
+
+  goTo('screen-game-admin');
+  renderAdminQuestion(0);
+}
+
+async function updateSessionStatus(status, extra = {}) {
+  if (DEMO_MODE) {
+    const s = demoStorage.sessions.find(s => s.id === currentSession.id);
+    if (s) Object.assign(s, { status, ...extra });
+    if (currentSession) Object.assign(currentSession, { status, ...extra });
+    return;
+  }
+  await supabase.from('kahoot_sessions').update({ status, ...extra }).eq('id', currentSession.id);
+  if (currentSession) Object.assign(currentSession, { status, ...extra });
+}
+
+/* ══════════════════════════════════════════════════════
+   ADMIN — RENDER QUESTION
+══════════════════════════════════════════════════════ */
+function renderAdminQuestion(idx) {
+  const qs = currentSession.questions;
+  if (!qs || idx >= qs.length) { endGame(); return; }
+  const q = qs[idx];
+  adminAnswerCount = 0;
+  document.getElementById('adminQProgress').textContent = `Q ${idx+1} / ${qs.length}`;
+  document.getElementById('adminAnswerCount').textContent = '0 answered';
+  document.getElementById('adminCurrentQ').textContent = q.question;
+  document.getElementById('nextQBtn').disabled = true;
+
+  // Show answers
+  const colors = ['ans-a','ans-b','ans-c','ans-d'];
+  const icons  = ['▲','◆','●','★'];
+  document.getElementById('adminAnswerDisplay').innerHTML = q.answers.map((a,i) => `
+    <div class="answer-play-btn ${colors[i]}" style="cursor:default;${i===q.correct?'outline:3px solid #ffcc00':''}">
+      <span class="ans-icon">${icons[i]}</span>
+      ${escHtml(a)}${i===q.correct?' ✓':''}
+    </div>
+  `).join('');
+
+  // Timer
+  startAdminTimer(q.time || QUESTION_TIME, idx);
+}
+
+function startAdminTimer(seconds, qIdx) {
+  clearInterval(questionTimer);
+  let remaining = seconds;
+  document.getElementById('adminTimer').textContent = remaining;
+  document.getElementById('adminTimerBar').style.width = '100%';
+  document.getElementById('adminTimerBar').style.transition = 'none';
+  setTimeout(() => {
+    document.getElementById('adminTimerBar').style.transition = `width ${seconds}s linear`;
+    document.getElementById('adminTimerBar').style.width = '0%';
+  }, 50);
+
+  questionTimer = setInterval(() => {
+    remaining--;
+    document.getElementById('adminTimer').textContent = remaining;
+    if (remaining <= 0) {
+      clearInterval(questionTimer);
+      document.getElementById('nextQBtn').disabled = false;
+      showAdminScoreboard(qIdx);
     }
+  }, 1000);
+}
 
-    // ── JOIN FLOW ────────────────────────────────────────────────────────────
-    function checkPin() {
-      const pin = document.getElementById('join-pin').value.trim();
-      const err = document.getElementById('pin-err');
-      if (!pin || pin.length < 6) { err.classList.add('show'); return; }
-      err.classList.remove('show');
-      curCode = pin;
-      goTo('screen-join-name');
-    }
+/* ══════════════════════════════════════════════════════
+   ADMIN — NEXT QUESTION
+══════════════════════════════════════════════════════ */
+async function adminNextQuestion() {
+  clearInterval(questionTimer);
+  currentQuestionIdx++;
+  const qs = currentSession.questions;
+  if (currentQuestionIdx >= qs.length) {
+    endGame();
+    return;
+  }
 
-    async function joinGame() {
-      if (joiningInProgress) return;
-      joiningInProgress = true;
-      const name = document.getElementById('join-name').value.trim() || 'Player';
-      curName      = name;
-      curPlayerId  = 'p_' + Math.random().toString(36).slice(2, 9);
-      myScore      = 0;
-      myAnswered   = false;
-      lastQIndex   = -1;
-      document.getElementById('player-lobby-name').textContent = name;
-      goTo('screen-lobby-player');
+  await updateSessionStatus('playing', { current_question: currentQuestionIdx });
 
-      // Subscribe to the game channel
-      subscribeToGame(curCode, () => {
-        console.log('✅ Player subscribed to game_room_' + curCode);
-        // Announce join and request current state
-        sendEvent('player_join', { id: curPlayerId, name, code: curCode });
-        setTimeout(() => sendEvent('request_state', { code: curCode }), 800);
-      });
-    }
+  if (!DEMO_MODE && sessionChannel) {
+    sessionChannel.send({
+      type: 'broadcast', event: 'next_question',
+      payload: { question_idx: currentQuestionIdx }
+    });
+  }
 
-    // ── PLAYER — handle incoming game state ──────────────────────────────────
-    function handleGameState(payload) {
-      if (isHost) return;   // host never processes its own game_state events
-      const { status, qIndex, correct, question, players, code } = payload;
-      if (code && code !== curCode) return;
+  // Demo mode: simulate player seeing next question
+  if (DEMO_MODE && currentRole === 'player') {
+    playerAnsweredThisQ = false;
+    showPlayerQuestion(currentQuestionIdx);
+  }
 
-      // Sync player list locally (for podium)
-      if (players) {
-        if (!store.players[curCode]) store.players[curCode] = {};
-        players.forEach(p => { store.players[curCode][p.id] = { name: p.name, score: p.score, answered: p.answered }; });
-      }
+  goTo('screen-game-admin');
+  renderAdminQuestion(currentQuestionIdx);
+}
 
-      if (status === 'lobby') {
-        // Stay on lobby screen
-        const active = document.querySelector('.screen.active');
-        if (active && active.id !== 'screen-lobby-player' && active.id !== 'screen-join-name') goTo('screen-lobby-player');
+/* ══════════════════════════════════════════════════════
+   ADMIN — SCOREBOARD AFTER QUESTION
+══════════════════════════════════════════════════════ */
+async function showAdminScoreboard(qIdx) {
+  const scores = await fetchScores();
+  const qs = currentSession.questions;
+  const isLast = qIdx >= qs.length - 1;
 
-      } else if (status === 'countdown') {
-        if (playerCountdownInterval) return;
-        let count = 10;
-        goTo('screen-countdown');
-        document.getElementById('countdown-number').textContent = count;
-        playerCountdownInterval = setInterval(() => {
-          count--;
-          document.getElementById('countdown-number').textContent = count;
-          if (count <= 0) { clearInterval(playerCountdownInterval); playerCountdownInterval = null; }
-        }, 1000);
+  renderScoreboard(
+    scores,
+    isLast ? '🏆 Final Scoreboard' : `After Q${qIdx+1}`,
+    isLast
+      ? [{ label:'🎉 End & Go Home', action:'endGameFinal()' }]
+      : [{ label:'Next Question →', action:'adminNextQuestion()', cls:'btn-accent' }]
+  );
 
-      } else if (status === 'question') {
-        if (playerCountdownInterval) { clearInterval(playerCountdownInterval); playerCountdownInterval = null; }
-        // Store question data locally so we can compute score client-side
-        if (question) {
-          if (!store.games[curCode]) store.games[curCode] = { questions: [] };
-          store.games[curCode].questions[qIndex] = question;
-        }
-        if (qIndex !== lastQIndex) { 
-          lastQIndex = qIndex; 
-          myAnswered = false; 
-          myLastAnswer = null; 
-          questionStartTime = performance.now(); // Start the timer for speed points
-        }
-        if (!myAnswered) showPlayerButtons();
-        else showPlayerWaiting('⏳', 'Answer sent!', false);
+  if (!DEMO_MODE && sessionChannel) {
+    sessionChannel.send({ type: 'broadcast', event: 'show_scoreboard', payload: { scores } });
+  }
+}
 
-      } else if (status === 'reveal') {
-        const isCorrect = myLastAnswer === correct;
-        const wasSkipped = payload.skipped;
-        
-        // Calculate Rank and Position
-        const sorted = (players || []).sort((a, b) => b.score - a.score);
-        const myIdx = sorted.findIndex(p => p.id === curPlayerId);
-        const myPlayer = sorted[myIdx];
-        
-        if (myPlayer) {
-          myScore = myPlayer.score; // Sync score from host
-          const rank = myIdx + 1;
-          const suffix = (rank === 1 ? 'st' : rank === 2 ? 'nd' : rank === 3 ? 'rd' : 'th');
-          
-          let positionMsg = "";
-          if (rank === 1) {
-            positionMsg = "You're in the lead! 🏆";
-          } else {
-            const ahead = sorted[myIdx - 1];
-            const diff = ahead.score - myPlayer.score;
-            if (diff === 0) {
-              positionMsg = `Tied with <span>${escHtml(ahead.name)}</span>`;
-            } else {
-              positionMsg = `Behind <span>${escHtml(ahead.name)}</span> by ${diff.toLocaleString()} pts`;
-            }
-          }
-          
-          showPlayerRankFeedback(wasSkipped ? '⏭ SKIPPED' : (isCorrect ? '✅ CORRECT' : '❌ INCORRECT'), isCorrect, rank + suffix, positionMsg);
-        } else {
-          const msg = wasSkipped ? '⏭ Question Skipped!' : '📊 Look at the screen!';
-          showPlayerWaiting(wasSkipped ? '⏭' : '📊', msg, false);
-        }
+/* ══════════════════════════════════════════════════════
+   END GAME
+══════════════════════════════════════════════════════ */
+async function endGame() {
+  clearInterval(questionTimer);
+  await updateSessionStatus('finished');
+  const scores = await fetchScores();
+  if (!DEMO_MODE && sessionChannel) {
+    sessionChannel.send({ type: 'broadcast', event: 'game_ended', payload: { scores } });
+  }
+  renderScoreboard(scores, '🏆 Final Scoreboard', [
+    { label: '🏠 Back to Home', action: "goTo('screen-home')", cls: 'btn-primary' }
+  ]);
+}
 
-      } else if (status === 'game_ended') {
-        showPlayerWaiting('🏁', 'Game Over! Results coming soon…', true);
+function endGameFinal() {
+  goTo('screen-home');
+  currentSession = null;
+  currentGame = null;
+  window._lobbyPlayerNames = [];
+}
 
-      } else if (status === 'podium') {
-        // Players don't see scores - redirect to home
-        goTo('screen-home');
-        document.getElementById('join-pin').value = '';
-        curCode = '';
-        curPlayerId = '';
-      }
-    }
+function stopSession() {
+  clearInterval(questionTimer);
+  if (!DEMO_MODE && sessionChannel) {
+    supabase.removeChannel(sessionChannel);
+    sessionChannel = null;
+  }
+  updateSessionStatus('finished');
+  currentSession = null;
+  currentGame = null;
+  window._lobbyPlayerNames = [];
+  goTo('screen-admin-dash');
+}
 
-    function showPlayerButtons() {
-      goTo('screen-player-game');
-      document.getElementById('player-buttons').classList.remove('hidden');
-      document.getElementById('player-rank-feedback').style.display = 'none';
-      document.getElementById('screen-player-game').style.background = ''; // reset color
-      const w = document.getElementById('player-waiting');
-      w.classList.remove('show');
-      w.style.display = 'none';
-    }
+/* ══════════════════════════════════════════════════════
+   PLAYER — SHOW QUESTION
+══════════════════════════════════════════════════════ */
+function showPlayerQuestion(idx) {
+  const qs = currentSession.questions;
+  if (!qs || idx >= qs.length) return;
+  const q = qs[idx];
 
-    function showPlayerWaiting(icon, msg, showScore) {
-      goTo('screen-player-game');
-      document.getElementById('player-buttons').classList.add('hidden');
-      document.getElementById('player-rank-feedback').style.display = 'none';
-      const w = document.getElementById('player-waiting');
-      w.style.display = 'flex';
-      w.classList.add('show');
-      document.getElementById('wait-icon').textContent = icon;
-      document.getElementById('player-status-msg').textContent = msg;
-      const sc = document.getElementById('player-score-badge');
-      sc.style.display = showScore ? 'block' : 'none';
-      if (showScore) sc.textContent = 'Score: ' + myScore.toLocaleString();
-    }
+  playerAnsweredThisQ = false;
 
-    function showPlayerRankFeedback(title, isCorrect, rankStr, posMsg) {
-      goTo('screen-player-game');
-      document.getElementById('player-buttons').classList.add('hidden');
-      document.getElementById('player-waiting').style.display = 'none';
-      
-      const fb = document.getElementById('player-rank-feedback');
-      fb.style.display = 'flex';
-      
-      const banner = document.getElementById('feedback-banner');
-      banner.textContent = title;
-      
-      const isSkipped = title.includes('SKIPPED');
-      banner.className = 'feedback-banner ' + (isSkipped ? '' : (isCorrect ? 'feedback-correct' : 'feedback-incorrect'));
-      
-      document.getElementById('feedback-rank').textContent = rankStr;
-      document.getElementById('feedback-position').innerHTML = posMsg;
-      document.getElementById('feedback-total-score').textContent = myScore.toLocaleString() + ' pts';
-      
-      // Change background color based on status (like Kahoot)
-      const screen = document.getElementById('screen-player-game');
-      if (isSkipped) {
-        screen.style.background = '';
-      } else if (isCorrect) {
-        screen.style.background = 'linear-gradient(135deg, #064e3b 0%, #065f46 100%)';
-      } else {
-        screen.style.background = 'linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%)';
-      }
-    }
+  goTo('screen-game-player');
 
-    function playerAnswer(num) {
-      if (myAnswered) return;
-      myAnswered = true;
-      myLastAnswer = num;
-      // Optimistic local score update for display
-      const q = store.games[curCode] && store.games[curCode].questions[lastQIndex];
-      let earned = 0;
-      if (q) {
-        if (q.c === num) {
-          const timeTakenMs = performance.now() - questionStartTime;
-          const totalTimeMs = (q.t || 20) * 1000;
-          earned = Math.round(1000 * (1 - ((timeTakenMs / totalTimeMs) / 2)));
-          earned = Math.max(500, Math.min(1000, earned));
-        } else {
-          earned = 0;
-        }
-      }
-      myScore += earned;
-      // Tell host
-      sendEvent('player_vote', { id: curPlayerId, answer: num, code: curCode, timeTaken: performance.now() - questionStartTime });
-      showPlayerWaiting('✅', 'Answer submitted!', false);
-    }
+  document.getElementById('playerQProgress').textContent = `Q ${idx+1} / ${qs.length}`;
+  document.getElementById('playerScoreBadge').textContent = `Score: ${playerScore}`;
+  document.getElementById('playerCurrentQ').textContent = q.question;
+  document.getElementById('playerResultArea').style.display = 'none';
 
-    // ── HOST: REVEAL PODIUM (called by "Show Results" button) ─────────────────────
-    function hostRevealPodium() {
-      store.state[curCode] = { status: 'podium' };
-      sendEvent('game_state', { status: 'podium', code: curCode, players: serializePlayers(curCode) });
-      showPodium(curCode);
-    }
+  const colors = ['ans-a','ans-b','ans-c','ans-d'];
+  const icons  = ['▲','◆','●','★'];
+  document.getElementById('playerAnswerButtons').innerHTML = q.answers.map((a, i) => `
+    <button class="answer-play-btn ${colors[i]}" onclick="playerAnswer(${idx},${i})">
+      <span class="ans-icon">${icons[i]}</span>
+      ${escHtml(a)}
+    </button>
+  `).join('');
 
-    // ── COSMIC GALAXY PODIUM ─────────────────────────────────────────────────
-    function showPodium(code) {
-      goTo('screen-podium');
-      const players = Object.values(store.players[code] || {}).sort((a, b) => b.score - a.score);
-      
-      // Reset all animations
-      ['3rd', '2nd', '1st'].forEach(rank => {
-        document.getElementById(`podium-${rank}`).classList.remove(`animate-${rank}`);
-      });
-      
-      // Reset content with mystery
-      ['3rd', '2nd', '1st'].forEach(rank => {
-        document.getElementById(`name-${rank}`).textContent = '???';
-        document.getElementById(`score-${rank}`).textContent = '?';
-        document.getElementById(`name-${rank}`).classList.remove('reveal');
-        document.getElementById(`score-${rank}`).classList.remove('reveal');
-      });
-      
-      // Reset trophy animations
-      document.querySelectorAll('.winner-rank').forEach(el => el.classList.remove('show'));
-      
-      // Clean up old effects
-      document.querySelectorAll('.star-particle, .cosmic-dust, .hyperspace, .nebula').forEach(c => c.remove());
-      
-      // Add nebula clouds
-      const nebula1 = document.createElement('div');
-      nebula1.className = 'nebula nebula-1';
-      document.getElementById('screen-podium').appendChild(nebula1);
-      
-      const nebula2 = document.createElement('div');
-      nebula2.className = 'nebula nebula-2';
-      document.getElementById('screen-podium').appendChild(nebula2);
-      
-      // Create hyperspace effect element
-      let hyperspace = document.querySelector('.hyperspace');
-      if (!hyperspace) {
-        hyperspace = document.createElement('div');
-        hyperspace.className = 'hyperspace';
-        document.body.appendChild(hyperspace);
-      }
-      
-      if (!players.length) {
-        document.getElementById('name-1st').textContent = 'No players 😢';
-        return;
-      }
-      
-      const top3 = players.slice(0, 3);
-      
-      // ═══ COSMIC SEQUENCE START ═══
-      
-      // Title warp entrance
-      const titleEl = document.querySelector('.podium-title');
-      titleEl.classList.remove('entrance');
-      void titleEl.offsetWidth;
-      titleEl.classList.add('entrance');
-      
-      // Start cosmic dust
-      createCosmicDust();
-      
-      // ═══ 3RD PLACE - MARS WARP ═══
-      setTimeout(() => {
-        hyperspace.classList.add('active');
-        setTimeout(() => hyperspace.classList.remove('active'), 1000);
-        
-        setTimeout(() => {
-          if (top3[2]) {
-            const nameEl = document.getElementById('name-3rd');
-            const scoreEl = document.getElementById('score-3rd');
-            
-            nameEl.textContent = escHtml(top3[2].name);
-            scoreEl.textContent = top3[2].score.toLocaleString();
-            
-            document.getElementById('podium-3rd').classList.add('animate-3rd');
-            createStarBurst(window.innerWidth * 0.3, window.innerHeight * 0.5, '#cd5c3c');
-            
-            setTimeout(() => {
-              nameEl.classList.add('reveal');
-              document.querySelector('#winner-3rd .winner-rank').classList.add('show');
-            }, 1200);
-            
-            setTimeout(() => {
-              scoreEl.classList.add('reveal');
-            }, 1400);
-          }
-        }, 500);
-      }, 2000);
-      
-      // ═══ 2ND PLACE - ICE WARP ═══
-      setTimeout(() => {
-        hyperspace.classList.add('active');
-        setTimeout(() => hyperspace.classList.remove('active'), 1000);
-        
-        setTimeout(() => {
-          if (top3[1]) {
-            const nameEl = document.getElementById('name-2nd');
-            const scoreEl = document.getElementById('score-2nd');
-            
-            nameEl.textContent = escHtml(top3[1].name);
-            scoreEl.textContent = top3[1].score.toLocaleString();
-            
-            document.getElementById('podium-2nd').classList.add('animate-2nd');
-            createStarBurst(window.innerWidth * 0.7, window.innerHeight * 0.45, '#a0c0e0');
-            
-            setTimeout(() => {
-              nameEl.classList.add('reveal');
-              document.querySelector('#winner-2nd .winner-rank').classList.add('show');
-            }, 1400);
-            
-            setTimeout(() => {
-              scoreEl.classList.add('reveal');
-            }, 1600);
-          }
-        }, 500);
-      }, 4500);
-      
-      // ═══ 1ST PLACE - SUN SUPERNOVA ═══
-      setTimeout(() => {
-        // Supernova flash
-        hyperspace.classList.add('active');
-        setTimeout(() => hyperspace.classList.remove('active'), 1500);
-        
-        // Massive star explosion
-        createSupernova();
-        
-        setTimeout(() => {
-          if (top3[0]) {
-            const nameEl = document.getElementById('name-1st');
-            const scoreEl = document.getElementById('score-1st');
-            
-            nameEl.textContent = escHtml(top3[0].name);
-            scoreEl.textContent = top3[0].score.toLocaleString();
-            
-            document.getElementById('podium-1st').classList.add('animate-1st');
-            
-            setTimeout(() => {
-              nameEl.classList.add('reveal');
-              document.querySelector('#winner-1st .winner-rank').classList.add('show');
-              createStarBurst(window.innerWidth * 0.5, window.innerHeight * 0.4, '#ffd700');
-            }, 1800);
-            
-            setTimeout(() => {
-              scoreEl.classList.add('reveal');
-            }, 2000);
-            
-            // Victory starfield
-            setTimeout(() => createVictoryStars(), 2500);
-            setTimeout(() => createVictoryStars(), 3000);
-          }
-        }, 800);
-      }, 7500);
-      
-      // Update legacy list
-      const medals = ['🥇','🥈','🥉'];
-      const list = document.getElementById('podium-list');
-      list.innerHTML = '';
-      players.slice(0, 3).forEach((p, i) => {
-        const li = document.createElement('li');
-        li.className = 'podium-item';
-        li.innerHTML = `<span class="podium-rank">${medals[i]||i+1}</span><span style="flex:1">${escHtml(p.name)}</span><span class="podium-score">${p.score.toLocaleString()}</span>`;
-        list.appendChild(li);
-      });
-    }
-    
-    // Star burst explosion effect
-    function createStarBurst(x, y, color) {
-      for (let i = 0; i < 20; i++) {
-        const star = document.createElement('div');
-        star.className = 'star-particle';
-        star.style.left = x + 'px';
-        star.style.top = y + 'px';
-        star.style.background = color;
-        star.style.boxShadow = `0 0 10px ${color}, 0 0 20px ${color}`;
-        
-        const angle = (i / 20) * Math.PI * 2;
-        const distance = 100 + Math.random() * 150;
-        star.style.setProperty('--sx', Math.cos(angle) * distance + 'px');
-        star.style.setProperty('--sy', Math.sin(angle) * distance + 'px');
-        star.style.animation = `starBurst ${0.8 + Math.random() * 0.4}s cubic-bezier(0.16, 1, 0.3, 1) forwards`;
-        
-        document.body.appendChild(star);
-        setTimeout(() => star.remove(), 1200);
+  startPlayerTimer(q.time || QUESTION_TIME, idx);
+}
+
+function startPlayerTimer(seconds, qIdx) {
+  clearInterval(questionTimer);
+  let remaining = seconds;
+  document.getElementById('playerTimer').textContent = remaining;
+  document.getElementById('playerTimerBar').style.width = '100%';
+  document.getElementById('playerTimerBar').style.transition = 'none';
+  setTimeout(() => {
+    document.getElementById('playerTimerBar').style.transition = `width ${seconds}s linear`;
+    document.getElementById('playerTimerBar').style.width = '0%';
+  }, 50);
+
+  questionTimer = setInterval(() => {
+    remaining--;
+    document.getElementById('playerTimer').textContent = remaining;
+    if (remaining <= 0) {
+      clearInterval(questionTimer);
+      if (!playerAnsweredThisQ) {
+        showPlayerResult(false, 0, qIdx);
       }
     }
-    
-    // Supernova explosion for champion
-    function createSupernova() {
-      const centerX = window.innerWidth * 0.5;
-      const centerY = window.innerHeight * 0.5;
-      
-      // Core explosion
-      for (let ring = 0; ring < 3; ring++) {
-        setTimeout(() => {
-          const count = 30 + ring * 10;
-          const colors = ['#ffd700', '#ff8c00', '#ff6b00', '#ffffff', '#ffec8b'];
-          
-          for (let i = 0; i < count; i++) {
-            const star = document.createElement('div');
-            star.className = 'star-particle';
-            star.style.left = centerX + 'px';
-            star.style.top = centerY + 'px';
-            const color = colors[Math.floor(Math.random() * colors.length)];
-            star.style.background = color;
-            star.style.boxShadow = `0 0 15px ${color}, 0 0 30px ${color}`;
-            star.style.width = (4 + Math.random() * 6) + 'px';
-            star.style.height = star.style.width;
-            
-            const angle = (i / count) * Math.PI * 2 + Math.random() * 0.5;
-            const distance = 150 + ring * 100 + Math.random() * 100;
-            star.style.setProperty('--sx', Math.cos(angle) * distance + 'px');
-            star.style.setProperty('--sy', Math.sin(angle) * distance + 'px');
-            star.style.animation = `starBurst ${1 + Math.random() * 0.5}s cubic-bezier(0.16, 1, 0.3, 1) forwards`;
-            
-            document.body.appendChild(star);
-            setTimeout(() => star.remove(), 1500);
-          }
-        }, ring * 200);
-      }
-    }
-    
-    // Cosmic dust particles
-    function createCosmicDust() {
-      for (let i = 0; i < 30; i++) {
-        setTimeout(() => {
-          const dust = document.createElement('div');
-          dust.className = 'cosmic-dust';
-          dust.style.left = Math.random() * 100 + '%';
-          dust.style.animation = `dustFloat ${8 + Math.random() * 6}s linear forwards`;
-          dust.style.opacity = 0.3 + Math.random() * 0.4;
-          
-          document.getElementById('screen-podium').appendChild(dust);
-          setTimeout(() => dust.remove(), 15000);
-        }, i * 300);
-      }
-    }
-    
-    // Victory stars rain
-    function createVictoryStars() {
-      const colors = ['#ffd700', '#ffec8b', '#ffffff', '#00ccff', '#ff00cc'];
-      
-      for (let i = 0; i < 25; i++) {
-        setTimeout(() => {
-          const star = document.createElement('div');
-          star.className = 'star-particle';
-          star.style.left = (Math.random() * 100) + '%';
-          star.style.top = '-10px';
-          const color = colors[Math.floor(Math.random() * colors.length)];
-          star.style.background = color;
-          star.style.boxShadow = `0 0 10px ${color}`;
-          star.style.width = (3 + Math.random() * 5) + 'px';
-          star.style.height = star.style.width;
-          star.style.animation = `dustFloat ${3 + Math.random() * 2}s linear forwards`;
-          
-          document.body.appendChild(star);
-          setTimeout(() => star.remove(), 5000);
-        }, i * 80);
-      }
-    }
+  }, 1000);
+}
 
-    function escHtml(s) {
-      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-    }
+/* ══════════════════════════════════════════════════════
+   PLAYER — SUBMIT ANSWER
+══════════════════════════════════════════════════════ */
+async function playerAnswer(qIdx, answerIdx) {
+  if (playerAnsweredThisQ) return;
+  playerAnsweredThisQ = true;
 
-    document.getElementById('admin-pwd').addEventListener('keyup', e => { if (e.key === 'Enter') checkAdmin(); });
-  </script>
+  clearInterval(questionTimer);
+
+  // Disable all buttons
+  document.querySelectorAll('.answer-play-btn').forEach(b => b.disabled = true);
+
+  const q = currentSession.questions[qIdx];
+  const isCorrect = answerIdx === q.correct;
+  const pts = isCorrect ? 1000 : 0;
+  playerScore += pts;
+
+  // Save answer
+  const answerData = {
+    session_id: currentSession.id,
+    player_id: currentPlayer.id,
+    player_name: currentPlayer.name,
+    question_idx: qIdx,
+    answer_idx: answerIdx,
+    correct: isCorrect,
+    points: pts,
+    answered_at: new Date().toISOString()
+  };
+
+  if (DEMO_MODE) {
+    demoStorage.answers.push(answerData);
+    // Update player score
+    const p = demoStorage.players.find(p => p.id === currentPlayer.id);
+    if (p) p.score = playerScore;
+  } else if (supabase) {
+    supabase.from('kahoot_answers').insert([answerData]).then(()=>{});
+    supabase.from('kahoot_players').update({ score: playerScore }).eq('id', currentPlayer.id).then(()=>{});
+    if (sessionChannel) {
+      sessionChannel.send({ type:'broadcast', event:'player_answered', payload:{ player_id: currentPlayer.id }});
+    }
+  }
+
+  document.getElementById('playerScoreBadge').textContent = `Score: ${playerScore}`;
+  showPlayerResult(isCorrect, pts, qIdx);
+}
+
+function showPlayerResult(isCorrect, pts, qIdx) {
+  document.getElementById('playerAnswerButtons').innerHTML = '';
+  document.getElementById('playerTimerBar').style.width = '0%';
+  const area = document.getElementById('playerResultArea');
+  area.style.display = 'block';
+  document.getElementById('playerResultIcon').textContent = isCorrect ? '✅' : '❌';
+  document.getElementById('playerResultIcon').className = 'result-icon ' + (isCorrect ? 'result-correct' : 'result-wrong');
+  document.getElementById('playerResultText').textContent = isCorrect ? 'Correct!' : 'Wrong!';
+  document.getElementById('playerResultPts').textContent = pts > 0 ? `+${pts} points` : 'No points this time';
+}
+
+function showPlayerFinal(scores) {
+  const rank = scores.findIndex(s => s.name === currentPlayer?.name);
+  const myScore = scores.find(s => s.name === currentPlayer?.name);
+  const total = scores.length;
+
+  document.getElementById('playerFinalScore').textContent = `${myScore?.score || playerScore} pts`;
+  document.getElementById('playerFinalEmoji').textContent = rank === 0 ? '🥇' : rank === 1 ? '🥈' : rank === 2 ? '🥉' : '🎮';
+  document.getElementById('playerFinalTitle').textContent = rank === 0 ? 'You Won! 🎉' : 'Game Over!';
+  document.getElementById('playerFinalSub').textContent = `You placed #${rank + 1} out of ${total} players`;
+  goTo('screen-player-final');
+}
+
+/* ══════════════════════════════════════════════════════
+   SCOREBOARD
+══════════════════════════════════════════════════════ */
+async function fetchScores() {
+  if (DEMO_MODE) {
+    const players = demoStorage.players.filter(p => p.session_id === currentSession?.id);
+    return players.sort((a,b) => b.score - a.score);
+  }
+  if (!supabase || !currentSession) return [];
+  const { data } = await supabase.from('kahoot_players').select('*').eq('session_id', currentSession.id).order('score', { ascending: false });
+  return data || [];
+}
+
+function renderScoreboard(scores, title, actions) {
+  document.getElementById('scoreboardTitle').textContent = title;
+  const medals = ['🥇','🥈','🥉'];
+  document.getElementById('scoreboardList').innerHTML = scores.map((s, i) => `
+    <div class="scoreboard-row ${i===0?'top1':i===1?'top2':i===2?'top3':''}">
+      <div class="rank-badge">${medals[i] || (i+1)}</div>
+      <div class="score-name">${escHtml(s.name)}</div>
+      <div class="score-pts">${s.score} pts</div>
+    </div>
+  `).join('') || '<p class="text-muted center">No scores yet.</p>';
+
+  document.getElementById('scoreboardActions').innerHTML = actions.map(a =>
+    `<button class="btn ${a.cls || 'btn-primary'}" onclick="${a.action}">${a.label}</button>`
+  ).join('');
+
+  goTo('screen-scoreboard');
+}
+
+/* ══════════════════════════════════════════════════════
+   HELPERS
+══════════════════════════════════════════════════════ */
+function escHtml(str) {
+  if (!str) return '';
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function showToast(msg, duration = 3000) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), duration);
+}
+</script>
+
+<!-- ══════════════════════════════════════════════════════════════
+  SQL SCHEMA — Paste this into Supabase → SQL Editor → Run
+  (Only needed once per project)
+═══════════════════════════════════════════════════════════════
+
+-- Games table
+create table if not exists kahoot_games (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  questions jsonb not null default '[]',
+  created_at timestamptz default now()
+);
+
+-- Sessions table (live game instances)
+create table if not exists kahoot_sessions (
+  id uuid primary key default gen_random_uuid(),
+  code text unique not null,
+  game_id uuid,
+  game_title text,
+  questions jsonb not null default '[]',
+  status text not null default 'lobby',
+  current_question int default 0,
+  created_at timestamptz default now()
+);
+
+-- Players table
+create table if not exists kahoot_players (
+  id uuid primary key default gen_random_uuid(),
+  session_id uuid not null,
+  name text not null,
+  score int default 0,
+  joined_at timestamptz default now()
+);
+
+-- Answers table
+create table if not exists kahoot_answers (
+  id uuid primary key default gen_random_uuid(),
+  session_id uuid not null,
+  player_id uuid not null,
+  player_name text,
+  question_idx int,
+  answer_idx int,
+  correct boolean default false,
+  points int default 0,
+  answered_at timestamptz default now()
+);
+
+-- Enable realtime for sessions (for live updates)
+alter publication supabase_realtime add table kahoot_sessions;
+alter publication supabase_realtime add table kahoot_players;
+
+═══════════════════════════════════════════════════════════════ -->
 </body>
-
 </html>
