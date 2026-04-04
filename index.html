@@ -2452,7 +2452,7 @@
     }
 
     // ── ADMIN AUTH (Supabase) ───────────────────────────────────────────────────
-    const ADMIN_EMAIL = 'admin@kahoot.local';
+    const ADMIN_EMAIL = 'waleed@admin.com';
     let isAdminLoggedIn = false;
 
     async function checkAdmin() {
@@ -2462,13 +2462,17 @@
       if (!sb || !useSB) {
         document.getElementById('admin-err').textContent = '⚠️ Supabase not connected';
         document.getElementById('admin-err').classList.add('show');
+        console.log('Supabase status:', { sb: !!sb, useSB });
         return;
       }
 
+      console.log('Trying login with:', ADMIN_EMAIL);
       const { data, error } = await sb.auth.signInWithPassword({
         email: ADMIN_EMAIL,
         password: pwd
       });
+
+      console.log('Login result:', { data, error });
 
       if (error) {
         document.getElementById('admin-err').textContent = '❌ Wrong password';
