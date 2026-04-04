@@ -12,10 +12,8 @@
 
 <body>
 
-  <!-- TOAST -->
   <div id="toast" class="toast"></div>
 
-  <!-- ══════════════ SCREEN 1: HOME ══════════════ -->
   <div id="screen-home" class="screen active">
     <div class="home-logo">Kahoot<span>!</span></div>
     <p class="home-subtitle">By : Waleed</p>
@@ -30,7 +28,6 @@
     </div>
   </div>
 
-  <!-- ══════════════ SCREEN 2: ADMIN LOGIN ══════════════ -->
   <div id="screen-admin-login" class="screen">
     <h1>🔐 Admin Login</h1>
     <div class="card">
@@ -42,8 +39,7 @@
     </div>
   </div>
 
-  <!-- ══════════════ SCREEN 3: ADMIN DASHBOARD ══════════════ -->
-  <div id="screen-admin-dash" class="screen">
+    <div id="screen-admin-dash" class="screen">
     <h1 style="font-size:2.2rem;margin-bottom:16px;">📋 Admin Dashboard</h1>
     <div class="admin-scroll">
       <p class="section-title">Saved Games</p>
@@ -58,19 +54,18 @@
     </div>
   </div>
 
-  <!-- ══════════════ SCREEN 4: CREATE / EDIT GAME ══════════════ -->
-  <div id="screen-create-game" class="screen">
+    <div id="screen-create-game" class="screen">
     <h1 style="font-size:2rem;margin-bottom:14px;" id="create-game-title">✏️ Create Game</h1>
     <div class="admin-scroll">
       <input type="text" id="game-title" placeholder="Game title (e.g. Science Quiz)"
         style="font-size:1.15rem;text-align:left;padding:16px 20px;" />
 
-      <!-- Question list -->
+      
       <p class="section-title">Questions Added: <span id="q-count">0</span></p>
       <p style="font-size:0.85rem;color:#94a3b8;font-weight:600;margin-bottom:6px;">💡 Click a question to edit it</p>
       <div id="q-list"></div>
 
-      <!-- Builder -->
+      
       <p class="section-title" style="margin-top:24px;" id="builder-title">➕ Add a Question</p>
       <div class="edit-banner" id="edit-banner">✏️ Editing question <span id="edit-banner-num"></span> — save changes
         below</div>
@@ -105,7 +100,7 @@
     </div>
   </div>
 
-  <!-- ══════════════ SCREEN 5: JOIN — ENTER PIN ══════════════ -->
+  
   <div id="screen-join-code" class="screen">
     <h1>Enter Game PIN</h1>
     <div class="card">
@@ -117,7 +112,7 @@
     </div>
   </div>
 
-  <!-- ══════════════ SCREEN 6: JOIN — ENTER NAME ══════════════ -->
+  
   <div id="screen-join-name" class="screen">
     <h1>What's your name?</h1>
     <div class="card">
@@ -128,7 +123,7 @@
     </div>
   </div>
 
-  <!-- ══════════════ SCREEN 7: LOBBY — HOST ══════════════ -->
+  
   <div id="screen-lobby-host" class="screen">
     <h2 style="color:rgba(255,255,255,0.6)">Join at this game PIN:</h2>
     <div class="pin-display" id="host-pin-display">000000</div>
@@ -145,7 +140,7 @@
     <p class="hint-text" style="margin-top:20px;">Share the PIN — players open this page and click "Join Game"</p>
   </div>
 
-  <!-- ══════════════ SCREEN 8: LOBBY — PLAYER WAITING ══════════════ -->
+  
   <div id="screen-lobby-player" class="screen">
     <div style="display:flex;flex-direction:column;align-items:center;gap:20px;">
       <div style="font-size:5rem;">✅</div>
@@ -159,7 +154,7 @@
     </div>
   </div>
 
-  <!-- ══════════════ SCREEN 8b: PRE-GAME COUNTDOWN ══════════════ -->
+  
   <div id="screen-countdown" class="screen">
     <div style="display:flex;flex-direction:column;align-items:center;gap:28px;">
       <h2 style="color:rgba(255,255,255,0.5);letter-spacing:3px;text-transform:uppercase;font-size:1rem;">Get Ready!
@@ -169,7 +164,7 @@
     </div>
   </div>
 
-  <!-- ══════════════ SCREEN 9: HOST GAME VIEW ══════════════ -->
+  
   <div id="screen-host-game" class="screen">
     <div id="reveal-timer"
       style="display:none;position:absolute;top:40px;right:40px;font-size:2.5rem;font-weight:900;color:white;background:linear-gradient(135deg,#f59e0b,#fbbf24);border:4px solid white;width:100px;height:100px;border-radius:50%;align-items:center;justify-content:center;z-index:30;box-shadow:0 0 30px rgba(251,191,36,0.6),0 10px 30px rgba(0,0,0,0.4);animation:popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;">
@@ -179,7 +174,7 @@
       CORRECT!</div>
     <p class="host-meta" id="host-q-meta">Question 1 of 1</p>
     <div class="host-question-box" id="host-question-text">…</div>
-    <!-- vote progress bar -->
+    
     <div style="display:flex;align-items:center;gap:14px;width:100%;max-width:850px;margin-bottom:16px;">
       <span style="color:rgba(255,255,255,0.5);font-size:0.95rem;font-weight:700;white-space:nowrap;">Votes:</span>
       <div style="flex:1;height:12px;background:rgba(255,255,255,0.1);border-radius:12px;overflow:hidden;">
@@ -211,7 +206,7 @@
       Skip Question</button>
   </div>
 
-  <!-- ══════════════ SCREEN 11b: ROUND SCOREBOARD ══════════════ -->
+  
   <div id="screen-round-scores" class="screen">
     <div style="font-size:3.5rem;margin-bottom:8px;">📊</div>
     <h1 style="font-size:2.2rem;margin-bottom:6px;" id="rsb-header">Round 1 Results</h1>
@@ -227,7 +222,7 @@
     </div>
   </div>
 
-  <!-- ══════════════ SCREEN 10: PLAYER GAME VIEW ══════════════ -->
+  
   <div id="screen-player-game" class="screen">
     <div class="player-waiting" id="player-waiting">
       <div class="wait-icon" id="wait-icon">⏳</div>
@@ -235,7 +230,7 @@
       <div class="score-badge" id="player-score-badge" style="display:none"></div>
     </div>
 
-    <!-- RANK FEEDBACK SECTION -->
+    
     <div id="player-rank-feedback"
       style="display:none;flex-direction:column;align-items:center;justify-content:center;width:100%;max-width:500px;animation:fadeIn 0.5s ease;">
       <div id="feedback-banner" class="feedback-banner">CORRECT</div>
@@ -268,7 +263,7 @@
     </div>
   </div>
 
-  <!-- ══════════════ SCREEN 11c: GAME ENDED ══════════════ -->
+  
   <div id="screen-game-ended" class="screen">
     <div id="game-ended-content"
       style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;text-align:center;">
@@ -292,11 +287,9 @@
   <div id="screen-podium" class="screen">
     <div class="podium-title">FINAL WINNERS</div>
     <div class="podium-container" id="podium-container">
-      <!-- Orbit rings -->
       <div class="orbit-ring orbit-ring-1"></div>
       <div class="orbit-ring orbit-ring-2"></div>
 
-      <!-- 3rd Place - Mars -->
       <div class="podium-block podium-3rd" id="podium-3rd">
         <div class="winner-card" id="winner-3rd">
           <div class="winner-rank">🥉</div>
@@ -305,7 +298,6 @@
         </div>
         <div class="planet-3rd"></div>
       </div>
-      <!-- 1st Place - Golden Sun (Center) -->
       <div class="podium-block podium-1st" id="podium-1st">
         <div class="winner-card" id="winner-1st">
           <div class="winner-rank">🥇</div>
@@ -314,7 +306,6 @@
         </div>
         <div class="planet-1st"></div>
       </div>
-      <!-- 2nd Place - Ice Planet -->
       <div class="podium-block podium-2nd" id="podium-2nd">
         <div class="winner-card" id="winner-2nd">
           <div class="winner-rank">🥈</div>
@@ -326,7 +317,6 @@
     </div>
     <button class="btn btn-outline btn-sm" onclick="location.reload()"
       style="margin-top: 40px; z-index: 10; position: relative;">Play Again 🔄</button>
-    <!-- Legacy list for compatibility -->
     <ul class="podium-list" id="podium-list"></ul>
   </div>
 
