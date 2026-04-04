@@ -54,8 +54,15 @@
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     h1 {
@@ -148,13 +155,34 @@
       transform: translateY(0);
     }
 
-    .btn-red { background: linear-gradient(135deg, #ef4444, #dc2626); }
-    .btn-blue { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-    .btn-yellow { background: linear-gradient(135deg, #f59e0b, #d97706); color: #1a1a2e; }
-    .btn-green { background: linear-gradient(135deg, #22c55e, #16a34a); }
-    .btn-dark { background: linear-gradient(135deg, #475569, #334155); }
-    .btn-purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
-    .btn-orange { background: linear-gradient(135deg, #f97316, #ea580c); }
+    .btn-red {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+    }
+
+    .btn-blue {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+    }
+
+    .btn-yellow {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #1a1a2e;
+    }
+
+    .btn-green {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+    }
+
+    .btn-dark {
+      background: linear-gradient(135deg, #475569, #334155);
+    }
+
+    .btn-purple {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    }
+
+    .btn-orange {
+      background: linear-gradient(135deg, #f97316, #ea580c);
+    }
 
     .btn-sm {
       font-size: 0.9rem;
@@ -176,7 +204,7 @@
 
     /* HOME */
     #screen-home {
-      background: 
+      background:
         radial-gradient(ellipse at 20% 80%, rgba(99, 102, 241, 0.3) 0%, transparent 50%),
         radial-gradient(ellipse at 80% 20%, rgba(139, 92, 246, 0.3) 0%, transparent 50%),
         linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
@@ -282,10 +310,21 @@
       transition: transform 0.15s ease;
     }
 
-    .sg-btn:hover { transform: scale(1.05); }
-    .sg-edit { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-    .sg-host { background: linear-gradient(135deg, #22c55e, #16a34a); }
-    .sg-del { background: linear-gradient(135deg, #ef4444, #dc2626); }
+    .sg-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .sg-edit {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+    }
+
+    .sg-host {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+    }
+
+    .sg-del {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+    }
 
     .q-item {
       display: flex;
@@ -388,7 +427,7 @@
 
     /* LOBBY */
     #screen-lobby-host {
-      background: 
+      background:
         radial-gradient(ellipse at 30% 70%, rgba(34, 197, 94, 0.2) 0%, transparent 50%),
         linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
     }
@@ -402,7 +441,7 @@
     }
 
     .player-pill {
-      background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
       border: 2px solid rgba(255, 255, 255, 0.25);
       color: white;
       padding: 10px 22px;
@@ -414,12 +453,19 @@
     }
 
     @keyframes popIn {
-      from { transform: scale(0.5); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
+      from {
+        transform: scale(0.5);
+        opacity: 0;
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
     }
 
     .lobby-box {
-      background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
       border: 2px solid rgba(255, 255, 255, 0.1);
       border-radius: 20px;
       padding: 24px 32px;
@@ -449,14 +495,14 @@
 
     /* PLAYER LOBBY */
     #screen-lobby-player {
-      background: 
+      background:
         radial-gradient(ellipse at 30% 70%, rgba(34, 197, 94, 0.3) 0%, transparent 50%),
         linear-gradient(135deg, #052e16 0%, #14532d 100%);
     }
 
     /* HOST GAME */
     #screen-host-game {
-      background: 
+      background:
         radial-gradient(ellipse at 50% 0%, rgba(59, 130, 246, 0.2) 0%, transparent 50%),
         linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
     }
@@ -521,11 +567,17 @@
       font-size: 1.2rem;
     }
 
-    .ans-btn.dim { opacity: 0.1; filter: grayscale(90%); transform: scale(0.95); transition: all 0.5s ease; }
-    .ans-btn.correct { 
-      outline: 8px solid #fff; 
-      outline-offset: 8px; 
-      transform: scale(1.08); 
+    .ans-btn.dim {
+      opacity: 0.1;
+      filter: grayscale(90%);
+      transform: scale(0.95);
+      transition: all 0.5s ease;
+    }
+
+    .ans-btn.correct {
+      outline: 8px solid #fff;
+      outline-offset: 8px;
+      transform: scale(1.08);
       z-index: 10;
       opacity: 1 !important;
       animation: correctPulse 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards, correctGlow 1.5s ease-in-out infinite;
@@ -539,24 +591,39 @@
       font-size: 3rem;
       font-weight: 900;
       color: white;
-      text-shadow: 0 0 20px rgba(0,0,0,0.3);
+      text-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
       animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
     }
 
     @keyframes correctPulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.15); }
-      100% { transform: scale(1.08); }
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.15);
+      }
+
+      100% {
+        transform: scale(1.08);
+      }
     }
 
     @keyframes correctGlow {
-      0%, 100% { box-shadow: 0 0 40px rgba(255, 255, 255, 0.3), 0 12px 0 rgba(0, 0, 0, 0.3); }
-      50% { box-shadow: 0 0 80px rgba(255, 255, 255, 0.6), 0 15px 0 rgba(0, 0, 0, 0.35); }
+
+      0%,
+      100% {
+        box-shadow: 0 0 40px rgba(255, 255, 255, 0.3), 0 12px 0 rgba(0, 0, 0, 0.3);
+      }
+
+      50% {
+        box-shadow: 0 0 80px rgba(255, 255, 255, 0.6), 0 15px 0 rgba(0, 0, 0, 0.35);
+      }
     }
 
     /* PLAYER GAME */
     #screen-player-game {
-      background: 
+      background:
         radial-gradient(ellipse at 50% 100%, rgba(139, 92, 246, 0.25) 0%, transparent 50%),
         linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
     }
@@ -604,10 +671,22 @@
       background: rgba(255, 255, 255, 0.25);
     }
 
-    .sym-triangle { clip-path: polygon(50% 0%, 0% 100%, 100% 100%); border-radius: 0; }
-    .sym-diamond { clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); }
-    .sym-circle { border-radius: 50%; }
-    .sym-square { border-radius: 8px; }
+    .sym-triangle {
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+      border-radius: 0;
+    }
+
+    .sym-diamond {
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    }
+
+    .sym-circle {
+      border-radius: 50%;
+    }
+
+    .sym-square {
+      border-radius: 8px;
+    }
 
     .player-waiting {
       display: none;
@@ -616,7 +695,9 @@
       gap: 20px;
     }
 
-    .player-waiting.show { display: flex; }
+    .player-waiting.show {
+      display: flex;
+    }
 
     .wait-icon {
       font-size: 4.5rem;
@@ -624,12 +705,19 @@
     }
 
     @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.1); }
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.1);
+      }
     }
 
     .score-badge {
-      background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
       border: 2px solid rgba(255, 255, 255, 0.25);
       color: white;
       padding: 14px 32px;
@@ -642,9 +730,9 @@
     /* ═══════════════════════════════════════════════════════════════════════════
        PODIUM - COSMIC GALAXY ARENA (PRESERVED)
        ═══════════════════════════════════════════════════════════════════════════ */
-    
+
     #screen-podium {
-      background: 
+      background:
         radial-gradient(ellipse at 20% 80%, rgba(120, 20, 180, 0.4) 0%, transparent 50%),
         radial-gradient(ellipse at 80% 20%, rgba(20, 100, 200, 0.4) 0%, transparent 50%),
         radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 1) 0%, #0a0a1a 100%);
@@ -660,15 +748,15 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-image: 
+      background-image:
         radial-gradient(2px 2px at 20px 30px, white, transparent),
-        radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+        radial-gradient(2px 2px at 40px 70px, rgba(255, 255, 255, 0.8), transparent),
         radial-gradient(1px 1px at 90px 40px, white, transparent),
-        radial-gradient(2px 2px at 160px 120px, rgba(255,255,255,0.9), transparent),
+        radial-gradient(2px 2px at 160px 120px, rgba(255, 255, 255, 0.9), transparent),
         radial-gradient(1px 1px at 230px 80px, white, transparent),
-        radial-gradient(2px 2px at 300px 150px, rgba(255,255,255,0.7), transparent),
+        radial-gradient(2px 2px at 300px 150px, rgba(255, 255, 255, 0.7), transparent),
         radial-gradient(1px 1px at 400px 60px, white, transparent),
-        radial-gradient(2px 2px at 500px 200px, rgba(255,255,255,0.8), transparent);
+        radial-gradient(2px 2px at 500px 200px, rgba(255, 255, 255, 0.8), transparent);
       background-size: 550px 250px;
       animation: starfieldMove 100s linear infinite;
       pointer-events: none;
@@ -676,8 +764,13 @@
     }
 
     @keyframes starfieldMove {
-      from { transform: translateY(0); }
-      to { transform: translateY(-250px); }
+      from {
+        transform: translateY(0);
+      }
+
+      to {
+        transform: translateY(-250px);
+      }
     }
 
     /* Nebula clouds */
@@ -709,13 +802,27 @@
     }
 
     @keyframes nebulaFloat1 {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      50% { transform: translate(50px, 30px) scale(1.1); }
+
+      0%,
+      100% {
+        transform: translate(0, 0) scale(1);
+      }
+
+      50% {
+        transform: translate(50px, 30px) scale(1.1);
+      }
     }
 
     @keyframes nebulaFloat2 {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      50% { transform: translate(-40px, -20px) scale(1.15); }
+
+      0%,
+      100% {
+        transform: translate(0, 0) scale(1);
+      }
+
+      50% {
+        transform: translate(-40px, -20px) scale(1.15);
+      }
     }
 
     /* ═══ COSMIC TITLE ═══ */
@@ -737,8 +844,13 @@
     }
 
     @keyframes cosmicGradient {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 300% 50%; }
+      0% {
+        background-position: 0% 50%;
+      }
+
+      100% {
+        background-position: 300% 50%;
+      }
     }
 
     .podium-title.entrance {
@@ -752,12 +864,14 @@
         filter: blur(20px);
         letter-spacing: 50px;
       }
+
       60% {
         opacity: 1;
         transform: scale(0.9) translateZ(50px);
         filter: blur(0px);
         letter-spacing: 4px;
       }
+
       100% {
         opacity: 1;
         transform: scale(1) translateZ(0);
@@ -783,7 +897,7 @@
     /* ═══ ORBIT RINGS ═══ */
     .orbit-ring {
       position: absolute;
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 50%;
       pointer-events: none;
     }
@@ -807,13 +921,23 @@
     }
 
     @keyframes orbitRotate1 {
-      from { transform: translate(-50%, -50%) rotateX(75deg) rotateZ(0deg); }
-      to { transform: translate(-50%, -50%) rotateX(75deg) rotateZ(360deg); }
+      from {
+        transform: translate(-50%, -50%) rotateX(75deg) rotateZ(0deg);
+      }
+
+      to {
+        transform: translate(-50%, -50%) rotateX(75deg) rotateZ(360deg);
+      }
     }
 
     @keyframes orbitRotate2 {
-      from { transform: translate(-50%, -50%) rotateX(75deg) rotateZ(45deg); }
-      to { transform: translate(-50%, -50%) rotateX(75deg) rotateZ(405deg); }
+      from {
+        transform: translate(-50%, -50%) rotateX(75deg) rotateZ(45deg);
+      }
+
+      to {
+        transform: translate(-50%, -50%) rotateX(75deg) rotateZ(405deg);
+      }
     }
 
     /* ═══ PLANET PODIUMS ═══ */
@@ -836,15 +960,15 @@
       width: 140px;
       height: 140px;
       border-radius: 50%;
-      background: 
-        radial-gradient(circle at 30% 30%, rgba(255,150,100,0.8), transparent 50%),
-        radial-gradient(circle at 70% 70%, rgba(150,50,0,0.6), transparent 50%),
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255, 150, 100, 0.8), transparent 50%),
+        radial-gradient(circle at 70% 70%, rgba(150, 50, 0, 0.6), transparent 50%),
         linear-gradient(135deg, #cd5c3c 0%, #8b3a22 50%, #5c2413 100%);
-      box-shadow: 
-        inset -10px -10px 30px rgba(0,0,0,0.6),
-        inset 10px 10px 30px rgba(255,150,100,0.3),
-        0 0 40px rgba(205,92,60,0.5),
-        0 0 80px rgba(205,92,60,0.3);
+      box-shadow:
+        inset -10px -10px 30px rgba(0, 0, 0, 0.6),
+        inset 10px 10px 30px rgba(255, 150, 100, 0.3),
+        0 0 40px rgba(205, 92, 60, 0.5),
+        0 0 80px rgba(205, 92, 60, 0.3);
       position: relative;
       transform: scale(0) rotate(-180deg);
       animation: planetFloat3rd 4s ease-in-out infinite;
@@ -858,8 +982,8 @@
       transform: translate(-50%, -50%);
       font-size: 3rem;
       font-weight: 900;
-      color: rgba(255,255,255,0.4);
-      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+      color: rgba(255, 255, 255, 0.4);
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
     }
 
     /* Planet ring */
@@ -870,15 +994,22 @@
       left: 50%;
       width: 180px;
       height: 40px;
-      border: 3px solid rgba(255,150,100,0.3);
+      border: 3px solid rgba(255, 150, 100, 0.3);
       border-radius: 50%;
       transform: translate(-50%, -50%) rotateX(80deg);
-      box-shadow: 0 0 20px rgba(255,150,100,0.2);
+      box-shadow: 0 0 20px rgba(255, 150, 100, 0.2);
     }
 
     @keyframes planetFloat3rd {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-15px) rotate(3deg); }
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(0deg);
+      }
+
+      50% {
+        transform: translateY(-15px) rotate(3deg);
+      }
     }
 
     /* 2ND PLACE - Ice Planet */
@@ -892,15 +1023,15 @@
       width: 160px;
       height: 160px;
       border-radius: 50%;
-      background: 
-        radial-gradient(circle at 30% 30%, rgba(200,230,255,0.9), transparent 50%),
-        radial-gradient(circle at 70% 70%, rgba(100,150,200,0.5), transparent 50%),
+      background:
+        radial-gradient(circle at 30% 30%, rgba(200, 230, 255, 0.9), transparent 50%),
+        radial-gradient(circle at 70% 70%, rgba(100, 150, 200, 0.5), transparent 50%),
         linear-gradient(135deg, #e0f0ff 0%, #a0c0e0 50%, #6080a0 100%);
-      box-shadow: 
-        inset -12px -12px 35px rgba(0,0,0,0.5),
-        inset 12px 12px 35px rgba(255,255,255,0.4),
-        0 0 50px rgba(160,192,224,0.6),
-        0 0 100px rgba(160,192,224,0.3);
+      box-shadow:
+        inset -12px -12px 35px rgba(0, 0, 0, 0.5),
+        inset 12px 12px 35px rgba(255, 255, 255, 0.4),
+        0 0 50px rgba(160, 192, 224, 0.6),
+        0 0 100px rgba(160, 192, 224, 0.3);
       position: relative;
       transform: scale(0) rotate(180deg);
       animation: planetFloat2nd 4s ease-in-out infinite 0.5s;
@@ -914,8 +1045,8 @@
       transform: translate(-50%, -50%);
       font-size: 3.5rem;
       font-weight: 900;
-      color: rgba(255,255,255,0.5);
-      text-shadow: 0 2px 10px rgba(0,0,0,0.4);
+      color: rgba(255, 255, 255, 0.5);
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
     }
 
     /* Ice crystals effect */
@@ -926,14 +1057,21 @@
       left: 20%;
       width: 30%;
       height: 30%;
-      background: radial-gradient(circle, rgba(255,255,255,0.4), transparent 70%);
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.4), transparent 70%);
       border-radius: 50%;
       filter: blur(5px);
     }
 
     @keyframes planetFloat2nd {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-20px) rotate(-3deg); }
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(0deg);
+      }
+
+      50% {
+        transform: translateY(-20px) rotate(-3deg);
+      }
     }
 
     /* 1ST PLACE - Golden Sun Planet */
@@ -946,14 +1084,14 @@
       width: 200px;
       height: 200px;
       border-radius: 50%;
-      background: 
-        radial-gradient(circle at 35% 35%, rgba(255,255,200,1), rgba(255,215,0,0.8) 30%, rgba(255,140,0,0.6) 60%, rgba(200,100,0,0.8) 100%);
-      box-shadow: 
-        inset -15px -15px 40px rgba(150,80,0,0.6),
-        inset 15px 15px 40px rgba(255,255,200,0.5),
-        0 0 60px rgba(255,215,0,0.8),
-        0 0 120px rgba(255,140,0,0.5),
-        0 0 180px rgba(255,100,0,0.3);
+      background:
+        radial-gradient(circle at 35% 35%, rgba(255, 255, 200, 1), rgba(255, 215, 0, 0.8) 30%, rgba(255, 140, 0, 0.6) 60%, rgba(200, 100, 0, 0.8) 100%);
+      box-shadow:
+        inset -15px -15px 40px rgba(150, 80, 0, 0.6),
+        inset 15px 15px 40px rgba(255, 255, 200, 0.5),
+        0 0 60px rgba(255, 215, 0, 0.8),
+        0 0 120px rgba(255, 140, 0, 0.5),
+        0 0 180px rgba(255, 100, 0, 0.3);
       position: relative;
       transform: scale(0);
       animation: planetFloat1st 3s ease-in-out infinite, sunPulse 2s ease-in-out infinite;
@@ -967,8 +1105,8 @@
       transform: translate(-50%, -50%);
       font-size: 4.5rem;
       font-weight: 900;
-      color: rgba(255,255,255,0.6);
-      text-shadow: 0 0 30px rgba(255,215,0,0.8), 0 2px 10px rgba(0,0,0,0.3);
+      color: rgba(255, 255, 255, 0.6);
+      text-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 2px 10px rgba(0, 0, 0, 0.3);
     }
 
     /* Solar flares */
@@ -979,24 +1117,43 @@
       left: -20%;
       width: 140%;
       height: 140%;
-      background: conic-gradient(from 0deg, transparent 0deg, rgba(255,200,50,0.3) 30deg, transparent 60deg, transparent 120deg, rgba(255,180,30,0.2) 150deg, transparent 180deg, transparent 240deg, rgba(255,200,50,0.3) 270deg, transparent 300deg, transparent 360deg);
+      background: conic-gradient(from 0deg, transparent 0deg, rgba(255, 200, 50, 0.3) 30deg, transparent 60deg, transparent 120deg, rgba(255, 180, 30, 0.2) 150deg, transparent 180deg, transparent 240deg, rgba(255, 200, 50, 0.3) 270deg, transparent 300deg, transparent 360deg);
       border-radius: 50%;
       animation: solarFlare 8s linear infinite;
     }
 
     @keyframes planetFloat1st {
-      0%, 100% { transform: translateY(0) scale(1); }
-      50% { transform: translateY(-25px) scale(1.02); }
+
+      0%,
+      100% {
+        transform: translateY(0) scale(1);
+      }
+
+      50% {
+        transform: translateY(-25px) scale(1.02);
+      }
     }
 
     @keyframes sunPulse {
-      0%, 100% { box-shadow: inset -15px -15px 40px rgba(150,80,0,0.6), inset 15px 15px 40px rgba(255,255,200,0.5), 0 0 60px rgba(255,215,0,0.8), 0 0 120px rgba(255,140,0,0.5), 0 0 180px rgba(255,100,0,0.3); }
-      50% { box-shadow: inset -15px -15px 40px rgba(150,80,0,0.6), inset 15px 15px 40px rgba(255,255,200,0.5), 0 0 80px rgba(255,215,0,1), 0 0 150px rgba(255,140,0,0.7), 0 0 220px rgba(255,100,0,0.5); }
+
+      0%,
+      100% {
+        box-shadow: inset -15px -15px 40px rgba(150, 80, 0, 0.6), inset 15px 15px 40px rgba(255, 255, 200, 0.5), 0 0 60px rgba(255, 215, 0, 0.8), 0 0 120px rgba(255, 140, 0, 0.5), 0 0 180px rgba(255, 100, 0, 0.3);
+      }
+
+      50% {
+        box-shadow: inset -15px -15px 40px rgba(150, 80, 0, 0.6), inset 15px 15px 40px rgba(255, 255, 200, 0.5), 0 0 80px rgba(255, 215, 0, 1), 0 0 150px rgba(255, 140, 0, 0.7), 0 0 220px rgba(255, 100, 0, 0.5);
+      }
     }
 
     @keyframes solarFlare {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
     }
 
     /* ═══ WINNER INFO CARDS ═══ */
@@ -1006,21 +1163,21 @@
       left: 50%;
       transform: translateX(-50%) scale(0);
       background: rgba(10, 10, 30, 0.9);
-      border: 1px solid rgba(255,255,255,0.2);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 16px;
       padding: 16px 20px;
       text-align: center;
       min-width: 160px;
       backdrop-filter: blur(10px);
-      box-shadow: 0 10px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
       opacity: 0;
     }
 
     .podium-1st .winner-card {
       min-width: 200px;
       padding: 20px 24px;
-      border: 1px solid rgba(255,215,0,0.3);
-      box-shadow: 0 15px 50px rgba(0,0,0,0.6), 0 0 30px rgba(255,215,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 215, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
       z-index: 200;
     }
 
@@ -1036,9 +1193,20 @@
     }
 
     @keyframes rankPop {
-      0% { opacity: 0; transform: scale(0) translateY(20px); }
-      50% { opacity: 1; transform: scale(1.3) translateY(-10px); }
-      100% { opacity: 1; transform: scale(1) translateY(0); }
+      0% {
+        opacity: 0;
+        transform: scale(0) translateY(20px);
+      }
+
+      50% {
+        opacity: 1;
+        transform: scale(1.3) translateY(-10px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
     }
 
     .podium-1st .winner-rank {
@@ -1052,7 +1220,7 @@
       margin-bottom: 4px;
       word-break: break-word;
       opacity: 0;
-      text-shadow: 0 0 10px rgba(255,255,255,0.3);
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
     }
 
     .winner-name.reveal {
@@ -1060,8 +1228,17 @@
     }
 
     @keyframes textReveal {
-      from { opacity: 0; transform: translateY(10px); filter: blur(10px); }
-      to { opacity: 1; transform: translateY(0); filter: blur(0); }
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+        filter: blur(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+      }
     }
 
     .podium-1st .winner-name {
@@ -1079,8 +1256,13 @@
     }
 
     @keyframes goldShimmer {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 200% 50%; }
+      0% {
+        background-position: 0% 50%;
+      }
+
+      100% {
+        background-position: 200% 50%;
+      }
     }
 
     .winner-score {
@@ -1095,8 +1277,16 @@
     }
 
     @keyframes scoreGlow {
-      from { opacity: 0; transform: scale(0.8); }
-      to { opacity: 1; transform: scale(1); text-shadow: 0 0 20px rgba(0,204,255,0.5); }
+      from {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+        text-shadow: 0 0 20px rgba(0, 204, 255, 0.5);
+      }
     }
 
     .podium-1st .winner-score {
@@ -1105,16 +1295,30 @@
     }
 
     /* ═══ ANIMATION CLASSES ═══ */
-    
+
     /* 3rd Place Animations */
     .animate-3rd .planet-3rd {
       animation: planetWarp3rd 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards, planetFloat3rd 4s ease-in-out infinite 1.5s;
     }
 
     @keyframes planetWarp3rd {
-      0% { transform: scale(0) rotate(-180deg) translateZ(-500px); filter: blur(20px); opacity: 0; }
-      50% { transform: scale(1.2) rotate(10deg) translateZ(100px); filter: blur(0px); opacity: 1; }
-      100% { transform: scale(1) rotate(0deg) translateZ(0); filter: blur(0px); opacity: 1; }
+      0% {
+        transform: scale(0) rotate(-180deg) translateZ(-500px);
+        filter: blur(20px);
+        opacity: 0;
+      }
+
+      50% {
+        transform: scale(1.2) rotate(10deg) translateZ(100px);
+        filter: blur(0px);
+        opacity: 1;
+      }
+
+      100% {
+        transform: scale(1) rotate(0deg) translateZ(0);
+        filter: blur(0px);
+        opacity: 1;
+      }
     }
 
     .animate-3rd .winner-card {
@@ -1127,9 +1331,23 @@
     }
 
     @keyframes planetWarp2nd {
-      0% { transform: scale(0) rotate(180deg) translateZ(-500px); filter: blur(20px); opacity: 0; }
-      50% { transform: scale(1.25) rotate(-10deg) translateZ(150px); filter: blur(0px); opacity: 1; }
-      100% { transform: scale(1) rotate(0deg) translateZ(0); filter: blur(0px); opacity: 1; }
+      0% {
+        transform: scale(0) rotate(180deg) translateZ(-500px);
+        filter: blur(20px);
+        opacity: 0;
+      }
+
+      50% {
+        transform: scale(1.25) rotate(-10deg) translateZ(150px);
+        filter: blur(0px);
+        opacity: 1;
+      }
+
+      100% {
+        transform: scale(1) rotate(0deg) translateZ(0);
+        filter: blur(0px);
+        opacity: 1;
+      }
     }
 
     .animate-2nd .winner-card {
@@ -1142,10 +1360,28 @@
     }
 
     @keyframes planetWarp1st {
-      0% { transform: scale(0) translateZ(-800px); filter: blur(30px) brightness(3); opacity: 0; }
-      40% { transform: scale(1.4) translateZ(200px); filter: blur(0px) brightness(1.5); opacity: 1; }
-      70% { transform: scale(0.95) translateZ(-50px); filter: blur(0px) brightness(1); }
-      100% { transform: scale(1) translateZ(0); filter: blur(0px) brightness(1); opacity: 1; }
+      0% {
+        transform: scale(0) translateZ(-800px);
+        filter: blur(30px) brightness(3);
+        opacity: 0;
+      }
+
+      40% {
+        transform: scale(1.4) translateZ(200px);
+        filter: blur(0px) brightness(1.5);
+        opacity: 1;
+      }
+
+      70% {
+        transform: scale(0.95) translateZ(-50px);
+        filter: blur(0px) brightness(1);
+      }
+
+      100% {
+        transform: scale(1) translateZ(0);
+        filter: blur(0px) brightness(1);
+        opacity: 1;
+      }
     }
 
     .animate-1st .winner-card {
@@ -1153,9 +1389,23 @@
     }
 
     @keyframes cardMaterialize {
-      0% { transform: translateX(-50%) scale(0) translateY(30px); opacity: 0; filter: blur(10px); }
-      60% { transform: translateX(-50%) scale(1.1) translateY(-10px); opacity: 1; filter: blur(0px); }
-      100% { transform: translateX(-50%) scale(1) translateY(0); opacity: 1; filter: blur(0px); }
+      0% {
+        transform: translateX(-50%) scale(0) translateY(30px);
+        opacity: 0;
+        filter: blur(10px);
+      }
+
+      60% {
+        transform: translateX(-50%) scale(1.1) translateY(-10px);
+        opacity: 1;
+        filter: blur(0px);
+      }
+
+      100% {
+        transform: translateX(-50%) scale(1) translateY(0);
+        opacity: 1;
+        filter: blur(0px);
+      }
     }
 
     /* ═══ HYPERSPACE EFFECT ═══ */
@@ -1167,7 +1417,7 @@
       height: 2px;
       background: white;
       border-radius: 50%;
-      box-shadow: 0 0 0 0 rgba(255,255,255,1);
+      box-shadow: 0 0 0 0 rgba(255, 255, 255, 1);
       transform: translate(-50%, -50%);
       pointer-events: none;
       z-index: 100;
@@ -1179,17 +1429,19 @@
     }
 
     @keyframes hyperspaceJump {
-      0% { 
+      0% {
         opacity: 1;
-        box-shadow: 0 0 0 0 rgba(255,255,255,1);
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 1);
         transform: translate(-50%, -50%) scale(1);
       }
+
       50% {
-        box-shadow: 0 0 100px 50px rgba(255,255,255,0.8), 0 0 200px 100px rgba(100,200,255,0.5);
+        box-shadow: 0 0 100px 50px rgba(255, 255, 255, 0.8), 0 0 200px 100px rgba(100, 200, 255, 0.5);
       }
-      100% { 
+
+      100% {
         opacity: 0;
-        box-shadow: 0 0 200px 100px rgba(255,255,255,0), 0 0 400px 200px rgba(100,200,255,0);
+        box-shadow: 0 0 200px 100px rgba(255, 255, 255, 0), 0 0 400px 200px rgba(100, 200, 255, 0);
         transform: translate(-50%, -50%) scale(3);
       }
     }
@@ -1203,12 +1455,19 @@
       border-radius: 50%;
       pointer-events: none;
       z-index: 50;
-      box-shadow: 0 0 10px white, 0 0 20px rgba(255,255,255,0.5);
+      box-shadow: 0 0 10px white, 0 0 20px rgba(255, 255, 255, 0.5);
     }
 
     @keyframes starBurst {
-      0% { transform: translate(0, 0) scale(1); opacity: 1; }
-      100% { transform: translate(var(--sx), var(--sy)) scale(0); opacity: 0; }
+      0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translate(var(--sx), var(--sy)) scale(0);
+        opacity: 0;
+      }
     }
 
     /* ═══ COSMIC DUST ═══ */
@@ -1216,17 +1475,30 @@
       position: fixed;
       width: 2px;
       height: 2px;
-      background: rgba(255,255,255,0.6);
+      background: rgba(255, 255, 255, 0.6);
       border-radius: 50%;
       pointer-events: none;
       z-index: 1;
     }
 
     @keyframes dustFloat {
-      0% { transform: translateY(100vh) translateX(0); opacity: 0; }
-      10% { opacity: 1; }
-      90% { opacity: 1; }
-      100% { transform: translateY(-20px) translateX(50px); opacity: 0; }
+      0% {
+        transform: translateY(100vh) translateX(0);
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 1;
+      }
+
+      90% {
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(-20px) translateX(50px);
+        opacity: 0;
+      }
     }
 
     /* Old podium styles - keeping for compatibility */
@@ -1265,7 +1537,7 @@
 
     /* ROUND SCOREBOARD */
     #screen-round-scores {
-      background: 
+      background:
         radial-gradient(ellipse at 30% 20%, rgba(99, 102, 241, 0.25) 0%, transparent 50%),
         radial-gradient(ellipse at 70% 80%, rgba(139, 92, 246, 0.2) 0%, transparent 50%),
         linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
@@ -1273,7 +1545,7 @@
 
     /* GAME ENDED SCREEN */
     #screen-game-ended {
-      background: 
+      background:
         radial-gradient(ellipse at 30% 30%, rgba(251, 191, 36, 0.15) 0%, transparent 50%),
         radial-gradient(ellipse at 70% 70%, rgba(249, 115, 22, 0.1) 0%, transparent 50%),
         linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
@@ -1281,30 +1553,73 @@
     }
 
     @keyframes gameEndedIcon {
-      0%   { opacity: 0; transform: scale(0) rotate(-30deg); }
-      60%  { opacity: 1; transform: scale(1.2) rotate(5deg); }
-      100% { opacity: 1; transform: scale(1) rotate(0deg); }
+      0% {
+        opacity: 0;
+        transform: scale(0) rotate(-30deg);
+      }
+
+      60% {
+        opacity: 1;
+        transform: scale(1.2) rotate(5deg);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+      }
     }
 
     @keyframes gameEndedTitle {
-      0%   { opacity: 0; transform: translateY(30px); letter-spacing: 20px; }
-      60%  { opacity: 1; transform: translateY(-5px); letter-spacing: 5px; }
-      100% { opacity: 1; transform: translateY(0); letter-spacing: 4px; }
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+        letter-spacing: 20px;
+      }
+
+      60% {
+        opacity: 1;
+        transform: translateY(-5px);
+        letter-spacing: 5px;
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+        letter-spacing: 4px;
+      }
     }
 
     @keyframes gameEndedSub {
-      from { opacity: 0; transform: translateY(15px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     @keyframes gameEndedBtn {
-      0%   { opacity: 0; transform: scale(0.6) translateY(20px); }
-      70%  { opacity: 1; transform: scale(1.05) translateY(-5px); }
-      100% { opacity: 1; transform: scale(1) translateY(0); }
+      0% {
+        opacity: 0;
+        transform: scale(0.6) translateY(20px);
+      }
+
+      70% {
+        opacity: 1;
+        transform: scale(1.05) translateY(-5px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
     }
 
     .round-sb-card {
-      background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 24px;
       padding: 32px 36px;
@@ -1397,8 +1712,15 @@
     }
 
     @keyframes scoreCount {
-      from { opacity: 0; transform: scale(0.7); }
-      to { opacity: 1; transform: scale(1); }
+      from {
+        opacity: 0;
+        transform: scale(0.7);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
     }
 
     .rsb-score.counting {
@@ -1406,14 +1728,30 @@
     }
 
     @keyframes countPulse {
-      0% { transform: scale(1); opacity: 1; }
-      45% { transform: scale(1.15); opacity: 0.9; }
-      100% { transform: scale(1); opacity: 1; }
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      45% {
+        transform: scale(1.15);
+        opacity: 0.9;
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
     }
 
     /* UTILS */
-    .hidden { display: none !important; }
-    .text-white { color: white; }
+    .hidden {
+      display: none !important;
+    }
+
+    .text-white {
+      color: white;
+    }
 
     .err-msg {
       color: #ef4444;
@@ -1423,7 +1761,9 @@
       display: none;
     }
 
-    .err-msg.show { display: block; }
+    .err-msg.show {
+      display: block;
+    }
 
     .hint-text {
       color: rgba(255, 255, 255, 0.45);
@@ -1464,7 +1804,7 @@
 
     /* COUNTDOWN */
     #screen-countdown {
-      background: 
+      background:
         radial-gradient(ellipse at 50% 50%, rgba(251, 191, 36, 0.2) 0%, transparent 60%),
         linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
     }
@@ -1479,10 +1819,17 @@
     }
 
     @keyframes countPulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.08); }
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.08);
+      }
     }
-    
+
     #skip-btn:hover {
       opacity: 1 !important;
       border-color: rgba(255, 255, 255, 0.5) !important;
@@ -1492,7 +1839,7 @@
     /* ═══════════════════════════════════════════════════════════════════════════
        PLAYER FEEDBACK (CORRECT/RANK/POSITION)
        ═══════════════════════════════════════════════════════════════════════════ */
-    
+
     .feedback-banner {
       font-size: clamp(2.5rem, 8vw, 4.5rem);
       font-weight: 900;
@@ -1501,11 +1848,18 @@
       letter-spacing: 4px;
       margin-bottom: 10px;
       animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-      text-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      text-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     }
 
-    .feedback-correct { color: #4ade80; text-shadow: 0 0 40px rgba(74, 222, 128, 0.4); }
-    .feedback-incorrect { color: #f87171; text-shadow: 0 0 40px rgba(248, 113, 113, 0.4); }
+    .feedback-correct {
+      color: #4ade80;
+      text-shadow: 0 0 40px rgba(74, 222, 128, 0.4);
+    }
+
+    .feedback-incorrect {
+      color: #f87171;
+      text-shadow: 0 0 40px rgba(248, 113, 113, 0.4);
+    }
 
     .rank-container {
       background: rgba(255, 255, 255, 0.1);
@@ -1529,7 +1883,7 @@
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));
+      filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.2));
     }
 
     .rank-label {
@@ -1558,13 +1912,22 @@
     }
 
     @keyframes slideUpFade {
-      from { opacity: 0; transform: translateY(30px); filter: blur(10px); }
-      to { opacity: 1; transform: translateY(0); filter: blur(0); }
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+        filter: blur(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+      }
     }
 
     /* ADMIN LOGIN */
     #screen-admin-login {
-      background: 
+      background:
         radial-gradient(ellipse at 30% 70%, rgba(124, 58, 237, 0.25) 0%, transparent 50%),
         linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
     }
@@ -1576,7 +1939,7 @@
     /* JOIN SCREENS */
     #screen-join-code,
     #screen-join-name {
-      background: 
+      background:
         radial-gradient(ellipse at 30% 70%, rgba(99, 102, 241, 0.2) 0%, transparent 50%),
         linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
     }
@@ -1589,7 +1952,7 @@
 
     /* CREATE GAME */
     #screen-create-game {
-      background: 
+      background:
         radial-gradient(ellipse at 20% 80%, rgba(139, 92, 246, 0.2) 0%, transparent 50%),
         linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
     }
@@ -1605,7 +1968,7 @@
 
     /* ADMIN DASH - HEADER */
     #screen-admin-dash {
-      background: 
+      background:
         radial-gradient(ellipse at 30% 70%, rgba(139, 92, 246, 0.2) 0%, transparent 50%),
         linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
     }
@@ -1659,6 +2022,9 @@
         <button class="btn btn-dark btn-sm" onclick="goTo('screen-home')" style="flex:1;">← Home</button>
         <button class="btn btn-green btn-sm" onclick="startNewGame()" style="flex:2;">➕ Create New Game</button>
       </div>
+      <div class="row-btns" style="margin-top:12px;">
+        <button class="btn btn-red btn-sm admin-logout-btn" onclick="adminSignOut()" style="display:none;width:100%;">🚪 Sign Out</button>
+      </div>
     </div>
   </div>
 
@@ -1676,7 +2042,8 @@
 
       <!-- Builder -->
       <p class="section-title" style="margin-top:24px;" id="builder-title">➕ Add a Question</p>
-      <div class="edit-banner" id="edit-banner">✏️ Editing question <span id="edit-banner-num"></span> — save changes below</div>
+      <div class="edit-banner" id="edit-banner">✏️ Editing question <span id="edit-banner-num"></span> — save changes
+        below</div>
       <input type="text" id="qb-q" placeholder="Question text" style="text-align:left;" />
       <div class="answers-row">
         <input type="text" id="qb-a1" placeholder="🔴 Answer 1" style="text-align:left;" />
@@ -1694,8 +2061,10 @@
         style="text-align:left;" />
 
       <div style="display:flex;gap:10px;margin-top:12px;">
-        <button class="btn btn-green" id="add-q-btn" onclick="addOrUpdateQuestion()" style="flex:2;">+ Add Question</button>
-        <button class="btn btn-dark btn-sm" id="cancel-edit-btn" onclick="cancelEdit()" style="display:none;flex:1;">✕ Cancel</button>
+        <button class="btn btn-green" id="add-q-btn" onclick="addOrUpdateQuestion()" style="flex:2;">+ Add
+          Question</button>
+        <button class="btn btn-dark btn-sm" id="cancel-edit-btn" onclick="cancelEdit()" style="display:none;flex:1;">✕
+          Cancel</button>
       </div>
 
       <div class="row-btns" style="margin-top:20px;">
@@ -1751,7 +2120,8 @@
     <div style="display:flex;flex-direction:column;align-items:center;gap:20px;">
       <div style="font-size:5rem;">✅</div>
       <h1>You're in!</h1>
-      <div style="background:linear-gradient(135deg,rgba(255,255,255,0.1),rgba(255,255,255,0.02));border:2px solid rgba(255,255,255,0.2);border-radius:20px;padding:18px 42px;">
+      <div
+        style="background:linear-gradient(135deg,rgba(255,255,255,0.1),rgba(255,255,255,0.02));border:2px solid rgba(255,255,255,0.2);border-radius:20px;padding:18px 42px;">
         <h2 id="player-lobby-name" style="font-size:2.2rem;color:white;"></h2>
       </div>
       <p style="color:rgba(255,255,255,0.5);font-weight:700;">Waiting for host to start…</p>
@@ -1762,7 +2132,8 @@
   <!-- ══════════════ SCREEN 8b: PRE-GAME COUNTDOWN ══════════════ -->
   <div id="screen-countdown" class="screen">
     <div style="display:flex;flex-direction:column;align-items:center;gap:28px;">
-      <h2 style="color:rgba(255,255,255,0.5);letter-spacing:3px;text-transform:uppercase;font-size:1rem;">Get Ready!</h2>
+      <h2 style="color:rgba(255,255,255,0.5);letter-spacing:3px;text-transform:uppercase;font-size:1rem;">Get Ready!
+      </h2>
       <div id="countdown-number">10</div>
       <p style="color:rgba(255,255,255,0.4);font-weight:700;font-size:1.15rem;">Game starts in…</p>
     </div>
@@ -1770,8 +2141,12 @@
 
   <!-- ══════════════ SCREEN 9: HOST GAME VIEW ══════════════ -->
   <div id="screen-host-game" class="screen">
-    <div id="reveal-timer" style="display:none;position:absolute;top:40px;right:40px;font-size:2.5rem;font-weight:900;color:white;background:linear-gradient(135deg,#f59e0b,#fbbf24);border:4px solid white;width:100px;height:100px;border-radius:50%;align-items:center;justify-content:center;z-index:30;box-shadow:0 0 30px rgba(251,191,36,0.6),0 10px 30px rgba(0,0,0,0.4);animation:popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;">7</div>
-    <div id="reveal-text" style="display:none;position:absolute;top:50px;left:50%;transform:translateX(-50%);font-size:3.5rem;font-weight:900;color:white;text-shadow:0 0 40px rgba(34,197,94,0.8);z-index:30;animation:popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;letter-spacing:4px;">CORRECT!</div>
+    <div id="reveal-timer"
+      style="display:none;position:absolute;top:40px;right:40px;font-size:2.5rem;font-weight:900;color:white;background:linear-gradient(135deg,#f59e0b,#fbbf24);border:4px solid white;width:100px;height:100px;border-radius:50%;align-items:center;justify-content:center;z-index:30;box-shadow:0 0 30px rgba(251,191,36,0.6),0 10px 30px rgba(0,0,0,0.4);animation:popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;">
+      7</div>
+    <div id="reveal-text"
+      style="display:none;position:absolute;top:50px;left:50%;transform:translateX(-50%);font-size:3.5rem;font-weight:900;color:white;text-shadow:0 0 40px rgba(34,197,94,0.8);z-index:30;animation:popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;letter-spacing:4px;">
+      CORRECT!</div>
     <p class="host-meta" id="host-q-meta">Question 1 of 1</p>
     <div class="host-question-box" id="host-question-text">…</div>
     <!-- vote progress bar -->
@@ -1799,8 +2174,11 @@
         <div class="shape">■</div><span id="hat-4"></span>
       </div>
     </div>
-    <p style="color:rgba(255,255,255,0.35);font-size:0.9rem;font-weight:700;margin-top:20px;">⏳ Round ends automatically when everyone has voted</p>
-    <button class="btn btn-outline" id="skip-btn" onclick="hostSkipQuestion()" style="margin-top:15px; width:auto; padding:10px 40px; border-color:rgba(255,255,255,0.2); font-size:0.9rem; opacity:0.6; transition:opacity 0.3s;">⏭ Skip Question</button>
+    <p style="color:rgba(255,255,255,0.35);font-size:0.9rem;font-weight:700;margin-top:20px;">⏳ Round ends automatically
+      when everyone has voted</p>
+    <button class="btn btn-outline" id="skip-btn" onclick="hostSkipQuestion()"
+      style="margin-top:15px; width:auto; padding:10px 40px; border-color:rgba(255,255,255,0.2); font-size:0.9rem; opacity:0.6; transition:opacity 0.3s;">⏭
+      Skip Question</button>
   </div>
 
   <!-- ══════════════ SCREEN 11b: ROUND SCOREBOARD ══════════════ -->
@@ -1812,8 +2190,11 @@
       <div class="round-sb-title">Leaderboard</div>
       <div id="rsb-list"></div>
     </div>
-    <p style="color:rgba(255,255,255,0.3);font-size:0.85rem;font-weight:700;margin-top:20px;" id="rsb-next-hint">Moving to next question…</p>
-    <div id="rsb-countdown" style="display:none;margin-top:12px;font-size:3.5rem;font-weight:900;color:white;text-shadow:0 0 30px rgba(255,255,255,0.5);"></div>
+    <p style="color:rgba(255,255,255,0.3);font-size:0.85rem;font-weight:700;margin-top:20px;" id="rsb-next-hint">Moving
+      to next question…</p>
+    <div id="rsb-countdown"
+      style="display:none;margin-top:12px;font-size:3.5rem;font-weight:900;color:white;text-shadow:0 0 30px rgba(255,255,255,0.5);">
+    </div>
   </div>
 
   <!-- ══════════════ SCREEN 10: PLAYER GAME VIEW ══════════════ -->
@@ -1823,9 +2204,10 @@
       <h2 id="player-status-msg" style="color:white;font-size:1.7rem;"></h2>
       <div class="score-badge" id="player-score-badge" style="display:none"></div>
     </div>
-    
+
     <!-- RANK FEEDBACK SECTION -->
-    <div id="player-rank-feedback" style="display:none;flex-direction:column;align-items:center;justify-content:center;width:100%;max-width:500px;animation:fadeIn 0.5s ease;">
+    <div id="player-rank-feedback"
+      style="display:none;flex-direction:column;align-items:center;justify-content:center;width:100%;max-width:500px;animation:fadeIn 0.5s ease;">
       <div id="feedback-banner" class="feedback-banner">CORRECT</div>
       <div class="rank-container">
         <div class="rank-label">You are in</div>
@@ -1858,11 +2240,19 @@
 
   <!-- ══════════════ SCREEN 11c: GAME ENDED ══════════════ -->
   <div id="screen-game-ended" class="screen">
-    <div id="game-ended-content" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;text-align:center;">
+    <div id="game-ended-content"
+      style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;text-align:center;">
       <div style="font-size:5.5rem;animation:gameEndedIcon 1s cubic-bezier(0.34,1.8,0.64,1) both;">🏁</div>
-      <h1 style="font-size:clamp(2.5rem,9vw,5rem);font-weight:900;color:white;letter-spacing:4px;text-shadow:0 0 50px rgba(255,255,255,0.4);animation:gameEndedTitle 1.2s cubic-bezier(0.16,1,0.3,1) 0.3s both;">GAME ENDED</h1>
-      <p style="color:rgba(255,255,255,0.45);font-size:1.15rem;font-weight:600;animation:gameEndedSub 0.8s ease 0.8s both;">The final scores are in…</p>
-      <button id="btn-show-results" onclick="hostRevealPodium()" style="margin-top:20px;padding:20px 52px;font-size:1.5rem;font-weight:900;border:none;border-radius:50px;cursor:pointer;background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#0f172a;letter-spacing:2px;box-shadow:0 0 50px rgba(251,191,36,0.5),0 10px 40px rgba(0,0,0,0.4);animation:gameEndedBtn 0.8s cubic-bezier(0.34,1.8,0.64,1) 1.2s both;transition:transform 0.2s,box-shadow 0.2s;" onmouseover="this.style.transform='scale(1.05)';this.style.boxShadow='0 0 70px rgba(251,191,36,0.8),0 14px 45px rgba(0,0,0,0.5)'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 0 50px rgba(251,191,36,0.5),0 10px 40px rgba(0,0,0,0.4)'">
+      <h1
+        style="font-size:clamp(2.5rem,9vw,5rem);font-weight:900;color:white;letter-spacing:4px;text-shadow:0 0 50px rgba(255,255,255,0.4);animation:gameEndedTitle 1.2s cubic-bezier(0.16,1,0.3,1) 0.3s both;">
+        GAME ENDED</h1>
+      <p
+        style="color:rgba(255,255,255,0.45);font-size:1.15rem;font-weight:600;animation:gameEndedSub 0.8s ease 0.8s both;">
+        The final scores are in…</p>
+      <button id="btn-show-results" onclick="hostRevealPodium()"
+        style="margin-top:20px;padding:20px 52px;font-size:1.5rem;font-weight:900;border:none;border-radius:50px;cursor:pointer;background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#0f172a;letter-spacing:2px;box-shadow:0 0 50px rgba(251,191,36,0.5),0 10px 40px rgba(0,0,0,0.4);animation:gameEndedBtn 0.8s cubic-bezier(0.34,1.8,0.64,1) 1.2s both;transition:transform 0.2s,box-shadow 0.2s;"
+        onmouseover="this.style.transform='scale(1.05)';this.style.boxShadow='0 0 70px rgba(251,191,36,0.8),0 14px 45px rgba(0,0,0,0.5)'"
+        onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 0 50px rgba(251,191,36,0.5),0 10px 40px rgba(0,0,0,0.4)'">
         🏆 Show Results
       </button>
     </div>
@@ -1875,7 +2265,7 @@
       <!-- Orbit rings -->
       <div class="orbit-ring orbit-ring-1"></div>
       <div class="orbit-ring orbit-ring-2"></div>
-      
+
       <!-- 3rd Place - Mars -->
       <div class="podium-block podium-3rd" id="podium-3rd">
         <div class="winner-card" id="winner-3rd">
@@ -1904,7 +2294,8 @@
         <div class="planet-2nd"></div>
       </div>
     </div>
-    <button class="btn btn-outline btn-sm" onclick="location.reload()" style="margin-top: 40px; z-index: 10; position: relative;">Play Again 🔄</button>
+    <button class="btn btn-outline btn-sm" onclick="location.reload()"
+      style="margin-top: 40px; z-index: 10; position: relative;">Play Again 🔄</button>
     <!-- Legacy list for compatibility -->
     <ul class="podium-list" id="podium-list"></ul>
   </div>
@@ -1929,7 +2320,7 @@
         (data || []).forEach(row => { obj[row.id] = row.game_data; });
         return obj;
       }
-      try { return JSON.parse(localStorage.getItem('kahoot_saved') || '{}'); } catch(e) { return {}; }
+      try { return JSON.parse(localStorage.getItem('kahoot_saved') || '{}'); } catch (e) { return {}; }
     }
 
     async function saveGameToStorage(id, gameObj) {
@@ -1963,8 +2354,8 @@
 
     // In-memory store (authoritative on the HOST side only)
     const store = {
-      games:   {},   // code → { code, title, questions }
-      state:   {},   // code → { status, qIndex, correct }
+      games: {},   // code → { code, title, questions }
+      state: {},   // code → { status, qIndex, correct }
       players: {},   // code → { playerId → { name, score, answered } }
     };
 
@@ -1980,7 +2371,7 @@
     // Subscribe to a game room and set up listener
     function subscribeToGame(code, onReady) {
       if (realtimeChannel) {
-        try { sb && sb.removeChannel(realtimeChannel); } catch(_) {}
+        try { sb && sb.removeChannel(realtimeChannel); } catch (_) { }
         realtimeChannel = null;
       }
 
@@ -2011,10 +2402,10 @@
     // ── EVENT DISPATCHER ─────────────────────────────────────────────────────
     // Runs on every connected device whenever an event arrives.
     function onEvent(event, payload) {
-      if (event === 'game_state')   handleGameState(payload);
-      if (event === 'player_join')  { if (isHost) hostOnPlayerJoin(payload); }
-      if (event === 'player_vote')  { if (isHost) hostOnPlayerVote(payload); }
-      if (event === 'request_state'){ if (isHost) hostResendState(); }
+      if (event === 'game_state') handleGameState(payload);
+      if (event === 'player_join') { if (isHost) hostOnPlayerJoin(payload); }
+      if (event === 'player_vote') { if (isHost) hostOnPlayerVote(payload); }
+      if (event === 'request_state') { if (isHost) hostResendState(); }
     }
 
     function serializePlayers(code) {
@@ -2060,20 +2451,76 @@
       }
     }
 
-    // ── ADMIN LOGIN ──────────────────────────────────────────────────────────
-    function checkAdmin() {
+    // ── ADMIN AUTH (Supabase) ───────────────────────────────────────────────────
+    const ADMIN_EMAIL = 'admin@kahoot.local';
+    let isAdminLoggedIn = false;
+
+    async function checkAdmin() {
       const pwd = document.getElementById('admin-pwd').value;
-      if (pwd === 'waleedgoat') {
-        document.getElementById('admin-err').classList.remove('show');
-        document.getElementById('admin-pwd').value = '';
-        openAdminDash();
-      } else {
+      if (!pwd) return;
+      
+      if (!sb || !useSB) {
+        document.getElementById('admin-err').textContent = '⚠️ Supabase not connected';
         document.getElementById('admin-err').classList.add('show');
+        return;
       }
+
+      const { data, error } = await sb.auth.signInWithPassword({
+        email: ADMIN_EMAIL,
+        password: pwd
+      });
+
+      if (error) {
+        document.getElementById('admin-err').textContent = '❌ Wrong password';
+        document.getElementById('admin-err').classList.add('show');
+        return;
+      }
+
+      isAdminLoggedIn = true;
+      document.getElementById('admin-err').classList.remove('show');
+      document.getElementById('admin-pwd').value = '';
+      updateAdminUI();
+      openAdminDash();
     }
+
+    async function checkAdminSession() {
+      if (!sb || !useSB) return false;
+      const { data: { session } } = await sb.auth.getSession();
+      if (session) {
+        isAdminLoggedIn = true;
+        updateAdminUI();
+      }
+      return !!session;
+    }
+
+    async function adminSignOut() {
+      if (sb) await sb.auth.signOut();
+      isAdminLoggedIn = false;
+      updateAdminUI();
+      goTo('screen-home');
+      showToast('Signed out', '#6366f1');
+    }
+
+    function updateAdminUI() {
+      const btns = document.querySelectorAll('.admin-logout-btn');
+      btns.forEach(btn => {
+        if (isAdminLoggedIn) {
+          btn.style.display = 'inline-block';
+        } else {
+          btn.style.display = 'none';
+        }
+      });
+    }
+
+    checkAdminSession();
 
     // ── ADMIN DASHBOARD ──────────────────────────────────────────────────────
     async function openAdminDash() {
+      if (!isAdminLoggedIn) {
+        goTo('screen-admin-login');
+        showToast('Please login first', '#6366f1');
+        return;
+      }
       await renderSavedGames();
       goTo('screen-admin-dash');
     }
@@ -2128,14 +2575,14 @@
 
     // ── QUESTION BUILDER ─────────────────────────────────────────────────────
     function addOrUpdateQuestion() {
-      const q  = document.getElementById('qb-q').value.trim();
+      const q = document.getElementById('qb-q').value.trim();
       const a1 = document.getElementById('qb-a1').value.trim();
       const a2 = document.getElementById('qb-a2').value.trim();
       const a3 = document.getElementById('qb-a3').value.trim();
       const a4 = document.getElementById('qb-a4').value.trim();
-      const c  = parseInt(document.getElementById('qb-correct').value);
-      const t  = parseInt(document.getElementById('qb-time').value) || 20;
-      if (!q)  { alert('Enter a question!'); return; }
+      const c = parseInt(document.getElementById('qb-correct').value);
+      const t = parseInt(document.getElementById('qb-time').value) || 20;
+      if (!q) { alert('Enter a question!'); return; }
       if (!a1) { alert('Enter Answer 1!'); return; }
       if (!a2) { alert('Enter Answer 2!'); return; }
       const qObj = { q, a1, a2, a3, a4, c, t };
@@ -2147,7 +2594,7 @@
     function editQuestion(i) {
       editingIndex = i;
       const q = QUESTIONS[i];
-      document.getElementById('qb-q').value  = q.q;
+      document.getElementById('qb-q').value = q.q;
       document.getElementById('qb-a1').value = q.a1;
       document.getElementById('qb-a2').value = q.a2;
       document.getElementById('qb-a3').value = q.a3 || '';
@@ -2169,7 +2616,7 @@
     }
 
     function clearBuilder() {
-      ['qb-q','qb-a1','qb-a2','qb-a3','qb-a4','qb-time'].forEach(id => document.getElementById(id).value = '');
+      ['qb-q', 'qb-a1', 'qb-a2', 'qb-a3', 'qb-a4', 'qb-time'].forEach(id => document.getElementById(id).value = '');
       document.getElementById('qb-correct').value = '1';
       document.getElementById('builder-title').textContent = '➕ Add a Question';
       document.getElementById('add-q-btn').textContent = '+ Add Question';
@@ -2193,7 +2640,7 @@
         const d = document.createElement('div');
         d.className = 'q-item' + (editingIndex === i ? ' editing' : '');
         d.onclick = () => editQuestion(i);
-        d.innerHTML = `<div class="q-num">${i+1}</div><span style="flex:1;text-align:left">${escHtml(q.q)}</span><span style="font-size:.8rem;color:#888;margin-right:6px">${q.t}s</span><button class="q-del" onclick="event.stopPropagation();deleteQuestion(${i})">✕</button>`;
+        d.innerHTML = `<div class="q-num">${i + 1}</div><span style="flex:1;text-align:left">${escHtml(q.q)}</span><span style="font-size:.8rem;color:#888;margin-right:6px">${q.t}s</span><button class="q-del" onclick="event.stopPropagation();deleteQuestion(${i})">✕</button>`;
         list.appendChild(d);
       });
     }
@@ -2227,9 +2674,9 @@
       isHost = true;
       const code = String(Math.floor(100000 + Math.random() * 900000));
       curCode = code;
-      store.games[code]   = { code, title, questions: [...questions] };
+      store.games[code] = { code, title, questions: [...questions] };
       store.players[code] = {};
-      store.state[code]   = { status: 'lobby', qIndex: 0 };
+      store.state[code] = { status: 'lobby', qIndex: 0 };
 
       document.getElementById('host-pin-display').textContent = code;
       updateHostLobbyUI();
@@ -2269,7 +2716,7 @@
       if (!st || !game || st.status !== 'question') return;
       const q = game.questions[st.qIndex];
       player.answered = true;
-      
+
       // Kahoot Point Formula: Points = MaxPoints * (1 - ((TimeTaken / QuestionTime) / 2))
       // MaxPoints = 1000, TimeTaken from payload (ms), QuestionTime from q.t (seconds)
       let points = 0;
@@ -2281,7 +2728,7 @@
       } else {
         points = 0; // 0 for incorrect to match real Kahoot
       }
-      
+
       player.score += points;
       // Broadcast updated state (triggers vote bar update on all screens)
       sendEvent('game_state', { ...store.state[curCode], code: curCode, players: serializePlayers(curCode) });
@@ -2312,7 +2759,7 @@
       const players = Object.values(store.players[curCode] || {});
       if (!players.length && !confirm('No players yet — start anyway for a demo?')) return;
       hostQIndex = 0;
-      hostPhase  = 'question';
+      hostPhase = 'question';
       store.state[curCode] = { status: 'countdown', qIndex: 0 };
       // Tell everyone to show countdown
       sendEvent('game_state', { status: 'countdown', code: curCode, players: serializePlayers(curCode) });
@@ -2332,7 +2779,7 @@
 
     function showHostQuestion() {
       const game = store.games[curCode];
-      const q    = game.questions[hostQIndex];
+      const q = game.questions[hostQIndex];
       // Snapshot scores pre-round
       prevScores = {};
       Object.entries(store.players[curCode] || {}).forEach(([id, p]) => prevScores[id] = p.score);
@@ -2345,8 +2792,8 @@
       document.getElementById('host-q-meta').textContent = `Question ${hostQIndex + 1} of ${game.questions.length}`;
       document.getElementById('host-question-text').textContent = q.q;
       [q.a1, q.a2, q.a3, q.a4].forEach((label, i) => {
-        document.getElementById('hat-' + (i+1)).textContent = label || '';
-        const ha = document.getElementById('ha-' + (i+1));
+        document.getElementById('hat-' + (i + 1)).textContent = label || '';
+        const ha = document.getElementById('ha-' + (i + 1));
         ha.style.opacity = label ? '1' : '0.15';
         ha.classList.remove('dim', 'correct');
       });
@@ -2364,10 +2811,10 @@
       const players = Object.values(store.players[curCode] || {});
       const total = players.length;
       const voted = players.filter(p => p.answered).length;
-      const pct   = total > 0 ? Math.round((voted / total) * 100) : 0;
-      const bar   = document.getElementById('vote-bar');
+      const pct = total > 0 ? Math.round((voted / total) * 100) : 0;
+      const bar = document.getElementById('vote-bar');
       const label = document.getElementById('vote-count-label');
-      if (bar)   bar.style.width = pct + '%';
+      if (bar) bar.style.width = pct + '%';
       if (label) label.textContent = voted + '/' + total;
     }
 
@@ -2381,10 +2828,10 @@
       }
       // Success background shift
       document.getElementById('screen-host-game').style.background = 'radial-gradient(circle at center, #064e3b 0%, #0f172a 100%)';
-      
+
       store.state[curCode] = { status: 'reveal', qIndex: hostQIndex, correct };
       sendEvent('game_state', { status: 'reveal', qIndex: hostQIndex, correct, code: curCode, players: serializePlayers(curCode) });
-      
+
       const rt = document.getElementById('reveal-timer');
       const rtxt = document.getElementById('reveal-text');
       if (rt) {
@@ -2409,7 +2856,7 @@
 
     function hostSkipQuestion() {
       if (!isHost || hostPhase !== 'question') return;
-      
+
       // 1. Add 50 points to ALL players
       const players = store.players[curCode] || {};
       Object.values(players).forEach(p => {
@@ -2430,9 +2877,9 @@
     }
 
     function showRoundScoreboard(wasSkipped = false) {
-      const game  = store.games[curCode];
+      const game = store.games[curCode];
       const isLast = hostQIndex >= game.questions.length - 1;
-      
+
       if (isLast) {
         // Show "Game Ended" screen — admin clicks to reveal podium
         store.state[curCode] = { status: 'game_ended' };
@@ -2440,11 +2887,11 @@
         goTo('screen-game-ended');
         return;
       }
-      
+
       const players = Object.entries(store.players[curCode] || {}).map(([id, p]) => ({ id, ...p })).sort((a, b) => b.score - a.score);
-      const top5  = players.slice(0, 5);
-      const medals = ['🥇','🥈','🥉','4️⃣','5️⃣'];
-      document.getElementById('rsb-header').textContent  = wasSkipped ? '⏭ Question Skipped!' : `Round ${hostQIndex + 1} Results`;
+      const top5 = players.slice(0, 5);
+      const medals = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣'];
+      document.getElementById('rsb-header').textContent = wasSkipped ? '⏭ Question Skipped!' : `Round ${hostQIndex + 1} Results`;
       document.getElementById('rsb-subheader').textContent = wasSkipped ? 'Everyone received 50 points!' : `Question ${hostQIndex + 1} of ${game.questions.length}`;
       document.getElementById('rsb-next-hint').textContent = isLast ? '🏆 Final scores coming up…' : '⏭ Next question coming up…';
       const list = document.getElementById('rsb-list');
@@ -2453,7 +2900,7 @@
         const delta = p.score - (prevScores[p.id] || 0);
         const div = document.createElement('div');
         div.className = 'rsb-item';
-        div.innerHTML = `<span class="rsb-rank">${medals[i]||i+1}</span><span class="rsb-name">${escHtml(p.name)}</span><span class="rsb-score" id="rsb-score-${i}">0</span>`;
+        div.innerHTML = `<span class="rsb-rank">${medals[i] || i + 1}</span><span class="rsb-name">${escHtml(p.name)}</span><span class="rsb-score" id="rsb-score-${i}">0</span>`;
         list.appendChild(div);
       });
       goTo('screen-round-scores');
@@ -2518,11 +2965,11 @@
       if (joiningInProgress) return;
       joiningInProgress = true;
       const name = document.getElementById('join-name').value.trim() || 'Player';
-      curName      = name;
-      curPlayerId  = 'p_' + Math.random().toString(36).slice(2, 9);
-      myScore      = 0;
-      myAnswered   = false;
-      lastQIndex   = -1;
+      curName = name;
+      curPlayerId = 'p_' + Math.random().toString(36).slice(2, 9);
+      myScore = 0;
+      myAnswered = false;
+      lastQIndex = -1;
       document.getElementById('player-lobby-name').textContent = name;
       goTo('screen-lobby-player');
 
@@ -2570,10 +3017,10 @@
           if (!store.games[curCode]) store.games[curCode] = { questions: [] };
           store.games[curCode].questions[qIndex] = question;
         }
-        if (qIndex !== lastQIndex) { 
-          lastQIndex = qIndex; 
-          myAnswered = false; 
-          myLastAnswer = null; 
+        if (qIndex !== lastQIndex) {
+          lastQIndex = qIndex;
+          myAnswered = false;
+          myLastAnswer = null;
           questionStartTime = performance.now(); // Start the timer for speed points
         }
         if (!myAnswered) showPlayerButtons();
@@ -2582,17 +3029,17 @@
       } else if (status === 'reveal') {
         const isCorrect = myLastAnswer === correct;
         const wasSkipped = payload.skipped;
-        
+
         // Calculate Rank and Position
         const sorted = (players || []).sort((a, b) => b.score - a.score);
         const myIdx = sorted.findIndex(p => p.id === curPlayerId);
         const myPlayer = sorted[myIdx];
-        
+
         if (myPlayer) {
           myScore = myPlayer.score; // Sync score from host
           const rank = myIdx + 1;
           const suffix = (rank === 1 ? 'st' : rank === 2 ? 'nd' : rank === 3 ? 'rd' : 'th');
-          
+
           let positionMsg = "";
           if (rank === 1) {
             positionMsg = "You're in the lead! 🏆";
@@ -2605,7 +3052,7 @@
               positionMsg = `Behind <span>${escHtml(ahead.name)}</span> by ${diff.toLocaleString()} pts`;
             }
           }
-          
+
           showPlayerRankFeedback(wasSkipped ? '⏭ SKIPPED' : (isCorrect ? '✅ CORRECT' : '❌ INCORRECT'), isCorrect, rank + suffix, positionMsg);
         } else {
           const msg = wasSkipped ? '⏭ Question Skipped!' : '📊 Look at the screen!';
@@ -2652,20 +3099,20 @@
       goTo('screen-player-game');
       document.getElementById('player-buttons').classList.add('hidden');
       document.getElementById('player-waiting').style.display = 'none';
-      
+
       const fb = document.getElementById('player-rank-feedback');
       fb.style.display = 'flex';
-      
+
       const banner = document.getElementById('feedback-banner');
       banner.textContent = title;
-      
+
       const isSkipped = title.includes('SKIPPED');
       banner.className = 'feedback-banner ' + (isSkipped ? '' : (isCorrect ? 'feedback-correct' : 'feedback-incorrect'));
-      
+
       document.getElementById('feedback-rank').textContent = rankStr;
       document.getElementById('feedback-position').innerHTML = posMsg;
       document.getElementById('feedback-total-score').textContent = myScore.toLocaleString() + ' pts';
-      
+
       // Change background color based on status (like Kahoot)
       const screen = document.getElementById('screen-player-game');
       if (isSkipped) {
@@ -2711,12 +3158,12 @@
     function showPodium(code) {
       goTo('screen-podium');
       const players = Object.values(store.players[code] || {}).sort((a, b) => b.score - a.score);
-      
+
       // Reset all animations
       ['3rd', '2nd', '1st'].forEach(rank => {
         document.getElementById(`podium-${rank}`).classList.remove(`animate-${rank}`);
       });
-      
+
       // Reset content with mystery
       ['3rd', '2nd', '1st'].forEach(rank => {
         document.getElementById(`name-${rank}`).textContent = '???';
@@ -2724,22 +3171,22 @@
         document.getElementById(`name-${rank}`).classList.remove('reveal');
         document.getElementById(`score-${rank}`).classList.remove('reveal');
       });
-      
+
       // Reset trophy animations
       document.querySelectorAll('.winner-rank').forEach(el => el.classList.remove('show'));
-      
+
       // Clean up old effects
       document.querySelectorAll('.star-particle, .cosmic-dust, .hyperspace, .nebula').forEach(c => c.remove());
-      
+
       // Add nebula clouds
       const nebula1 = document.createElement('div');
       nebula1.className = 'nebula nebula-1';
       document.getElementById('screen-podium').appendChild(nebula1);
-      
+
       const nebula2 = document.createElement('div');
       nebula2.className = 'nebula nebula-2';
       document.getElementById('screen-podium').appendChild(nebula2);
-      
+
       // Create hyperspace effect element
       let hyperspace = document.querySelector('.hyperspace');
       if (!hyperspace) {
@@ -2747,129 +3194,129 @@
         hyperspace.className = 'hyperspace';
         document.body.appendChild(hyperspace);
       }
-      
+
       if (!players.length) {
         document.getElementById('name-1st').textContent = 'No players 😢';
         return;
       }
-      
+
       const top3 = players.slice(0, 3);
-      
+
       // ═══ COSMIC SEQUENCE START ═══
-      
+
       // Title warp entrance
       const titleEl = document.querySelector('.podium-title');
       titleEl.classList.remove('entrance');
       void titleEl.offsetWidth;
       titleEl.classList.add('entrance');
-      
+
       // Start cosmic dust
       createCosmicDust();
-      
+
       // ═══ 3RD PLACE - MARS WARP ═══
       setTimeout(() => {
         hyperspace.classList.add('active');
         setTimeout(() => hyperspace.classList.remove('active'), 1000);
-        
+
         setTimeout(() => {
           if (top3[2]) {
             const nameEl = document.getElementById('name-3rd');
             const scoreEl = document.getElementById('score-3rd');
-            
+
             nameEl.textContent = escHtml(top3[2].name);
             scoreEl.textContent = top3[2].score.toLocaleString();
-            
+
             document.getElementById('podium-3rd').classList.add('animate-3rd');
             createStarBurst(window.innerWidth * 0.3, window.innerHeight * 0.5, '#cd5c3c');
-            
+
             setTimeout(() => {
               nameEl.classList.add('reveal');
               document.querySelector('#winner-3rd .winner-rank').classList.add('show');
             }, 1200);
-            
+
             setTimeout(() => {
               scoreEl.classList.add('reveal');
             }, 1400);
           }
         }, 500);
       }, 2000);
-      
+
       // ═══ 2ND PLACE - ICE WARP ═══
       setTimeout(() => {
         hyperspace.classList.add('active');
         setTimeout(() => hyperspace.classList.remove('active'), 1000);
-        
+
         setTimeout(() => {
           if (top3[1]) {
             const nameEl = document.getElementById('name-2nd');
             const scoreEl = document.getElementById('score-2nd');
-            
+
             nameEl.textContent = escHtml(top3[1].name);
             scoreEl.textContent = top3[1].score.toLocaleString();
-            
+
             document.getElementById('podium-2nd').classList.add('animate-2nd');
             createStarBurst(window.innerWidth * 0.7, window.innerHeight * 0.45, '#a0c0e0');
-            
+
             setTimeout(() => {
               nameEl.classList.add('reveal');
               document.querySelector('#winner-2nd .winner-rank').classList.add('show');
             }, 1400);
-            
+
             setTimeout(() => {
               scoreEl.classList.add('reveal');
             }, 1600);
           }
         }, 500);
       }, 4500);
-      
+
       // ═══ 1ST PLACE - SUN SUPERNOVA ═══
       setTimeout(() => {
         // Supernova flash
         hyperspace.classList.add('active');
         setTimeout(() => hyperspace.classList.remove('active'), 1500);
-        
+
         // Massive star explosion
         createSupernova();
-        
+
         setTimeout(() => {
           if (top3[0]) {
             const nameEl = document.getElementById('name-1st');
             const scoreEl = document.getElementById('score-1st');
-            
+
             nameEl.textContent = escHtml(top3[0].name);
             scoreEl.textContent = top3[0].score.toLocaleString();
-            
+
             document.getElementById('podium-1st').classList.add('animate-1st');
-            
+
             setTimeout(() => {
               nameEl.classList.add('reveal');
               document.querySelector('#winner-1st .winner-rank').classList.add('show');
               createStarBurst(window.innerWidth * 0.5, window.innerHeight * 0.4, '#ffd700');
             }, 1800);
-            
+
             setTimeout(() => {
               scoreEl.classList.add('reveal');
             }, 2000);
-            
+
             // Victory starfield
             setTimeout(() => createVictoryStars(), 2500);
             setTimeout(() => createVictoryStars(), 3000);
           }
         }, 800);
       }, 7500);
-      
+
       // Update legacy list
-      const medals = ['🥇','🥈','🥉'];
+      const medals = ['🥇', '🥈', '🥉'];
       const list = document.getElementById('podium-list');
       list.innerHTML = '';
       players.slice(0, 3).forEach((p, i) => {
         const li = document.createElement('li');
         li.className = 'podium-item';
-        li.innerHTML = `<span class="podium-rank">${medals[i]||i+1}</span><span style="flex:1">${escHtml(p.name)}</span><span class="podium-score">${p.score.toLocaleString()}</span>`;
+        li.innerHTML = `<span class="podium-rank">${medals[i] || i + 1}</span><span style="flex:1">${escHtml(p.name)}</span><span class="podium-score">${p.score.toLocaleString()}</span>`;
         list.appendChild(li);
       });
     }
-    
+
     // Star burst explosion effect
     function createStarBurst(x, y, color) {
       for (let i = 0; i < 20; i++) {
@@ -2879,29 +3326,29 @@
         star.style.top = y + 'px';
         star.style.background = color;
         star.style.boxShadow = `0 0 10px ${color}, 0 0 20px ${color}`;
-        
+
         const angle = (i / 20) * Math.PI * 2;
         const distance = 100 + Math.random() * 150;
         star.style.setProperty('--sx', Math.cos(angle) * distance + 'px');
         star.style.setProperty('--sy', Math.sin(angle) * distance + 'px');
         star.style.animation = `starBurst ${0.8 + Math.random() * 0.4}s cubic-bezier(0.16, 1, 0.3, 1) forwards`;
-        
+
         document.body.appendChild(star);
         setTimeout(() => star.remove(), 1200);
       }
     }
-    
+
     // Supernova explosion for champion
     function createSupernova() {
       const centerX = window.innerWidth * 0.5;
       const centerY = window.innerHeight * 0.5;
-      
+
       // Core explosion
       for (let ring = 0; ring < 3; ring++) {
         setTimeout(() => {
           const count = 30 + ring * 10;
           const colors = ['#ffd700', '#ff8c00', '#ff6b00', '#ffffff', '#ffec8b'];
-          
+
           for (let i = 0; i < count; i++) {
             const star = document.createElement('div');
             star.className = 'star-particle';
@@ -2912,20 +3359,20 @@
             star.style.boxShadow = `0 0 15px ${color}, 0 0 30px ${color}`;
             star.style.width = (4 + Math.random() * 6) + 'px';
             star.style.height = star.style.width;
-            
+
             const angle = (i / count) * Math.PI * 2 + Math.random() * 0.5;
             const distance = 150 + ring * 100 + Math.random() * 100;
             star.style.setProperty('--sx', Math.cos(angle) * distance + 'px');
             star.style.setProperty('--sy', Math.sin(angle) * distance + 'px');
             star.style.animation = `starBurst ${1 + Math.random() * 0.5}s cubic-bezier(0.16, 1, 0.3, 1) forwards`;
-            
+
             document.body.appendChild(star);
             setTimeout(() => star.remove(), 1500);
           }
         }, ring * 200);
       }
     }
-    
+
     // Cosmic dust particles
     function createCosmicDust() {
       for (let i = 0; i < 30; i++) {
@@ -2935,17 +3382,17 @@
           dust.style.left = Math.random() * 100 + '%';
           dust.style.animation = `dustFloat ${8 + Math.random() * 6}s linear forwards`;
           dust.style.opacity = 0.3 + Math.random() * 0.4;
-          
+
           document.getElementById('screen-podium').appendChild(dust);
           setTimeout(() => dust.remove(), 15000);
         }, i * 300);
       }
     }
-    
+
     // Victory stars rain
     function createVictoryStars() {
       const colors = ['#ffd700', '#ffec8b', '#ffffff', '#00ccff', '#ff00cc'];
-      
+
       for (let i = 0; i < 25; i++) {
         setTimeout(() => {
           const star = document.createElement('div');
@@ -2958,7 +3405,7 @@
           star.style.width = (3 + Math.random() * 5) + 'px';
           star.style.height = star.style.width;
           star.style.animation = `dustFloat ${3 + Math.random() * 2}s linear forwards`;
-          
+
           document.body.appendChild(star);
           setTimeout(() => star.remove(), 5000);
         }, i * 80);
@@ -2966,7 +3413,7 @@
     }
 
     function escHtml(s) {
-      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+      return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
     }
 
     document.getElementById('admin-pwd').addEventListener('keyup', e => { if (e.key === 'Enter') checkAdmin(); });
