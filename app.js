@@ -21,6 +21,7 @@ async function getSavedGames() {
 }
 
 async function saveGameToStorage(id, gameObj) {
+  console.log('Saving game with questions:', JSON.stringify(gameObj.questions));
   if (useSB) {
     const { error } = await sb.from('saved_games').upsert({ id, game_data: gameObj, updated_at: new Date().toISOString() }, { onConflict: 'id' });
     if (error) console.error(error);
@@ -134,6 +135,8 @@ let hostPhase = 'question';
 let prevScores = {};
 let joiningInProgress = false;
 let playerCountdownInterval = null;
+let currentImageUrl = '';
+let imageUploadInProgress = false;
 
 // ── TOAST ────────────────────────────────────────────────────────────────
 function showToast(msg, color) {
@@ -142,6 +145,65 @@ function showToast(msg, color) {
   t.style.background = color || 'linear-gradient(135deg, #3b82f6, #2563eb)';
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ── IMAGE UPLOAD ──────────────────────────────────────────────────────────
+async function uploadImageToStorage(file) {
+  if (!file || !useSB) return null;
+  
+  const fileName = `game_${editingGameId || 'new'}/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
+  const { data, error } = await sb.storage
+    .from('kahoot-storage')
+    .upload(fileName, file);
+
+  if (error) {
+    console.error('Image upload error:', error);
+    showToast('❌ Failed to upload image', '#ef4444');
+    return null;
+  }
+
+  const { data: { publicUrl } } = sb.storage
+    .from('kahoot-storage')
+    .getPublicUrl(fileName);
+
+  return publicUrl;
+}
+
+async function handleImageUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+
+  if (file.size > 2 * 1024 * 1024) {
+    alert('Image too large! Please use images under 2MB.');
+    input.value = '';
+    return;
+  }
+
+  document.getElementById('img-uploading').style.display = 'block';
+  imageUploadInProgress = true;
+
+  try {
+    currentImageUrl = await uploadImageToStorage(file);
+    if (currentImageUrl) {
+      document.getElementById('img-preview-src').src = currentImageUrl;
+      document.getElementById('img-preview').style.display = 'block';
+      showToast('🖼️ Image added!', '#26890c');
+    }
+  } catch (e) {
+    console.error('Upload error:', e);
+    showToast('❌ Upload failed', '#ef4444');
+  } finally {
+    document.getElementById('img-uploading').style.display = 'none';
+    imageUploadInProgress = false;
+    input.value = '';
+  }
+}
+
+function removeImage() {
+  currentImageUrl = '';
+  document.getElementById('qb-img').value = '';
+  document.getElementById('img-preview').style.display = 'none';
+  document.getElementById('img-preview-src').src = '';
 }
 
 // ── NAVIGATION ───────────────────────────────────────────────────────────
@@ -268,6 +330,7 @@ async function deleteSavedGame(id) {
 // ── CREATE / EDIT GAME ───────────────────────────────────────────────────
 function startNewGame() {
   QUESTIONS = []; editingGameId = null; editingIndex = -1;
+  currentImageUrl = '';
   document.getElementById('game-title').value = '';
   document.getElementById('create-game-title').textContent = '✏️ Create Game';
   clearBuilder(); renderQuestionList(); goTo('screen-create-game');
@@ -291,10 +354,11 @@ function addOrUpdateQuestion() {
   const a4 = document.getElementById('qb-a4').value.trim();
   const c = parseInt(document.getElementById('qb-correct').value);
   const t = parseInt(document.getElementById('qb-time').value) || 20;
+  const img = currentImageUrl;
   if (!q) { alert('Enter a question!'); return; }
   if (!a1) { alert('Enter Answer 1!'); return; }
   if (!a2) { alert('Enter Answer 2!'); return; }
-  const qObj = { q, a1, a2, a3, a4, c, t };
+  const qObj = { q, a1, a2, a3, a4, c, t, img };
   if (editingIndex >= 0) { QUESTIONS[editingIndex] = qObj; showToast('Question updated ✅', '#26890c'); }
   else { QUESTIONS.push(qObj); showToast('Question added ✅', '#26890c'); }
   cancelEdit(); renderQuestionList();
@@ -310,6 +374,15 @@ function editQuestion(i) {
   document.getElementById('qb-a4').value = q.a4 || '';
   document.getElementById('qb-correct').value = String(q.c);
   document.getElementById('qb-time').value = q.t;
+  
+  currentImageUrl = q.img || '';
+  if (currentImageUrl) {
+    document.getElementById('img-preview-src').src = currentImageUrl;
+    document.getElementById('img-preview').style.display = 'block';
+  } else {
+    document.getElementById('img-preview').style.display = 'none';
+  }
+  
   document.getElementById('builder-title').textContent = '✏️ Edit Question';
   document.getElementById('add-q-btn').textContent = '💾 Save Changes';
   document.getElementById('add-q-btn').className = 'btn btn-orange';
@@ -332,6 +405,9 @@ function clearBuilder() {
   document.getElementById('add-q-btn').className = 'btn btn-green';
   document.getElementById('cancel-edit-btn').style.display = 'none';
   document.getElementById('edit-banner').classList.remove('show');
+  currentImageUrl = '';
+  document.getElementById('img-preview').style.display = 'none';
+  document.getElementById('img-preview-src').src = '';
 }
 
 function deleteQuestion(i) {
@@ -376,10 +452,14 @@ async function saveAndHost() {
 async function loadGameAndHost(id) {
   const all = await getSavedGames();
   const g = all[id]; if (!g) return;
+  console.log('Loading game:', g);
+  console.log('Questions in game:', g.questions);
+  if (g.questions && g.questions[0]) console.log('First question:', JSON.stringify(g.questions[0]));
   await startHosting(g.title, g.questions);
 }
 
 async function startHosting(title, questions) {
+  console.log('startHosting questions:', questions);
   isHost = true;
   const code = String(Math.floor(100000 + Math.random() * 900000));
   curCode = code;
@@ -503,6 +583,7 @@ function hostStartGame() {
 function showHostQuestion() {
   const game = store.games[curCode];
   const q = game.questions[hostQIndex];
+  console.log('Question data:', q);
   prevScores = {};
   Object.entries(store.players[curCode] || {}).forEach(([id, p]) => prevScores[id] = p.score);
   Object.values(store.players[curCode] || {}).forEach(p => p.answered = false);
@@ -511,6 +592,16 @@ function showHostQuestion() {
   goTo('screen-host-game');
   document.getElementById('host-q-meta').textContent = `Question ${hostQIndex + 1} of ${game.questions.length}`;
   document.getElementById('host-question-text').textContent = q.q;
+  
+  const hostImg = document.getElementById('host-question-img');
+  console.log('Image URL:', q.img);
+  if (q.img) {
+    hostImg.src = q.img;
+    hostImg.style.display = 'block';
+  } else {
+    hostImg.style.display = 'none';
+  }
+  
   [q.a1, q.a2, q.a3, q.a4].forEach((label, i) => {
     document.getElementById('hat-' + (i + 1)).textContent = label || '';
     const ha = document.getElementById('ha-' + (i + 1));
@@ -723,6 +814,15 @@ function handleGameState(payload) {
     if (question) {
       if (!store.games[curCode]) store.games[curCode] = { questions: [] };
       store.games[curCode].questions[qIndex] = question;
+      
+      const playerImgContainer = document.getElementById('player-question-img-container');
+      const playerImg = document.getElementById('player-question-img');
+      if (question.img) {
+        playerImg.src = question.img;
+        playerImgContainer.style.display = 'block';
+      } else {
+        playerImgContainer.style.display = 'none';
+      }
     }
     if (qIndex !== lastQIndex) {
       lastQIndex = qIndex;
