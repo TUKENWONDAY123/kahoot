@@ -78,16 +78,29 @@ function subscribeToGame(code, onReady) {
   }
 
   realtimeChannel = sb.channel('game_room_' + code, {
-    config: { broadcast: { self: false } }
+    config: { 
+      broadcast: { self: false },
+      presence: { key: isHost ? 'host' : (curPlayerId || 'unknown') }
+    }
   });
 
   realtimeChannel
     .on('broadcast', { event: '*' }, ({ event, payload }) => {
       onEvent(event, payload);
     })
-    .subscribe(status => {
+    .on('presence', { event: 'leave' }, ({ key }) => {
+      if (key && key !== 'host') {
+        onEvent('player_leave', { id: key, code: code });
+      }
+    })
+    .subscribe(async status => {
       console.log('Channel status:', status);
-      if (status === 'SUBSCRIBED' && onReady) onReady();
+      if (status === 'SUBSCRIBED') {
+        try {
+          await realtimeChannel.track({ id: isHost ? 'host' : curPlayerId });
+        } catch (e) { console.error('Presence track error', e); }
+        if (onReady) onReady();
+      }
     });
 }
 
@@ -97,6 +110,7 @@ function onEvent(event, payload) {
   if (event === 'player_join') { if (isHost) hostOnPlayerJoin(payload); }
   if (event === 'player_vote') { if (isHost) hostOnPlayerVote(payload); }
   if (event === 'request_state') { if (isHost) hostResendState(); }
+  if (event === 'player_leave') { if (isHost) hostOnPlayerLeave(payload); }
 }
 
 function serializePlayers(code) {
@@ -398,6 +412,26 @@ function hostOnPlayerJoin(payload) {
     showToast('👋 ' + name + ' joined!', '#26890c');
   }
   hostResendState();
+}
+
+function hostOnPlayerLeave(payload) {
+  const { id, code } = payload;
+  if (code !== curCode) return;
+  if (store.players[curCode] && store.players[curCode][id]) {
+    const pName = store.players[curCode][id].name;
+    delete store.players[curCode][id];
+    updateHostLobbyUI();
+    showToast('👋 ' + pName + ' left', '#e21b3c');
+    hostResendState();
+
+    if (hostPhase === 'question') {
+      updateVoteBar();
+      const all = Object.values(store.players[curCode]);
+      if (all.length > 0 && all.every(p => p.answered)) {
+        hostRevealAnswer();
+      }
+    }
+  }
 }
 
 function hostOnPlayerVote(payload) {
@@ -1063,3 +1097,9 @@ function escHtml(s) {
 }
 
 document.getElementById('admin-pwd').addEventListener('keyup', e => { if (e.key === 'Enter') checkAdmin(); });
+
+window.addEventListener('beforeunload', () => {
+  if (!isHost && curPlayerId && curCode) {
+    sendEvent('player_leave', { id: curPlayerId, code: curCode });
+  }
+});
