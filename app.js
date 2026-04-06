@@ -611,9 +611,7 @@ function showHostQuestion() {
   hostPhase = 'question';
   updateVoteBar();
   const rt = document.getElementById('reveal-timer');
-  const rtxt = document.getElementById('reveal-text');
   if (rt) rt.style.display = 'none';
-  if (rtxt) rtxt.style.display = 'none';
   document.getElementById('screen-host-game').style.background = '';
 }
 
@@ -642,10 +640,8 @@ function hostRevealAnswer() {
   sendEvent('game_state', { status: 'reveal', qIndex: hostQIndex, correct, code: curCode, players: serializePlayers(curCode) });
 
   const rt = document.getElementById('reveal-timer');
-  const rtxt = document.getElementById('reveal-text');
   if (rt) {
     rt.style.display = 'flex';
-    if (rtxt) rtxt.style.display = 'block';
     let left = 7;
     rt.textContent = left;
     const iv = setInterval(() => {
@@ -654,7 +650,6 @@ function hostRevealAnswer() {
       if (left <= 0) {
         clearInterval(iv);
         rt.style.display = 'none';
-        if (rtxt) rtxt.style.display = 'none';
         showRoundScoreboard();
       }
     }, 1000);
