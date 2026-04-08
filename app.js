@@ -79,7 +79,7 @@ function subscribeToGame(code, onReady) {
   }
 
   realtimeChannel = sb.channel('game_room_' + code, {
-    config: { 
+    config: {
       broadcast: { self: false },
       presence: { key: isHost ? 'host' : (curPlayerId || 'unknown') }
     }
@@ -112,6 +112,7 @@ function onEvent(event, payload) {
   if (event === 'player_vote') { if (isHost) hostOnPlayerVote(payload); }
   if (event === 'request_state') { if (isHost) hostResendState(); }
   if (event === 'player_leave') { if (isHost) hostOnPlayerLeave(payload); }
+  if (event === 'player_kicked') { if (!isHost) handlePlayerKicked(payload); }
 }
 
 function serializePlayers(code) {
@@ -150,7 +151,7 @@ function showToast(msg, color) {
 // ── IMAGE UPLOAD ──────────────────────────────────────────────────────────
 async function uploadImageToStorage(file) {
   if (!file || !useSB) return null;
-  
+
   const fileName = `game_${editingGameId || 'new'}/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
   const { data, error } = await sb.storage
     .from('kahoot-storage')
@@ -225,7 +226,7 @@ let isAdminLoggedIn = false;
 async function checkAdmin() {
   const pwd = document.getElementById('admin-pwd').value;
   if (!pwd) return;
-  
+
   if (!sb || !useSB) {
     document.getElementById('admin-err').textContent = '⚠️ Supabase not connected';
     document.getElementById('admin-err').classList.add('show');
@@ -374,7 +375,7 @@ function editQuestion(i) {
   document.getElementById('qb-a4').value = q.a4 || '';
   document.getElementById('qb-correct').value = String(q.c);
   document.getElementById('qb-time').value = q.t;
-  
+
   currentImageUrl = q.img || '';
   if (currentImageUrl) {
     document.getElementById('img-preview-src').src = currentImageUrl;
@@ -382,7 +383,7 @@ function editQuestion(i) {
   } else {
     document.getElementById('img-preview').style.display = 'none';
   }
-  
+
   document.getElementById('builder-title').textContent = '✏️ Edit Question';
   document.getElementById('add-q-btn').textContent = '💾 Save Changes';
   document.getElementById('add-q-btn').className = 'btn btn-orange';
@@ -484,10 +485,10 @@ function hostResendState() {
 }
 
 function hostOnPlayerJoin(payload) {
-  const { id, name, code } = payload;
+  const { id, name, code, avatarUrl } = payload;
   if (code !== curCode) return;
   if (!store.players[curCode][id]) {
-    store.players[curCode][id] = { name, score: 0, answered: false };
+    store.players[curCode][id] = { name, score: 0, answered: false, avatarUrl };
     updateHostLobbyUI();
     showToast('👋 ' + name + ' joined!', '#26890c');
   }
@@ -545,17 +546,34 @@ function hostOnPlayerVote(payload) {
 }
 
 function updateHostLobbyUI() {
-  const players = Object.values(store.players[curCode] || {});
-  const count = players.length;
+  const players = store.players[curCode] || {};
+  const count = Object.keys(players).length;
   document.getElementById('player-count-badge').textContent = count + ' player' + (count !== 1 ? 's' : '');
   const list = document.getElementById('host-players-list');
   list.innerHTML = '';
-  players.forEach(p => {
+  Object.entries(players).forEach(([pid, p]) => {
     const el = document.createElement('div');
     el.className = 'player-pill';
-    el.textContent = p.name;
+    el.style.display = 'flex';
+    el.style.alignItems = 'center';
+    el.style.justifyContent = 'space-between';
+    el.style.gap = '8px';
+    el.style.padding = '8px 12px';
+    el.innerHTML = `<div style="display:flex;align-items:center;gap:8px;">${getAvatarImg(p.name, 28, p.avatarUrl)}<span>${escHtml(p.name)}</span></div><button class="btn btn-red btn-sm" style="padding:4px 10px;font-size:0.75rem;" onclick="kickPlayer('${pid}')">Kick</button>`;
     list.appendChild(el);
   });
+}
+
+function kickPlayer(playerId) {
+  if (!confirm('Kick this player?')) return;
+  if (store.players[curCode] && store.players[curCode][playerId]) {
+    const pName = store.players[curCode][playerId].name;
+    delete store.players[curCode][playerId];
+    updateHostLobbyUI();
+    showToast('🚫 ' + pName + ' was kicked', '#ef4444');
+    sendEvent('player_kicked', { id: playerId, code: curCode });
+    hostResendState();
+  }
 }
 
 // ── HOST GAME FLOW ───────────────────────────────────────────────────────
@@ -592,7 +610,7 @@ function showHostQuestion() {
   goTo('screen-host-game');
   document.getElementById('host-q-meta').textContent = `Question ${hostQIndex + 1} of ${game.questions.length}`;
   document.getElementById('host-question-text').textContent = q.q;
-  
+
   const hostImg = document.getElementById('host-question-img');
   console.log('Image URL:', q.img);
   if (q.img) {
@@ -601,7 +619,7 @@ function showHostQuestion() {
   } else {
     hostImg.style.display = 'none';
   }
-  
+
   [q.a1, q.a2, q.a3, q.a4].forEach((label, i) => {
     document.getElementById('hat-' + (i + 1)).textContent = label || '';
     const ha = document.getElementById('ha-' + (i + 1));
@@ -700,7 +718,7 @@ function showRoundScoreboard(wasSkipped = false) {
     const delta = p.score - (prevScores[p.id] || 0);
     const div = document.createElement('div');
     div.className = 'rsb-item';
-    div.innerHTML = `<span class="rsb-rank">${medals[i] || i + 1}</span><span class="rsb-name">${escHtml(p.name)}</span><span class="rsb-score" id="rsb-score-${i}">0</span>`;
+    div.innerHTML = `<span class="rsb-rank">${medals[i] || i + 1}</span><span class="rsb-name" style="display:flex;align-items:center;gap:10px;">${getAvatarImg(p.name, 32, p.avatarUrl)}<span>${escHtml(p.name)}</span></span><span class="rsb-score" id="rsb-score-${i}">0</span>`;
     list.appendChild(div);
   });
   goTo('screen-round-scores');
@@ -759,6 +777,61 @@ function checkPin() {
   goTo('screen-join-name');
 }
 
+let myAvatarUrl = 'https://api.dicebear.com/9.x/avataaars/svg?seed=Player';
+
+function updateAvatarPreview() {
+  if (avatarIsCustom) return;
+  const nameEl = document.getElementById('join-name');
+  const seed = (nameEl && nameEl.value.trim() !== '') ? nameEl.value.trim() : 'Player';
+  myAvatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(seed)}`;
+  const previewEl = document.getElementById('avatar-preview');
+  if (previewEl) previewEl.src = myAvatarUrl;
+}
+
+let avatarIsCustom = false;
+
+function randomizeAvatar() {
+  const randomSeed = 'Avatar' + Date.now() + '_' + Math.floor(Math.random() * 999999);
+  avatarIsCustom = true;
+  myAvatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${randomSeed}`;
+  const previewEl = document.getElementById('avatar-preview');
+  if (previewEl) previewEl.src = myAvatarUrl;
+}
+
+const avatarSeeds = ['Alex','Jordan','Taylor','Morgan','Casey','Riley','Quinn','Avery','Parker','Sage','River','Sky','Emery','Blake','Cameron','Dakota','Reese','Finley','Hayden','Lennox','Phoenix','Winter','Sage','Marlowe','Spencer','Tatum','Lane','Pierce','Remy','Rowan','Sawyer','Shiloh','Stevie','Sutton','Teagan','Unity','Venus','Wren','Zion','Indigo','Marquis','Dakota','Ellis','Kendall','Logan','Peyton','Robin','Shannon','Stacy','Toni','Val','Kerry','Les','Shelley','Stevie'];
+
+function showAvatarPicker() {
+  const modal = document.getElementById('avatar-picker-modal');
+  const grid = document.getElementById('avatar-grid');
+  grid.innerHTML = '';
+  avatarSeeds.forEach(seed => {
+    const img = document.createElement('img');
+    img.src = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}`;
+    img.style.cssText = 'width:70px;height:70px;cursor:pointer;border-radius:12px;border:2px solid rgba(255,255,255,0.1);transition:all 0.2s ease;object-fit:contain;background:rgba(255,255,255,0.05);';
+    img.onmouseover = () => { img.style.borderColor = '#818cf8'; img.style.transform = 'scale(1.08)'; img.style.boxShadow = '0 4px 12px rgba(129,140,248,0.3)'; };
+    img.onmouseout = () => { img.style.borderColor = 'rgba(255,255,255,0.1)'; img.style.transform = 'scale(1)'; img.style.boxShadow = 'none'; };
+    img.onclick = () => {
+      avatarIsCustom = true;
+      myAvatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}`;
+      const previewEl = document.getElementById('avatar-preview');
+      if (previewEl) previewEl.src = myAvatarUrl;
+      closeAvatarPicker();
+    };
+    grid.appendChild(img);
+  });
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeAvatarPicker() {
+  document.getElementById('avatar-picker-modal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function updateAvatarSeedFromInput() {
+  updateAvatarPreview();
+}
+
 async function joinGame() {
   if (joiningInProgress) return;
   joiningInProgress = true;
@@ -768,12 +841,18 @@ async function joinGame() {
   myScore = 0;
   myAnswered = false;
   lastQIndex = -1;
-  document.getElementById('player-lobby-name').textContent = name;
+  
+  if (!avatarIsCustom) {
+    myAvatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(name)}`;
+  }
+  updateAvatarPreview();
+  
+  document.getElementById('player-lobby-name').innerHTML = `<div style="display:flex;align-items:center;justify-content:center;gap:12px;">${getAvatarImg(name, 48, myAvatarUrl)}<span>${escHtml(name)}</span></div>`;
   goTo('screen-lobby-player');
 
   subscribeToGame(curCode, () => {
     console.log('✅ Player subscribed to game_room_' + curCode);
-    sendEvent('player_join', { id: curPlayerId, name, code: curCode });
+    sendEvent('player_join', { id: curPlayerId, name, code: curCode, avatarUrl: myAvatarUrl });
     setTimeout(() => sendEvent('request_state', { code: curCode }), 800);
   });
 }
@@ -786,7 +865,7 @@ function handleGameState(payload) {
 
   if (players) {
     if (!store.players[curCode]) store.players[curCode] = {};
-    players.forEach(p => { store.players[curCode][p.id] = { name: p.name, score: p.score, answered: p.answered }; });
+    players.forEach(p => { store.players[curCode][p.id] = { name: p.name, score: p.score, answered: p.answered, avatarUrl: p.avatarUrl }; });
   }
 
   if (status === 'lobby') {
@@ -809,7 +888,7 @@ function handleGameState(payload) {
     if (question) {
       if (!store.games[curCode]) store.games[curCode] = { questions: [] };
       store.games[curCode].questions[qIndex] = question;
-      
+
       const playerImgContainer = document.getElementById('player-question-img-container');
       const playerImg = document.getElementById('player-question-img');
       if (question.img) {
@@ -848,9 +927,9 @@ function handleGameState(payload) {
         const ahead = sorted[myIdx - 1];
         const diff = ahead.score - myPlayer.score;
         if (diff === 0) {
-          positionMsg = `Tied with <span>${escHtml(ahead.name)}</span>`;
+          positionMsg = `Tied with <span style="display:inline-flex;align-items:center;vertical-align:middle;gap:6px;margin:0 4px;">${getAvatarImg(ahead.name, 24, ahead.avatarUrl)} ${escHtml(ahead.name)}</span>`;
         } else {
-          positionMsg = `Behind <span>${escHtml(ahead.name)}</span> by ${diff.toLocaleString()} pts`;
+          positionMsg = `Behind <span style="display:inline-flex;align-items:center;vertical-align:middle;gap:6px;margin:0 4px;">${getAvatarImg(ahead.name, 24, ahead.avatarUrl)} ${escHtml(ahead.name)}</span> by ${diff.toLocaleString()} pts`;
         }
       }
 
@@ -866,6 +945,15 @@ function handleGameState(payload) {
   } else if (status === 'podium') {
     goTo('screen-home');
     document.getElementById('join-pin').value = '';
+    curCode = '';
+    curPlayerId = '';
+  }
+}
+
+function handlePlayerKicked(payload) {
+  if (payload.id === curPlayerId) {
+    showToast('🚫 You were kicked from the game!', '#ef4444');
+    goTo('screen-home');
     curCode = '';
     curPlayerId = '';
   }
@@ -1009,7 +1097,7 @@ function showPodium(code) {
         const nameEl = document.getElementById('name-3rd');
         const scoreEl = document.getElementById('score-3rd');
 
-        nameEl.textContent = escHtml(top3[2].name);
+        nameEl.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;gap:8px;">${getAvatarImg(top3[2].name, 60, top3[2].avatarUrl)}<span>${escHtml(top3[2].name)}</span></div>`;
         scoreEl.textContent = top3[2].score.toLocaleString();
 
         document.getElementById('podium-3rd').classList.add('animate-3rd');
@@ -1036,7 +1124,7 @@ function showPodium(code) {
         const nameEl = document.getElementById('name-2nd');
         const scoreEl = document.getElementById('score-2nd');
 
-        nameEl.textContent = escHtml(top3[1].name);
+        nameEl.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;gap:8px;">${getAvatarImg(top3[1].name, 60, top3[1].avatarUrl)}<span>${escHtml(top3[1].name)}</span></div>`;
         scoreEl.textContent = top3[1].score.toLocaleString();
 
         document.getElementById('podium-2nd').classList.add('animate-2nd');
@@ -1065,7 +1153,7 @@ function showPodium(code) {
         const nameEl = document.getElementById('name-1st');
         const scoreEl = document.getElementById('score-1st');
 
-        nameEl.textContent = escHtml(top3[0].name);
+        nameEl.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;gap:8px;">${getAvatarImg(top3[0].name, 70, top3[0].avatarUrl)}<span>${escHtml(top3[0].name)}</span></div>`;
         scoreEl.textContent = top3[0].score.toLocaleString();
 
         document.getElementById('podium-1st').classList.add('animate-1st');
@@ -1092,7 +1180,7 @@ function showPodium(code) {
   players.slice(0, 3).forEach((p, i) => {
     const li = document.createElement('li');
     li.className = 'podium-item';
-    li.innerHTML = `<span class="podium-rank">${medals[i] || i + 1}</span><span style="flex:1">${escHtml(p.name)}</span><span class="podium-score">${p.score.toLocaleString()}</span>`;
+    li.innerHTML = `<span class="podium-rank">${medals[i] || i + 1}</span><span style="flex:1;display:flex;align-items:center;gap:10px;">${getAvatarImg(p.name, 32, p.avatarUrl)}<span>${escHtml(p.name)}</span></span><span class="podium-score">${p.score.toLocaleString()}</span>`;
     list.appendChild(li);
   });
 }
@@ -1189,6 +1277,11 @@ function createVictoryStars() {
 
 function escHtml(s) {
   return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+function getAvatarImg(name, size = 30, avatarUrl = '') {
+  const url = avatarUrl || `https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(name)}`;
+  return `<img src="${url}" style="width:${size}px;height:${size}px;border-radius:50%;background:#ffffff22;flex-shrink:0;object-fit:contain;" alt="avatar" />`;
 }
 
 document.getElementById('admin-pwd').addEventListener('keyup', e => { if (e.key === 'Enter') checkAdmin(); });

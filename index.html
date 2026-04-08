@@ -6,7 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kahoot</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800;900&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 
@@ -39,7 +40,7 @@
     </div>
   </div>
 
-    <div id="screen-admin-dash" class="screen">
+  <div id="screen-admin-dash" class="screen">
     <h1 style="font-size:2.2rem;margin-bottom:16px;">📋 Admin Dashboard</h1>
     <div class="admin-scroll">
       <p class="section-title">Saved Games</p>
@@ -49,23 +50,24 @@
         <button class="btn btn-green btn-sm" onclick="startNewGame()" style="flex:2;">➕ Create New Game</button>
       </div>
       <div class="row-btns" style="margin-top:12px;">
-        <button class="btn btn-red btn-sm admin-logout-btn" onclick="adminSignOut()" style="display:none;width:100%;">🚪 Sign Out</button>
+        <button class="btn btn-red btn-sm admin-logout-btn" onclick="adminSignOut()" style="display:none;width:100%;">🚪
+          Sign Out</button>
       </div>
     </div>
   </div>
 
-    <div id="screen-create-game" class="screen">
+  <div id="screen-create-game" class="screen">
     <h1 style="font-size:2rem;margin-bottom:14px;" id="create-game-title">✏️ Create Game</h1>
     <div class="admin-scroll">
       <input type="text" id="game-title" placeholder="Game title (e.g. Science Quiz)"
         style="font-size:1.15rem;text-align:left;padding:16px 20px;" />
 
-      
+
       <p class="section-title">Questions Added: <span id="q-count">0</span></p>
       <p style="font-size:0.85rem;color:#94a3b8;font-weight:600;margin-bottom:6px;">💡 Click a question to edit it</p>
       <div id="q-list"></div>
 
-      
+
       <p class="section-title" style="margin-top:24px;" id="builder-title">➕ Add a Question</p>
       <div class="edit-banner" id="edit-banner">✏️ Editing question <span id="edit-banner-num"></span> — save changes
         below</div>
@@ -86,14 +88,20 @@
         style="text-align:left;" />
 
       <div style="margin-top:12px;">
-        <label style="display:block;text-align:left;font-size:0.9rem;color:#94a3b8;margin-bottom:6px;">🖼️ Add Image (optional)</label>
+        <label style="display:block;text-align:left;font-size:0.9rem;color:#94a3b8;margin-bottom:6px;">🖼️ Add Image
+          (optional)</label>
         <input type="file" id="qb-img" accept="image/*" onchange="handleImageUpload(this)" style="display:none;" />
-        <button class="btn btn-dark btn-sm" onclick="document.getElementById('qb-img').click()" style="width:100%;margin-bottom:8px;">📁 Upload Image</button>
-        <div id="img-preview" style="display:none;position:relative;background:#1e293b;border-radius:12px;padding:10px;">
-          <img id="img-preview-src" style="max-width:100%;max-height:150px;border-radius:8px;display:block;margin:0 auto;" />
-          <button onclick="removeImage()" style="position:absolute;top:5px;right:5px;background:#ef4444;border:none;border-radius:50%;width:28px;height:28px;color:white;font-size:16px;cursor:pointer;">✕</button>
+        <button class="btn btn-dark btn-sm" onclick="document.getElementById('qb-img').click()"
+          style="width:100%;margin-bottom:8px;">📁 Upload Image</button>
+        <div id="img-preview"
+          style="display:none;position:relative;background:#1e293b;border-radius:12px;padding:10px;">
+          <img id="img-preview-src"
+            style="max-width:100%;max-height:150px;border-radius:8px;display:block;margin:0 auto;" />
+          <button onclick="removeImage()"
+            style="position:absolute;top:5px;right:5px;background:#ef4444;border:none;border-radius:50%;width:28px;height:28px;color:white;font-size:16px;cursor:pointer;">✕</button>
         </div>
-        <p id="img-uploading" style="display:none;color:#fbbf24;font-size:0.85rem;margin-top:6px;">⏳ Uploading image...</p>
+        <p id="img-uploading" style="display:none;color:#fbbf24;font-size:0.85rem;margin-top:6px;">⏳ Uploading image...
+        </p>
       </div>
 
       <div style="display:flex;gap:10px;margin-top:12px;">
@@ -111,7 +119,7 @@
     </div>
   </div>
 
-  
+
   <div id="screen-join-code" class="screen">
     <h1>Enter Game PIN</h1>
     <div class="card">
@@ -123,18 +131,39 @@
     </div>
   </div>
 
-  
+
   <div id="screen-join-name" class="screen">
     <h1>What's your name?</h1>
-    <div class="card">
-      <input type="text" id="join-name" placeholder="Nickname (max 15 chars)" maxlength="15"
-        onkeyup="if(event.key==='Enter')joinGame()" />
+    <div class="card" style="display:flex;flex-direction:column;align-items:center;">
+      <div style="margin-bottom:20px;">
+        <img id="avatar-preview" src="https://api.dicebear.com/9.x/avataaars/svg?seed=Player"
+          style="width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.2);" />
+      </div>
+      <div style="width:100%;text-align:left;margin-top:8px;">
+        <label
+          style="font-size:0.85rem;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1px;">Nickname</label>
+        <input type="text" id="join-name" placeholder="Nickname (max 15 chars)" maxlength="15"
+          onkeyup="if(event.key==='Enter')joinGame(); else updateAvatarSeedFromInput();" style="margin-top:6px;" />
+      </div>
+      <button class="btn btn-dark" onclick="showAvatarPicker()" style="margin-top:12px;width:100%;">👤 Choose
+        Avatar</button>
       <button class="btn btn-green" id="join-go-btn" onclick="this.disabled=true;this.textContent='Joining…';joinGame()"
-        style="margin-top:12px;">Let's Go! 🎉</button>
+        style="margin-top:20px;width:100%;">Let's Go! 🎉</button>
     </div>
   </div>
 
-  
+  <div id="avatar-picker-modal"
+    style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:99999;justify-content:center;align-items:center;">
+    <div
+      style="background:linear-gradient(135deg,#1e1e3f,#2d2d5a);padding:24px;border-radius:20px;max-width:420px;width:90%;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.1);">
+      <h2 style="color:#fff;margin:0 0 20px 0;text-align:center;font-size:1.4rem;">Choose Your Avatar</h2>
+      <div id="avatar-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;"></div>
+      <button class="btn btn-dark" onclick="closeAvatarPicker()"
+        style="width:100%;padding:14px;font-size:1rem;">Cancel</button>
+    </div>
+  </div>
+
+
   <div id="screen-lobby-host" class="screen">
     <h2 style="color:rgba(255,255,255,0.6)">Join at this game PIN:</h2>
     <div class="pin-display" id="host-pin-display">000000</div>
@@ -151,7 +180,7 @@
     <p class="hint-text" style="margin-top:20px;">Share the PIN — players open this page and click "Join Game"</p>
   </div>
 
-  
+
   <div id="screen-lobby-player" class="screen">
     <div style="display:flex;flex-direction:column;align-items:center;gap:20px;">
       <div style="font-size:5rem;">✅</div>
@@ -165,7 +194,7 @@
     </div>
   </div>
 
-  
+
   <div id="screen-countdown" class="screen">
     <div style="display:flex;flex-direction:column;align-items:center;gap:28px;">
       <h2 style="color:rgba(255,255,255,0.5);letter-spacing:3px;text-transform:uppercase;font-size:1rem;">Get Ready!
@@ -175,7 +204,7 @@
     </div>
   </div>
 
-  
+
   <div id="screen-host-game" class="screen">
     <div id="reveal-timer"
       style="display:none;position:absolute;top:40px;right:40px;font-size:2.5rem;font-weight:900;color:white;background:linear-gradient(135deg,#f59e0b,#fbbf24);border:4px solid white;width:100px;height:100px;border-radius:50%;align-items:center;justify-content:center;z-index:30;box-shadow:0 0 30px rgba(251,191,36,0.6),0 10px 30px rgba(0,0,0,0.4);animation:popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;">
@@ -183,8 +212,9 @@
 
     <p class="host-meta" id="host-q-meta">Question 1 of 1</p>
     <div class="host-question-box" id="host-question-text">…</div>
-    <img id="host-question-img" style="display:none;max-width:100%;max-height:300px;border-radius:16px;margin:16px auto;box-shadow:0 8px 32px rgba(0,0,0,0.3);" />
-    
+    <img id="host-question-img"
+      style="display:none;max-width:100%;max-height:300px;border-radius:16px;margin:16px auto;box-shadow:0 8px 32px rgba(0,0,0,0.3);" />
+
     <div style="display:flex;align-items:center;gap:14px;width:100%;max-width:850px;margin-bottom:16px;">
       <span style="color:rgba(255,255,255,0.5);font-size:0.95rem;font-weight:700;white-space:nowrap;">Votes:</span>
       <div style="flex:1;height:12px;background:rgba(255,255,255,0.1);border-radius:12px;overflow:hidden;">
@@ -216,7 +246,7 @@
       Skip Question</button>
   </div>
 
-  
+
   <div id="screen-round-scores" class="screen">
     <div style="font-size:3.5rem;margin-bottom:8px;">📊</div>
     <h1 style="font-size:2.2rem;margin-bottom:6px;" id="rsb-header">Round 1 Results</h1>
@@ -232,7 +262,7 @@
     </div>
   </div>
 
-  
+
   <div id="screen-player-game" class="screen">
     <div class="player-waiting" id="player-waiting">
       <div class="wait-icon" id="wait-icon">⏳</div>
@@ -240,11 +270,12 @@
       <div class="score-badge" id="player-score-badge" style="display:none"></div>
     </div>
 
-    
+
     <div id="player-question-img-container" style="display:none;text-align:center;margin-bottom:10px;">
-      <img id="player-question-img" style="max-width:100%;max-height:200px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.3);" />
+      <img id="player-question-img"
+        style="max-width:100%;max-height:200px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.3);" />
     </div>
-    
+
     <div id="player-rank-feedback"
       style="display:none;flex-direction:column;align-items:center;justify-content:center;width:100%;max-width:500px;animation:fadeIn 0.5s ease;">
       <div id="feedback-banner" class="feedback-banner">CORRECT</div>
@@ -277,7 +308,7 @@
     </div>
   </div>
 
-  
+
   <div id="screen-game-ended" class="screen">
     <div id="game-ended-content"
       style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;text-align:center;">
@@ -299,7 +330,7 @@
 
 
   <div id="screen-podium" class="screen">
-    <div class="podium-title">FINAL WINNERS</div>
+    <div class="podium-title"></div>
     <div class="podium-container" id="podium-container">
       <div class="orbit-ring orbit-ring-1"></div>
       <div class="orbit-ring orbit-ring-2"></div>
