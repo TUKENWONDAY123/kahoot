@@ -1,5 +1,5 @@
-const SB_URL = 'https://afwtmvturyetaqruihsr.supabase.co';
-const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFmd3RtdnR1cnlldGFxcnVpaHNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxMzM3MjUsImV4cCI6MjA5MDcwOTcyNX0.MmBoHJSe5uH_sOhe1WK5egr1znH-4hlm3eBzwgRwL10';
+const SB_URL = window.SB_URL || '';
+const SB_KEY = window.SB_KEY || '';
 
 let sb = null;
 let useSB = false;
@@ -220,7 +220,8 @@ function goTo(id) {
 }
 
 
-const ADMIN_EMAIL = 'waleed@admin.com';
+const ADMIN_EMAIL = window.ADMIN_EMAIL || 'admin@example.com';
+const AVATAR_API_URL = window.AVATAR_API_URL || 'https://api.dicebear.com/9.x/avataaars/svg';
 let isAdminLoggedIn = false;
 
 async function checkAdmin() {
@@ -779,13 +780,13 @@ function checkPin() {
   goTo('screen-join-name');
 }
 
-let myAvatarUrl = 'https://api.dicebear.com/9.x/avataaars/svg?seed=Player';
+let myAvatarUrl = `${AVATAR_API_URL}?seed=Player`;
 
 function updateAvatarPreview() {
   if (avatarIsCustom) return;
   const nameEl = document.getElementById('join-name');
   const seed = (nameEl && nameEl.value.trim() !== '') ? nameEl.value.trim() : 'Player';
-  myAvatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(seed)}`;
+  myAvatarUrl = `${AVATAR_API_URL}?seed=${encodeURIComponent(seed)}`;
   const previewEl = document.getElementById('avatar-preview');
   if (previewEl) previewEl.src = myAvatarUrl;
 }
@@ -795,7 +796,7 @@ let avatarIsCustom = false;
 function randomizeAvatar() {
   const randomSeed = 'Avatar' + Date.now() + '_' + Math.floor(Math.random() * 999999);
   avatarIsCustom = true;
-  myAvatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${randomSeed}`;
+  myAvatarUrl = `${AVATAR_API_URL}?seed=${randomSeed}`;
   const previewEl = document.getElementById('avatar-preview');
   if (previewEl) previewEl.src = myAvatarUrl;
 }
@@ -808,13 +809,13 @@ function showAvatarPicker() {
   grid.innerHTML = '';
   avatarSeeds.forEach(seed => {
     const img = document.createElement('img');
-    img.src = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}`;
+    img.src = `${AVATAR_API_URL}?seed=${seed}`;
     img.style.cssText = 'width:70px;height:70px;cursor:pointer;border-radius:12px;border:2px solid rgba(255,255,255,0.1);transition:all 0.2s ease;object-fit:contain;background:rgba(255,255,255,0.05);';
     img.onmouseover = () => { img.style.borderColor = '#818cf8'; img.style.transform = 'scale(1.08)'; img.style.boxShadow = '0 4px 12px rgba(129,140,248,0.3)'; };
     img.onmouseout = () => { img.style.borderColor = 'rgba(255,255,255,0.1)'; img.style.transform = 'scale(1)'; img.style.boxShadow = 'none'; };
     img.onclick = () => {
       avatarIsCustom = true;
-      myAvatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}`;
+      myAvatarUrl = `${AVATAR_API_URL}?seed=${seed}`;
       const previewEl = document.getElementById('avatar-preview');
       if (previewEl) previewEl.src = myAvatarUrl;
       closeAvatarPicker();
@@ -845,7 +846,7 @@ async function joinGame() {
   lastQIndex = -1;
 
   if (!avatarIsCustom) {
-    myAvatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(name)}`;
+    myAvatarUrl = `${AVATAR_API_URL}?seed=${encodeURIComponent(name)}`;
   }
   updateAvatarPreview();
 
@@ -1284,7 +1285,7 @@ function escHtml(s) {
 }
 
 function getAvatarImg(name, size = 30, avatarUrl = '') {
-  const url = avatarUrl || `https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(name)}`;
+  const url = avatarUrl || `${AVATAR_API_URL}?seed=${encodeURIComponent(name)}`;
   return `<img src="${url}" style="width:${size}px;height:${size}px;border-radius:50%;background:#ffffff22;flex-shrink:0;object-fit:contain;" alt="avatar" />`;
 }
 
