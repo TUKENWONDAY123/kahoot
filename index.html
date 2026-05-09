@@ -9,23 +9,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800;900&display=swap"
     rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
-  <!-- Configuration (loaded from config.js) -->
-  <script src="config.js"></script>
-  <script>
-    // Fallback if config.js is missing or doesn't set variables
-    if (typeof window.SB_URL === 'undefined') {
-      console.warn('config.js not found or incomplete. Using hardcoded defaults if available.');
-      window.SB_URL = window.SB_URL || '';
-      window.SB_KEY = window.SB_KEY || '';
-      window.ADMIN_EMAIL = window.ADMIN_EMAIL || 'admin@example.com';
-      window.AVATAR_API_URL = window.AVATAR_API_URL || 'https://api.dicebear.com/9.x/avataaars/svg';
-    }
-  </script>
 </head>
 
 <body>
 
   <div id="toast" class="toast"></div>
+
+<div id="screen-maintenance" class="screen">
+    <h1 class="maint-title">Website is Down</h1>
+  </div>
 
   <div id="screen-home" class="screen active">
     <div class="home-logo">Kahoot<span>!</span></div>

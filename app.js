@@ -1,5 +1,7 @@
-const SB_URL = window.SB_URL || '';
-const SB_KEY = window.SB_KEY || '';
+const SB_URL = 'https://afwtmvturyetaqruihsr.supabase.co';
+
+const MAINTENANCE_MODE = true;
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFmd3RtdnR1cnlldGFxcnVpaHNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxMzM3MjUsImV4cCI6MjA5MDcwOTcyNX0.MmBoHJSe5uH_sOhe1WK5egr1znH-4hlm3eBzwgRwL10';
 
 let sb = null;
 let useSB = false;
@@ -220,8 +222,7 @@ function goTo(id) {
 }
 
 
-const ADMIN_EMAIL = window.ADMIN_EMAIL || 'admin@example.com';
-const AVATAR_API_URL = window.AVATAR_API_URL || 'https://api.dicebear.com/9.x/avataaars/svg';
+const ADMIN_EMAIL = 'waleed@admin.com';
 let isAdminLoggedIn = false;
 
 async function checkAdmin() {
@@ -780,13 +781,13 @@ function checkPin() {
   goTo('screen-join-name');
 }
 
-let myAvatarUrl = `${AVATAR_API_URL}?seed=Player`;
+let myAvatarUrl = 'https://api.dicebear.com/9.x/avataaars/svg?seed=Player';
 
 function updateAvatarPreview() {
   if (avatarIsCustom) return;
   const nameEl = document.getElementById('join-name');
   const seed = (nameEl && nameEl.value.trim() !== '') ? nameEl.value.trim() : 'Player';
-  myAvatarUrl = `${AVATAR_API_URL}?seed=${encodeURIComponent(seed)}`;
+  myAvatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(seed)}`;
   const previewEl = document.getElementById('avatar-preview');
   if (previewEl) previewEl.src = myAvatarUrl;
 }
@@ -796,7 +797,7 @@ let avatarIsCustom = false;
 function randomizeAvatar() {
   const randomSeed = 'Avatar' + Date.now() + '_' + Math.floor(Math.random() * 999999);
   avatarIsCustom = true;
-  myAvatarUrl = `${AVATAR_API_URL}?seed=${randomSeed}`;
+  myAvatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${randomSeed}`;
   const previewEl = document.getElementById('avatar-preview');
   if (previewEl) previewEl.src = myAvatarUrl;
 }
@@ -809,13 +810,13 @@ function showAvatarPicker() {
   grid.innerHTML = '';
   avatarSeeds.forEach(seed => {
     const img = document.createElement('img');
-    img.src = `${AVATAR_API_URL}?seed=${seed}`;
+    img.src = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}`;
     img.style.cssText = 'width:70px;height:70px;cursor:pointer;border-radius:12px;border:2px solid rgba(255,255,255,0.1);transition:all 0.2s ease;object-fit:contain;background:rgba(255,255,255,0.05);';
     img.onmouseover = () => { img.style.borderColor = '#818cf8'; img.style.transform = 'scale(1.08)'; img.style.boxShadow = '0 4px 12px rgba(129,140,248,0.3)'; };
     img.onmouseout = () => { img.style.borderColor = 'rgba(255,255,255,0.1)'; img.style.transform = 'scale(1)'; img.style.boxShadow = 'none'; };
     img.onclick = () => {
       avatarIsCustom = true;
-      myAvatarUrl = `${AVATAR_API_URL}?seed=${seed}`;
+      myAvatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}`;
       const previewEl = document.getElementById('avatar-preview');
       if (previewEl) previewEl.src = myAvatarUrl;
       closeAvatarPicker();
@@ -846,7 +847,7 @@ async function joinGame() {
   lastQIndex = -1;
 
   if (!avatarIsCustom) {
-    myAvatarUrl = `${AVATAR_API_URL}?seed=${encodeURIComponent(name)}`;
+    myAvatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(name)}`;
   }
   updateAvatarPreview();
 
@@ -1055,9 +1056,9 @@ function initPodiumCanvas() {
   canvas.height = window.innerHeight;
   podiumCanvasCtx = canvas.getContext('2d');
   podiumParticles = [];
-  
+
   if (podiumVfxAnimId) cancelAnimationFrame(podiumVfxAnimId);
-  
+
   function render() {
     podiumCanvasCtx.clearRect(0, 0, canvas.width, canvas.height);
     for (let i = podiumParticles.length - 1; i >= 0; i--) {
@@ -1066,16 +1067,16 @@ function initPodiumCanvas() {
       p.y += p.vy;
       p.vy += p.gravity;
       p.life -= p.decay;
-      
+
       if (p.life <= 0) {
         podiumParticles.splice(i, 1);
         continue;
       }
-      
+
       podiumCanvasCtx.save();
       podiumCanvasCtx.globalAlpha = Math.max(0, p.life);
       podiumCanvasCtx.fillStyle = p.color;
-      
+
       if (p.type === 'star') {
         podiumCanvasCtx.translate(p.x, p.y);
         podiumCanvasCtx.rotate(p.life * 5);
@@ -1090,15 +1091,15 @@ function initPodiumCanvas() {
         podiumCanvasCtx.translate(p.x, p.y);
         podiumCanvasCtx.rotate(p.rotation);
         p.rotation += p.rv;
-        podiumCanvasCtx.fillRect(-p.size, -p.size/2, p.size*2, p.size);
+        podiumCanvasCtx.fillRect(-p.size, -p.size / 2, p.size * 2, p.size);
       }
-      
+
       podiumCanvasCtx.restore();
     }
     podiumVfxAnimId = requestAnimationFrame(render);
   }
   render();
-  
+
   window.addEventListener('resize', () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -1127,7 +1128,7 @@ function spawnCanvasSupernova() {
   const cx = window.innerWidth / 2;
   const cy = window.innerHeight / 2;
   const colors = ['#ffd700', '#ff8c00', '#ffffff', '#ffec8b'];
-  
+
   for (let i = 0; i < 150; i++) {
     const angle = Math.random() * Math.PI * 2;
     const speed = 5 + Math.random() * 15;
@@ -1168,17 +1169,17 @@ function spawnCanvasConfetti() {
 function animateScoreCountUp(el, targetScore, duration = 1500) {
   const start = performance.now();
   el.classList.add('counting');
-  
+
   function update(time) {
     let progress = (time - start) / duration;
     if (progress > 1) progress = 1;
-    
-    
+
+
     const easeOut = 1 - Math.pow(1 - progress, 5);
     const current = Math.round(targetScore * easeOut);
-    
+
     el.textContent = current.toLocaleString();
-    
+
     if (progress < 1) {
       requestAnimationFrame(update);
     } else {
@@ -1193,11 +1194,11 @@ function animateScoreCountUp(el, targetScore, duration = 1500) {
 async function showPodium(code) {
   goTo('screen-podium');
   initPodiumCanvas();
-  
+
   const players = Object.values(store.players[code] || {}).sort((a, b) => b.score - a.score);
   const top3 = players.slice(0, 3);
-  
-  
+
+
   const phases = ['podium-phase-intro', 'podium-phase-3rd', 'podium-phase-2nd', 'podium-phase-1st'];
   phases.forEach(id => {
     const el = document.getElementById(id);
@@ -1205,18 +1206,18 @@ async function showPodium(code) {
       el.className = 'podium-phase podium-phase-hidden';
     }
   });
-  
+
   const finalBtns = document.getElementById('podium-final-btns');
   if (finalBtns) finalBtns.classList.remove('visible');
 
-  
+
   const runPhase = (id, setupFn, delayBeforeExit) => new Promise(resolve => {
     const el = document.getElementById(id);
     if (!el) return resolve();
-    
+
     if (setupFn) setupFn();
     el.className = 'podium-phase podium-phase-enter';
-    
+
     if (delayBeforeExit) {
       setTimeout(() => {
         el.className = 'podium-phase podium-phase-exit';
@@ -1227,13 +1228,13 @@ async function showPodium(code) {
     }
   });
 
-  
+
   await new Promise(r => setTimeout(r, 500));
 
-  
+
   await runPhase('podium-phase-intro', null, 2500);
 
-  
+
   if (top3[2]) {
     await runPhase('podium-phase-3rd', () => {
       document.getElementById('name-3rd').innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;gap:8px;">${getAvatarImg(top3[2].name, 60, top3[2].avatarUrl)}<span>${escHtml(top3[2].name)}</span></div>`;
@@ -1244,7 +1245,7 @@ async function showPodium(code) {
     }, 3500);
   }
 
-  
+
   if (top3[1]) {
     await runPhase('podium-phase-2nd', () => {
       document.getElementById('name-2nd').innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;gap:8px;">${getAvatarImg(top3[1].name, 60, top3[1].avatarUrl)}<span>${escHtml(top3[1].name)}</span></div>`;
@@ -1255,7 +1256,7 @@ async function showPodium(code) {
     }, 4000);
   }
 
-  
+
   if (top3[0]) {
     await runPhase('podium-phase-1st', () => {
       document.getElementById('name-1st').innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;gap:8px;">${getAvatarImg(top3[0].name, 80, top3[0].avatarUrl)}<span>${escHtml(top3[0].name)}</span></div>`;
@@ -1265,14 +1266,14 @@ async function showPodium(code) {
       }, 700);
       setTimeout(() => spawnCanvasConfetti(), 1500);
       setTimeout(() => spawnCanvasConfetti(), 3000);
-      
-      
+
+
       setTimeout(() => {
         if (finalBtns) finalBtns.classList.add('visible');
       }, 3500);
     }, 0);
   } else {
-    
+
     await runPhase('podium-phase-1st', () => {
       document.getElementById('name-1st').textContent = 'No players 😢';
       if (finalBtns) finalBtns.classList.add('visible');
@@ -1285,7 +1286,7 @@ function escHtml(s) {
 }
 
 function getAvatarImg(name, size = 30, avatarUrl = '') {
-  const url = avatarUrl || `${AVATAR_API_URL}?seed=${encodeURIComponent(name)}`;
+  const url = avatarUrl || `https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(name)}`;
   return `<img src="${url}" style="width:${size}px;height:${size}px;border-radius:50%;background:#ffffff22;flex-shrink:0;object-fit:contain;" alt="avatar" />`;
 }
 
@@ -1435,13 +1436,18 @@ function screenShake() {
   setTimeout(() => screen.classList.remove('screen-shake'), 600);
 }
 
+if (MAINTENANCE_MODE) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-maintenance').classList.add('active');
+}
+
 
 
 
 const _origGoTo = goTo;
 window.goTo = function (id) {
   _origGoTo(id);
-  
+
   if (id === 'screen-lobby-player') {
     setTimeout(() => {
       launchEmojiParticles(['🎉', '✅', '🥳', '🎊', '⭐'], 12);
@@ -1470,7 +1476,7 @@ const _origPlayerAnswer = window.playerAnswer;
 if (typeof _origPlayerAnswer === 'function') {
   window.playerAnswer = function (num) {
     _origPlayerAnswer(num);
-    
+
     const btn = document.querySelectorAll('.player-ans-btn')[num - 1];
     if (btn) {
       const rect = btn.getBoundingClientRect();
@@ -1484,7 +1490,7 @@ const _origHandleGameState = window.handleGameState;
 window.handleGameState = function (payload) {
   if (typeof _origHandleGameState === 'function') _origHandleGameState(payload);
   if (payload && payload.status === 'reveal') {
-    
+
     setTimeout(() => {
       const banner = document.getElementById('feedback-banner');
       if (banner && banner.classList.contains('feedback-correct')) {

@@ -5682,3 +5682,15 @@ select {
   }
   .prc-score { font-size: 2.8rem; }
 }
+
+#screen-maintenance {
+  background: linear-gradient(135deg, #1e1e3f, #2d2d5a);
+}
+
+.maint-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 4rem;
+  color: #000 !important;
+  letter-spacing: 4px;
+  text-shadow: none !important;
+}
