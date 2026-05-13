@@ -1,6 +1,6 @@
 const SB_URL = 'https://afwtmvturyetaqruihsr.supabase.co';
 
-const MAINTENANCE_MODE = true;
+const MAINTENANCE_MODE = false;
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFmd3RtdnR1cnlldGFxcnVpaHNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxMzM3MjUsImV4cCI6MjA5MDcwOTcyNX0.MmBoHJSe5uH_sOhe1WK5egr1znH-4hlm3eBzwgRwL10';
 
 let sb = null;
